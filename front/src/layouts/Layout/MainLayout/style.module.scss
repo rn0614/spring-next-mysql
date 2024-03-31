@@ -1,0 +1,6 @@
+#grid{
+  display:grid;
+  grid-template-areas: "header" "main" "footer";
+  grid-template-rows: 5rem auto 4rem;
+  min-height:100vh;
+}

@@ -1,0 +1,41 @@
+.comment-list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  .comment-list-item-top {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .comment-list-item-nickname {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 140%;
+  }
+
+  .comment-list-item-driver {
+    color: rgba(0, 0, 0, 0.4);
+
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 140%;
+  }
+
+  .comment-list-item-time {
+    color: rgba(0, 0, 0, 0.4);
+
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 140%;
+  }
+
+  .comment-list-item-content {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 150%;
+  }
+}

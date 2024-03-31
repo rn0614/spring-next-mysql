@@ -1,0 +1,13 @@
+.favorite-list-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.favorite-list-item-nickname {
+  color: rgba(0, 0, 0, 0.7);
+
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 140%;
+}
