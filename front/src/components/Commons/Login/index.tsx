@@ -32,7 +32,9 @@ export default function Login({ children }: LoginProps) {
   };
 
   useEffect(() => {
-    getSignInUserRequest(cookies.accessToken).then(getSignInuserResponse);
+    if (cookies?.accessToken) {
+      getSignInUserRequest(cookies.accessToken).then(getSignInuserResponse);
+    }
   }, [cookies.accessToken]);
 
   return <>{children}</>;

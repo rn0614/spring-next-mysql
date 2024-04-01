@@ -52,15 +52,15 @@ export const GET_SING_IN_USER_URL = () => `${API_DOMAIN}/user`;
 
 // user 가 실제로 인가된 유저인지 확인하는 router
 export const getSignInUserRequest = async (accessToken: string) => {
-  const result = await axios.get(
+  const result = await fetch(
     GET_SING_IN_USER_URL(),
     bearAuthorization(accessToken)
-  ).then(response=>{
-    const responseBody:GetSignInUserResponseDto = response.data;
+  ).then(response=>response.json())
+  .then(response=>{
+    const responseBody:GetSignInUserResponseDto = response;
     return responseBody;
   }).catch(error => {
-    if(!error.response) return null;
-    const responseBody:ResponseDto = error.response.data;
+    const responseBody:ResponseDto = error.response?.data;
     return responseBody
   })
   return result;
