@@ -15,7 +15,6 @@ type inputDataType = {
 
 export default function SignInCard({ setIsSigned }: any) {
   const router = useRouter();
-
   const [cookies, setCookies] = useCookies();
 
   const emailRef = useRef<HTMLInputElement | null>(null);
@@ -42,11 +41,11 @@ export default function SignInCard({ setIsSigned }: any) {
     if (code === "DBE") alert("데이터 베이스 오류");
     if (code === "SF" || code === "VF") setError(true);
     if (code !== "SU") return;
-
     const { token, expirationTime } = responseBody;
+    console.log('login user',responseBody)
+
     const now = new Date().getTime();
     const expires = new Date(now + expirationTime * 1000);
-    console.log(expires);
     setCookies("accessToken", token, { expires: expires, path: MAIN_PATH() });  // expires: expires,
     router.push(MAIN_PATH());
   };

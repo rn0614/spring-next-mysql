@@ -32,7 +32,8 @@ export function ProfileImageWithNickName({
   writerProfileImage,
   writerNickname,
   writerDatetime,
-  color="black"
+  color="black",
+  
 }: WithNickName) {
   return (
     <>
@@ -41,7 +42,7 @@ export function ProfileImageWithNickName({
         <div className={styles["board-list-item-nickname"]}>
           {writerNickname}
         </div>
-        <div className={styles["board-list-item-write-datetime"]}>
+        <div className={styles["board-list-item-write-datetime"]} suppressHydrationWarning>
           {writerDatetime}
         </div>
       </div>

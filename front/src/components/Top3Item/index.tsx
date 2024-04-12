@@ -31,7 +31,7 @@ export default function Top3Item({ top3ListItem }: Props) {
   return (
     <div
       className={styles["top-3-list-item"]}
-      style={{ backgroundImage: `url(${boardTitleImage})` }}
+      style={{ backgroundImage: `${boardTitleImage?"url("+boardTitleImage+")":null}` }}
       onClick={onClickHandler}
     >
       <div className={styles["top-3-list-item-main-box"]}>

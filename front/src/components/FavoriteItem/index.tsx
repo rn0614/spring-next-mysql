@@ -4,11 +4,11 @@ import ProfileImage from "@/ui/atom/ProfileImage/ProfileImage";
 import { favoriteListItem } from "@/types/interface";
 
 type FavoriteItemProps = {
-  favoriteListItem: favoriteListItem;
+  favoriteItem: favoriteListItem;
 };
 
-export default function FavoriteItem({ favoriteListItem }: FavoriteItemProps) {
-  const { email, nickname, profileImage } = favoriteListItem;
+export default function FavoriteItem({ favoriteItem }: FavoriteItemProps) {
+  const { email, nickname, profileImage } = favoriteItem;
   return (
     <div className={styles["favorite-list-item"]}>
       <ProfileImage writerProfileImage={profileImage} />

@@ -1,0 +1,18 @@
+@use '@/styles/global-variable.scss' as *;
+
+.main-wrapper {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.top3-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  max-width: var(--max-width);
+  justify-content: center;
+  gap: 10px;
+  @media screen and (max-width:$mobile-width) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

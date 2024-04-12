@@ -24,7 +24,7 @@ export default function BoardListItem({ boardListItem }: Props) {
   } = boardListItem;
 
   const onClickHandler = () => {
-    router.push(`/board/${boardNumber}`);
+    router.push(`/board/detail/${boardNumber}`);
   };
 
   return (

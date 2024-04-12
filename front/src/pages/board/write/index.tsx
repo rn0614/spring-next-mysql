@@ -1,14 +1,11 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import style from "./style.module.scss";
 import { IconButton } from "@/ui/atom/Icon/Icon";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { Board, CurBoardAtom } from "@/stores/board.store";
-import { CurrUserAtom } from "@/stores/login-user.store";
-import { useRouter } from "next/navigation";
-import { MAIN_PATH } from "@/constants";
+import MainLayout from "@/layouts/Layout/MainLayout/MainLayout";
 
 export default function BoardWrite() {
-  const router = useRouter();
   const titleRef = useRef<HTMLTextAreaElement | null>(null);
 
   const contentRef = useRef<HTMLTextAreaElement | null>(null);
@@ -17,8 +14,6 @@ export default function BoardWrite() {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const [board, setBoard] = useRecoilState(CurBoardAtom);
-
-  const loginUser = useRecoilValue(CurrUserAtom);
 
   const onChangeHandler = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -68,59 +63,61 @@ export default function BoardWrite() {
       return { ...pre, boardImageFileList: newBoardImageFileList } as Board;
     });
   };
-  
+
   return (
-    <div id={style["board-write-wrapper"]}>
-      <div className={style["board-write-container"]}>
-        <div className={style["board-write-box"]}>
-          <div className={style["board-wriete-title-box"]}>
-            <textarea
-              name="title"
-              ref={titleRef}
-              className={style["board-write-title-textarea"]}
-              rows={1}
-              placeholder="제목을 작성해주세요."
-              value={board ? board.title : ""}
-              onChange={onChangeHandler}
-            />
-          </div>
-          <hr />
-          <div className={style["board-wriete-content-box"]}>
-            <textarea
-              name="content"
-              ref={contentRef}
-              className={style["board-write-content-textarea"]}
-              placeholder="본문을 작성해주세요."
-              value={board ? board.content : ""}
-              onChange={onChangeHandler}
-            />
-            <IconButton
-              icon="image-box-light-icon"
-              onButtonClick={onImageUploadButtonClickHandler}
-            ></IconButton>
-            <input
-              name="image"
-              ref={imageInputRef}
-              type="file"
-              accept="image/*"
-              style={{ display: "none" }}
-              onChange={onImageChangeHandler}
-            />
-          </div>
-          <div className={style["board-write-images-box"]}>
-            {imageUrls.map((item, idx) => (
-              <div key={idx} className={style["board-write-image-box"]}>
-                <img className={style["board-write-image"]} src={item} />
-                <IconButton
-                  icon="image-close-icon"
-                  onButtonClick={() => onImageCloseButtonClickHandler(idx)}
-                  position="top"
-                ></IconButton>
-              </div>
-            ))}
+    <MainLayout path={"write"}>
+      <div id={style["board-write-wrapper"]}>
+        <div className={style["board-write-container"]}>
+          <div className={style["board-write-box"]}>
+            <div className={style["board-wriete-title-box"]}>
+              <textarea
+                name="title"
+                ref={titleRef}
+                className={style["board-write-title-textarea"]}
+                rows={1}
+                placeholder="제목을 작성해주세요."
+                value={board ? board.title : ""}
+                onChange={onChangeHandler}
+              />
+            </div>
+            <hr />
+            <div className={style["board-wriete-content-box"]}>
+              <textarea
+                name="content"
+                ref={contentRef}
+                className={style["board-write-content-textarea"]}
+                placeholder="본문을 작성해주세요."
+                value={board ? board.content : ""}
+                onChange={onChangeHandler}
+              />
+              <IconButton
+                icon="image-box-light-icon"
+                onButtonClick={onImageUploadButtonClickHandler}
+              ></IconButton>
+              <input
+                name="image"
+                ref={imageInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={onImageChangeHandler}
+              />
+            </div>
+            <div className={style["board-write-images-box"]}>
+              {imageUrls.map((item, idx) => (
+                <div key={idx} className={style["board-write-image-box"]}>
+                  <img className={style["board-write-image"]} src={item} />
+                  <IconButton
+                    icon="image-close-icon"
+                    onButtonClick={() => onImageCloseButtonClickHandler(idx)}
+                    position="top"
+                  ></IconButton>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </MainLayout>
   );
 }

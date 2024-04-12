@@ -5,14 +5,16 @@ import { useCookies } from "react-cookie";
 import { GetSignInUserResponseDto } from "@/pages/api/response/user";
 import { ResponseDto } from "@/pages/api/response";
 import { getSignInUserRequest } from "@/pages/api";
+import { useRecoilState } from "recoil";
+import { CurrUserAtom } from "@/stores/login-user.store";
 
 type LoginProps = {
   children: ReactNode;
 };
 
 export default function Login({ children }: LoginProps) {
-  const { setLoginUser, resetLoginUser } = useLoginUserStore(); // 전역 상태에 loginUser 삽입
-
+  const [loginUser, setLoginUser] = useRecoilState(CurrUserAtom);
+  
   // state: cookies 상태 //
   const [cookies, setCookies] = useCookies(); // 쿠키에 jwtToken을 저장하는 방법
 
@@ -22,13 +24,14 @@ export default function Login({ children }: LoginProps) {
     if (!responseBody) return;
     const { code } = responseBody;
     if (code === "AF" || code === "NU" || code === "DBE") {
-      resetLoginUser();
+      setLoginUser(null);
       return;
     }
+    console.log('user')
     const loginUserCopy: User = {
       ...(responseBody as GetSignInUserResponseDto),
     };
-    await setLoginUser(loginUserCopy);
+    setLoginUser(loginUserCopy);
   };
 
   useEffect(() => {

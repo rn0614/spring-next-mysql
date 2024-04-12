@@ -4,6 +4,7 @@ import { getSignInUserRequest } from "./pages/api";
 // If the incoming req has the "beta" cookie
 // then we'll rewrite the req to /beta
 export async function middleware(request: NextRequest) {
+  console.log('middleware start',request.nextUrl.pathname)
   const url = request.nextUrl.clone();
   url.pathname = "/auth";
   const token = request.cookies.get("accessToken")?.value;
@@ -17,5 +18,5 @@ export async function middleware(request: NextRequest) {
 
 // Supports both a single value or an array of matches
 export const config = {
-  matcher: ["/board/write"],
+  matcher: ["/board/write","/api"],
 };

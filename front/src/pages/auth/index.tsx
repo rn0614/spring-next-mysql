@@ -7,7 +7,7 @@ import SignUpCard from "@/components/SignUpCard";
 export default function AuthPage() {
   const [isSigned, setIsSigned] = useState<boolean>(true);
   return (
-    <MainLayout>
+    <MainLayout path="">
       <article id={styles["auth-wrapper"]}>
         <div className={styles["auth-container"]}>
           <div className={styles["auth-jumbotron-box"]}>

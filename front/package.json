@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "axios": "^1.6.8",
+    "dayjs": "^1.11.10",
     "next": "14.0.4",
     "react": "^18",
     "react-cookie": "^7.1.0",
     "react-dom": "^18",
+    "react-query": "^3.39.3",
+    "react-toastify": "^10.0.5",
     "recoil": "^0.7.7",
     "sass": "^1.72.0",
     "stores": "^1.0.0"
