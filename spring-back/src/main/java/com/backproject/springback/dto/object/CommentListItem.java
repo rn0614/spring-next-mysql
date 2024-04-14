@@ -1,7 +1,6 @@
 package com.backproject.springback.dto.object;
 
 import com.backproject.springback.repository.resultSet.GetCommentListResultSet;
-import com.backproject.springback.repository.resultSet.GetFavoriteListResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -17,12 +16,14 @@ public class CommentListItem {
   private String profileImage;
   private String writeDatetime;
   private String content;
+  private String totalCount;
 
   public CommentListItem(GetCommentListResultSet resultSet) {
     this.nickname = resultSet.getNickname();
     this.profileImage = resultSet.getProfileImage();
     this.writeDatetime = resultSet.getWriteDatetime();
     this.content = resultSet.getContent();
+    this.totalCount = resultSet.getTotalCount();
   }
 
   public static List<CommentListItem> copyItem(

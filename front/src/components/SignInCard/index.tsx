@@ -4,9 +4,9 @@ import InputBox from "../InputBox";
 import Button from "@/ui/atom/Button/Button";
 import { signInRequest } from "@/pages/api";
 import { SignInRequestDto } from "@/pages/api/request/auth";
-import { useCookies } from "react-cookie";
 import { MAIN_PATH } from "@/constants";
 import { useRouter } from "next/navigation";
+import { useSetLoginUser } from "@/hooks/useLogin";
 
 type inputDataType = {
   email: string;
@@ -15,7 +15,6 @@ type inputDataType = {
 
 export default function SignInCard({ setIsSigned }: any) {
   const router = useRouter();
-  const [cookies, setCookies] = useCookies();
 
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
@@ -24,6 +23,7 @@ export default function SignInCard({ setIsSigned }: any) {
     password: "",
   };
   const [inputData, setInputData] = useState<inputDataType>(initInputDate);
+  const setUser = useSetLoginUser();
 
   const [viewPassword, setViewPassword] = useState<"password" | "text">(
     "password"
@@ -33,20 +33,8 @@ export default function SignInCard({ setIsSigned }: any) {
     useState<string>("eye-light-off-icon");
 
   const signInResponse = (responseBody: any) => {
-    if (!responseBody) {
-      alert("네트워크 이상");
-      return;
-    }
-    const { code } = responseBody;
-    if (code === "DBE") alert("데이터 베이스 오류");
-    if (code === "SF" || code === "VF") setError(true);
-    if (code !== "SU") return;
-    const { token, expirationTime } = responseBody;
-    console.log('login user',responseBody)
-
-    const now = new Date().getTime();
-    const expires = new Date(now + expirationTime * 1000);
-    setCookies("accessToken", token, { expires: expires, path: MAIN_PATH() });  // expires: expires,
+    console.log('inputdata',inputData)
+    setUser(inputData)
     router.push(MAIN_PATH());
   };
 

@@ -3,4 +3,5 @@ export default interface CommentListItem{
   profileIamge:string|null;
   writeDatetime:string;
   content:string;
+  totalCount:number;
 }

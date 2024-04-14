@@ -13,11 +13,11 @@ import org.springframework.http.ResponseEntity;
 @Getter
 public class GetCommentListResponseDto extends ResponseDto {
 
-  private List<CommentListItem> data;
+  private List<CommentListItem> commentList;
 
   public GetCommentListResponseDto(List<GetCommentListResultSet> resultSets) {
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-    this.data = CommentListItem.copyItem(resultSets);
+    this.commentList = CommentListItem.copyItem(resultSets);
   }
 
   public static ResponseEntity<GetCommentListResponseDto> success(

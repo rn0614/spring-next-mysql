@@ -1,47 +1,35 @@
 import { useRouter } from "next/navigation";
 import styles from "./style.module.scss";
-import React, { useEffect } from "react";
+import React from "react";
 import SearchButton from "@/ui/morecular/SearchButton/SearchButton";
 import Button from "@/ui/atom/Button/Button";
 import Icon from "@/ui/atom/Icon/Icon";
-import { AUTH_PATH, MAIN_PATH, USER_PATH } from "@/constants";
+import { BOARD_DETAIL_PATH, MAIN_PATH, USER_PATH } from "@/constants";
 import { useRecoilState } from "recoil";
 import { CurrUserAtom } from "@/stores/login-user.store";
 import { useCookies } from "react-cookie";
 import { CurBoardAtom } from "@/stores/board.store";
-import { fileUploadRequest, postBoardRequest } from "@/pages/api";
+import { fileUploadRequest } from "@/pages/api";
 import { PostBoardRequestDto } from "@/pages/api/request/board";
-import { PostBoardResponseDto } from "@/pages/api/response/board";
-import { ResponseDto } from "@/pages/api/response";
+import { usePostBoard, useUpdateBoard } from "@/hooks/useBoard";
+import { queryClient } from "@/utils/react-query/queryClient";
+import { useGetLoginUser } from "@/hooks/useLogin";
 
-type Props ={
-  path:string
-}
-let loginButtonOn= false;
-export default function Header({path}:Props) {
-  const [loginUser, setLoginUser] = useRecoilState(CurrUserAtom);
-  const [cookies, setCookies] = useCookies();
+type Props = {
+  path: string;
+};
+
+export default function Header({ path }: Props) {
+  const {loginUser,resetUser} = useGetLoginUser();
   const [board, setBorad] = useRecoilState(CurBoardAtom);
-  
+  const accessToken = queryClient.getQueryData("accessToken");
+
+  const postBoard = usePostBoard();
+  const updateBoard = useUpdateBoard();
 
   const router = useRouter();
 
-  const postBoardResponse = (
-    responseBody: PostBoardResponseDto | ResponseDto | null
-  ) => {
-    if (!responseBody) return;
-    const { code } = responseBody;
-    if (code === "AF" || code === "NU") router.push(AUTH_PATH());
-    if (code === "VF") alert("제목과 내용은 필수입니다.");
-    if (code === "DBE") alert("데이터 베이스 오류입니다.");
-    if (code !== "SU") return;
-    setBorad(null);
-    if (!loginUser) return;
-    router.push(MAIN_PATH());
-  };
-
   const onUploadButtonClickHandler = async () => {
-    const accessToken = cookies.accessToken;
     if (!accessToken || !board) return;
 
     const boardImageList: string[] = [];
@@ -50,7 +38,7 @@ export default function Header({path}:Props) {
         const data = new FormData();
         data.append("file", file);
 
-        const url = await fileUploadRequest(data) as string;
+        const url = (await fileUploadRequest(data)) as string;
         if (url) boardImageList.push(url);
       }
     }
@@ -60,7 +48,34 @@ export default function Header({path}:Props) {
       content: board.content,
       boardImageList,
     };
-    postBoardRequest(requestBody, accessToken).then(postBoardResponse);
+    postBoard(requestBody);
+    setBorad(null);
+    
+  };
+
+  const onUpdateButtonClickHandler = async () => {
+    if (!accessToken || !board) return;
+    const boardNumber = board.boardNumber;
+
+    const boardImageList: string[] = [];
+    if (board?.boardImageFileList) {
+      for (const file of board?.boardImageFileList) {
+        const data = new FormData();
+        data.append("file", file);
+
+        const url = (await fileUploadRequest(data)) as string;
+        if (url) boardImageList.push(url);
+      }
+    }
+
+    const requestBody = {
+      title: board.title,
+      content: board.content,
+      boardImageList,
+    };
+    updateBoard({ boardNumber, requestBody });
+    setBorad(null);
+    router.push(BOARD_DETAIL_PATH(boardNumber!));
   };
 
   const onLogoClickHander = () => {
@@ -78,15 +93,9 @@ export default function Header({path}:Props) {
   };
 
   const onLogOutButtonClickHandler = () => {
-    setCookies("accessToken", null); // expires: expires,
-    setLoginUser(null);
+    resetUser();
     router.push("/");
   };
-  useEffect(()=>{
-    if(!loginUser){
-      loginButtonOn=true;
-    }
-  },[loginUser])
 
   return (
     <header id={styles["header"]} className="header">
@@ -97,7 +106,7 @@ export default function Header({path}:Props) {
         </div>
         <div className={styles["header-right-box"]}>
           <SearchButton />
-          {loginUser && path==="home"&&(
+          {loginUser && path === "home" && (
             <>
               <Button color="white" onClick={onMyPageButtonClickHandler}>
                 마이페이지
@@ -105,10 +114,13 @@ export default function Header({path}:Props) {
               <Button onClick={onLogOutButtonClickHandler}>로그아웃</Button>
             </>
           )}
-          {loginUser && path==="write" && (
+          {loginUser && path === "write" && (
             <Button onClick={onUploadButtonClickHandler}>업로드</Button>
           )}
-          {!loginUser&& loginButtonOn && (
+          {loginUser && path === "update" && (
+            <Button onClick={onUpdateButtonClickHandler}>수정하기</Button>
+          )}
+          {!loginUser && (
             <Button onClick={onSignInButtonClickHandler}>로그인</Button>
           )}
         </div>

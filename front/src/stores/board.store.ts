@@ -1,6 +1,7 @@
 import { atom } from "recoil";
 
 export type Board = {
+  boardNumber?:number;
   title: string;
   content: string;
   boardImageFileList: File[];

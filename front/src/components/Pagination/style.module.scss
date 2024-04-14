@@ -1,0 +1,39 @@
+.pagination-wrapper {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  .page-item {
+    color: black;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .side-btn {
+    background-color: white;
+    padding: 0.2rem 0.5rem;
+    &:disabled {
+      border: 1px solid #999999;
+      background-color: #cccccc;
+      color: #787878;
+    }
+  }
+
+  .page-item.active {
+    background-color: #4caf50;
+    color: white;
+  }
+
+  .page-item:hover:not(.active) {
+    background-color: #ddd;
+  }
+
+  .page-limit {
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+  }
+}

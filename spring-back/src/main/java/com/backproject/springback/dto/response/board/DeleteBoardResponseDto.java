@@ -1,6 +1,5 @@
 package com.backproject.springback.dto.response.board;
 
-import org.hibernate.sql.Delete;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

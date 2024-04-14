@@ -16,7 +16,7 @@ function getCookie(name: string) {
   return cookieValue;
 }
 
-const authFetch = (contentType?: string) => {
+const authFetch = (accessToken?: string, contentType?: string) => {
   const Instance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BACK,
     timeout: 60000,
@@ -25,11 +25,11 @@ const authFetch = (contentType?: string) => {
     },
   });
 
-
   Instance.interceptors.request.use(
     (request) => {
-      const token = getCookie("accessToken"); // 'accessToken' 쿠키에서 액세스 토큰을 가져옴
-      if (token !== null) request.headers.Authorization = `Bearer ${token}`;
+      const token = accessToken ? accessToken : getCookie("accessToken"); // 'accessToken' 쿠키에서 액세스 토큰을 가져옴
+      if (token !== null || token !== "null")
+        request.headers.Authorization = `Bearer ${token}`;
       return request;
     },
     (error) => {
@@ -39,10 +39,10 @@ const authFetch = (contentType?: string) => {
 
   Instance.interceptors.response.use(
     (request) => {
-      return request.data;
+      return request;
     },
     (error) => {
-      return error.response.data;
+      return error;
     }
   );
 

@@ -2,26 +2,32 @@ package com.backproject.springback.controller;
 
 import com.backproject.springback.dto.request.board.PostBoardRequestDto;
 import com.backproject.springback.dto.request.board.PostCommentRequestDto;
+import com.backproject.springback.dto.request.board.UpdateBoardRequestDto;
 import com.backproject.springback.dto.response.board.DeleteBoardResponseDto;
 import com.backproject.springback.dto.response.board.GetBoardResponseDto;
 import com.backproject.springback.dto.response.board.GetCommentListResponseDto;
 import com.backproject.springback.dto.response.board.GetFavoriteListResponseDto;
 import com.backproject.springback.dto.response.board.IncreaseViewCountResponseDto;
+import com.backproject.springback.dto.response.board.PatchBoardResponseDto;
 import com.backproject.springback.dto.response.board.PostBoardResponseDto;
 import com.backproject.springback.dto.response.board.PostCommentResponseDto;
 import com.backproject.springback.dto.response.board.PutFavoriteResponseDto;
 import com.backproject.springback.service.BoardService;
+import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.annotation.QueryAnnotation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -101,10 +107,14 @@ public class BoardController {
 
   @GetMapping("/{boardNumber}/comment-list")
   public ResponseEntity<? super GetCommentListResponseDto> getCommentList(
-    @PathVariable("boardNumber") Integer boardNumber
+    @PathVariable("boardNumber") Integer boardNumber,
+    @RequestParam(value="limit", defaultValue = "5") Integer limit,
+    @RequestParam(value="startNumber", defaultValue = "0") Integer startNumber
   ) {
     ResponseEntity<? super GetCommentListResponseDto> reponse = boardService.getCommentList(
-      boardNumber
+      boardNumber,
+      limit,
+      startNumber
     );
     return reponse;
   }
@@ -119,5 +129,19 @@ public class BoardController {
       email
     );
     return reponse;
+  }
+
+  @PatchMapping("/{boardNumber}")
+  public ResponseEntity<? super PatchBoardResponseDto> pathBoard(
+    @PathVariable("boardNumber") Integer boardNumber,
+    @RequestBody @Valid UpdateBoardRequestDto requestBody,
+    @AuthenticationPrincipal String email
+  ) {
+    ResponseEntity<? super PatchBoardResponseDto> response = boardService.patchBoard(
+      boardNumber,
+      requestBody,
+      email
+    );
+    return response;
   }
 }

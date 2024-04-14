@@ -2,6 +2,7 @@ package com.backproject.springback.service.implement;
 
 import com.backproject.springback.dto.request.board.PostBoardRequestDto;
 import com.backproject.springback.dto.request.board.PostCommentRequestDto;
+import com.backproject.springback.dto.request.board.UpdateBoardRequestDto;
 import com.backproject.springback.dto.response.ResponseDto;
 import com.backproject.springback.dto.response.board.DeleteBoardResponseDto;
 import com.backproject.springback.dto.response.board.GetBoardResponseDto;
@@ -11,6 +12,7 @@ import com.backproject.springback.dto.response.board.IncreaseViewCountResponseDt
 import com.backproject.springback.dto.response.board.PostBoardResponseDto;
 import com.backproject.springback.dto.response.board.PostCommentResponseDto;
 import com.backproject.springback.dto.response.board.PutFavoriteResponseDto;
+import com.backproject.springback.dto.response.board.PatchBoardResponseDto;
 import com.backproject.springback.entity.BoardEntity;
 import com.backproject.springback.entity.CommentEntity;
 import com.backproject.springback.entity.FavoriteEntity;
@@ -80,13 +82,15 @@ public class BoardServiceImplement implements BoardService {
 
   @Override
   public ResponseEntity<? super GetCommentListResponseDto> getCommentList(
-    Integer boardNumber
+    Integer boardNumber,
+    Integer limit,
+    Integer startNumber
   ) {
     try {
       List<GetCommentListResultSet> resultSets = new ArrayList<>();
       boolean existedBoard = boardRepository.existsByBoardNumber(boardNumber);
       if (!existedBoard) return GetCommentListResponseDto.noExistBoard();
-      resultSets = commentRepository.getCommentList(boardNumber);
+      resultSets = commentRepository.getCommentList(boardNumber, limit, startNumber);
       return GetCommentListResponseDto.success(resultSets);
     } catch (Exception exception) {
       exception.printStackTrace();
@@ -117,7 +121,7 @@ public class BoardServiceImplement implements BoardService {
       }
       imageRepository.saveAll(imageEntities);
 
-      return PostBoardResponseDto.success();
+      return PostBoardResponseDto.success(boardNumber);
     } catch (Exception exception) {
       exception.printStackTrace();
       return ResponseDto.databaseError();
@@ -226,6 +230,39 @@ public class BoardServiceImplement implements BoardService {
       boardRepository.delete(boardEntity);
 
       return DeleteBoardResponseDto.success();
+    } catch (Exception exception) {
+      exception.printStackTrace();
+      return ResponseDto.databaseError();
+    }
+  }
+
+  @Override
+  public ResponseEntity<? super PatchBoardResponseDto> patchBoard(Integer boardNumber, UpdateBoardRequestDto dto, String email) {
+    try {
+      boolean existedEmail = userRespository.existsByEmail(email);
+      if (!existedEmail) return PostBoardResponseDto.noExistUser();
+
+      BoardEntity boardEntity = boardRepository.findByBoardNumber(boardNumber);
+      if(boardEntity== null) return PatchBoardResponseDto.noExistBoard();
+      
+      String writerEmail = boardEntity.getWriterEmail();
+      boolean isWriter = writerEmail.equals(email);
+      if(!isWriter) return PatchBoardResponseDto.noPermision();
+
+      boardEntity.pathBoard(dto);
+      boardRepository.save(boardEntity);
+
+      imageRepository.deleteByBoardNumber(boardNumber);
+      List<String> boardImageList = dto.getBoardImageList();
+      List<ImageEntity> imageEntities = new ArrayList<>();
+
+      for (String image : boardImageList) {
+        ImageEntity imageEntity = new ImageEntity(boardNumber, image);
+        imageEntities.add(imageEntity);
+      }
+      imageRepository.saveAll(imageEntities);
+
+      return PatchBoardResponseDto.success(boardNumber);
     } catch (Exception exception) {
       exception.printStackTrace();
       return ResponseDto.databaseError();

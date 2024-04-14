@@ -1,11 +1,10 @@
 package com.backproject.springback.entity;
 
 import com.backproject.springback.dto.request.board.PostBoardRequestDto;
-
+import com.backproject.springback.dto.request.board.UpdateBoardRequestDto;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,8 +13,10 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "board")
@@ -36,7 +37,9 @@ public class BoardEntity {
 
   public BoardEntity(PostBoardRequestDto dto, String email) {
     Date now = Date.from(Instant.now());
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+      "yyyy-MM-dd HH:mm:ss"
+    );
     String writeDatetime = simpleDateFormat.format(now);
 
     this.title = dto.getTitle();
@@ -48,20 +51,24 @@ public class BoardEntity {
     this.writerEmail = email;
   }
 
-  public void increaseViewCount(){
+  public void increaseViewCount() {
     this.viewCount++;
   }
 
-  public void increaseFavoriteCount(){
+  public void increaseFavoriteCount() {
     this.favoriteCount++;
   }
 
-  public void decreaseFavoriteCount(){
+  public void decreaseFavoriteCount() {
     this.favoriteCount--;
   }
 
-  public void increaseCommentCount(){
+  public void increaseCommentCount() {
     this.commentCount++;
   }
 
+  public void pathBoard(UpdateBoardRequestDto dto) {
+    this.title = dto.getTitle();
+    this.content = dto.getContent();
+  }
 }

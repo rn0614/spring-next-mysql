@@ -21,7 +21,7 @@ public class FileServiceImplement implements FileService {
   @Override
   public String upload(MultipartFile file) {
     if (file.isEmpty()) return null;
-
+    
     String originalFileName = file.getOriginalFilename();
     String extension = originalFileName.substring(
       originalFileName.lastIndexOf(".")

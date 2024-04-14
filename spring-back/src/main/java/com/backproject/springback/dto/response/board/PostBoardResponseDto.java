@@ -10,12 +10,15 @@ import org.springframework.http.ResponseEntity;
 @Getter
 public class PostBoardResponseDto extends ResponseDto {
 
-  private PostBoardResponseDto() {
+  Integer boardNumber;
+
+  private PostBoardResponseDto(Integer boardNumber) {
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+    this.boardNumber = boardNumber;
   }
 
-  public static ResponseEntity<PostBoardResponseDto> success() {
-    return ResponseEntity.status(HttpStatus.OK).body(new PostBoardResponseDto());
+  public static ResponseEntity<PostBoardResponseDto> success(Integer boardNumber) {
+    return ResponseEntity.status(HttpStatus.OK).body(new PostBoardResponseDto(boardNumber));
   }
 
   public static ResponseEntity<ResponseDto> noExistUser(){

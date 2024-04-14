@@ -86,8 +86,8 @@ export default function Authentication({ setIsSigned }: any) {
 
     const { token, expirationTime } = responseBody;
     const now = new Date().getTime();
-    const expires = new Date(now + expirationTime * 1000);
-    setCookies("accessToken", token, { expires: expires, path: MAIN_PATH() });
+    const expires = new Date( now + 9 * 36000 + 60 * 60);
+    setCookies("accessToken", token, { expires: expires, path: "/" });
     router.push(MAIN_PATH());
   };
 

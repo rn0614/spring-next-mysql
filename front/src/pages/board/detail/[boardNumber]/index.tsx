@@ -8,7 +8,7 @@ import React, {
 import style from "./style.module.scss";
 import Icon, { IconButton } from "@/ui/atom/Icon/Icon";
 import FavoriteItem from "@/components/FavoriteItem";
-import { Board, FavoriteListItem } from "@/types/interface";
+import { Board } from "@/types/interface";
 import CommentItem from "@/components/CommentItem";
 import Button from "@/ui/atom/Button/Button";
 import Pagination from "@/components/Pagination";
@@ -17,32 +17,14 @@ import { ProfileImageWithNickName } from "@/ui/atom/ProfileImage/ProfileImage";
 import { useRecoilValue } from "recoil";
 import { CurrUserAtom } from "@/stores/login-user.store";
 import { useRouter } from "next/router";
-import {
-  BOARD_UPDATE_PATH,
-  BOARD_WRITE_PATH,
-  MAIN_PATH,
-  USER_PATH,
-} from "@/constants";
-import {
-  deleteBoardRequest,
-  getBoardRequest,
-  getFavoriteListRequest,
-  increaseViewCountRequest,
-  postCommentRequest,
-  putFavoriteRequest,
-} from "@/pages/api";
-import { useComment } from "@/hooks/useBoard";
+import { BOARD_UPDATE_PATH, MAIN_PATH, USER_PATH } from "@/constants";
+import { increaseViewCountRequest } from "@/pages/api";
+import { useGetCommentList, usePostComment } from "@/hooks/useComment";
 import { getElapsedTime } from "@/utils/day";
-import {
-  DeleteBoardResponseDto,
-  GetCommentListResponseDto,
-  GetFavoriteListResponseDto,
-  PostCommentResponseDto,
-  PutFavoriteResponseDto,
-} from "@/pages/api/response/board";
-import { ResponseDto } from "@/pages/api/response";
 import { useCookies } from "react-cookie";
 import { PostCommentRequestDto } from "@/pages/api/request/board";
+import { useDeleteBoard, getBoardRequest } from "@/hooks/useBoard";
+import { useGetFavoriteList, usePutFavorite } from "@/hooks/useFavorite";
 
 type boardProps = {
   board: Board;
@@ -55,19 +37,8 @@ export default function DetailBoardPage({ board }: boardProps) {
   const [cookies, setCookies] = useCookies();
 
   const BoardDetailTop = () => {
+    const deleteBoard = useDeleteBoard();
     const [showMore, setShowMore] = useState<boolean>(false);
-
-    const deleteBoardResponse = (
-      responseBody: DeleteBoardResponseDto | ResponseDto | null
-    ) => {
-      if (!responseBody) return;
-      const { code } = responseBody;
-      if (code !== "SU") {
-        alert("제대로된 접근이 아닙니다."+code);
-        return;
-      }
-      router.push(MAIN_PATH());
-    };
 
     const onNicknameClickHander = () => {
       if (!board) return;
@@ -81,17 +52,13 @@ export default function DetailBoardPage({ board }: boardProps) {
     const onUpdateButtonClickHandler = () => {
       if (!board || !loginUser) return;
       if (loginUser.email !== board.writerEmail) return;
-      router.push(
-        BOARD_WRITE_PATH() + "/" + BOARD_UPDATE_PATH(board.boardNumber)
-      );
+      router.push(BOARD_UPDATE_PATH(board.boardNumber));
     };
 
     const onDelteButtonClickHandler = () => {
       if (!board || !loginUser || !cookies.accessToken) return;
       if (loginUser.email !== board.writerEmail) return;
-      deleteBoardRequest(board.boardNumber, cookies.accessToken).then(
-        (response) => deleteBoardResponse(response)
-      );
+      deleteBoard(board.boardNumber);
       router.push(MAIN_PATH());
     };
 
@@ -153,65 +120,35 @@ export default function DetailBoardPage({ board }: boardProps) {
   };
 
   const BoardDetailBottom = () => {
-    const {commentList} = useComment(board.boardNumber);
-
     const [showFavorite, setShowFavorite] = useState<boolean>(false);
-    const [showComment, setShowComment] = useState<boolean>(false);
-
-    const [favoriteList, setFavoriteList] = useState<FavoriteListItem[]>([]);
+    const [showComment, setShowComment] = useState<boolean>(true);
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
-    const commentRef = useRef<HTMLTextAreaElement>(null);
     const [comment, setComment] = useState<string>();
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(8);
 
-    const postCommentResponse = (
-      responseBody: PostCommentResponseDto | ResponseDto | null
-    ) => {
-      if (!responseBody) return;
-      const { code } = responseBody;
-      if (code !== "SU") {
-        alert("실패입니다..");
-        return;
-      }
-      //getCommentListRequest(board.boardNumber).then(getCommentListResponse);
-    };
+    const commentRef = useRef<HTMLTextAreaElement>(null);
 
-    const putFavoriteResponse = (
-      responseBody: PutFavoriteResponseDto | ResponseDto | null
-    ) => {
-      if (!responseBody) return;
-      const { code } = responseBody;
-      if (code !== "SU") {
-        alert("실패입니다..");
-        return;
-      }
-      getFavoriteListRequest(board.boardNumber).then(getFavoriteListResponse);
-    };
-
-    const getFavoriteListResponse = (
-      responseBody: GetFavoriteListResponseDto | ResponseDto | null
-    ) => {
-      if (!responseBody) return;
-      const { favoriteList } = responseBody as GetFavoriteListResponseDto;
-      setFavoriteList(favoriteList);
-      if (
-        -1 !==
-        favoriteList.findIndex(
-          (favorite) => favorite.email === loginUser?.email
-        )
-      ) {
-        setIsFavorite(true);
-      }
-    };
+    const commentList = useGetCommentList({
+      boardNumber: board.boardNumber,
+      limit: limit,
+      page: page,
+    });
+    const postComment = usePostComment();
+    const putFavorite = usePutFavorite();
+    const favoriteList = useGetFavoriteList(board.boardNumber);
 
     const onFavoriteClickHandler = () => {
-      if (!loginUser || !cookies.accessToken) return;
-      putFavoriteRequest(board.boardNumber, cookies.accessToken).then(
-        (responseBody) => {
-          putFavoriteResponse(responseBody);
-        }
-      );
+      console.log("loginuser", loginUser);
+      console.log("cookies.accessToken", cookies.accessToken);
+      if (!loginUser || !cookies.accessToken) {
+        alert("로그인 후 좋아요가 가능합니다.");
+        return;
+      }
+      putFavorite(board.boardNumber);
       setIsFavorite((pre) => !pre);
     };
+
     const onCommentChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
       setComment(e.target?.value);
       if (e.target == commentRef.current) {
@@ -221,7 +158,6 @@ export default function DetailBoardPage({ board }: boardProps) {
     };
 
     const onCommentSubmitHandler = () => {
-      console.log(comment, loginUser, cookies.accessToken);
       if (
         comment === "" ||
         comment === undefined ||
@@ -230,11 +166,8 @@ export default function DetailBoardPage({ board }: boardProps) {
       )
         return;
       const requestBody: PostCommentRequestDto = { content: comment };
-      postCommentRequest(
-        board.boardNumber,
-        requestBody,
-        cookies.accessToken
-      ).then(postCommentResponse);
+      postComment({ boardNumber: board.boardNumber, requestBody });
+      setComment("");
     };
 
     const onShowClickHandler = (openTarget: string) => {
@@ -244,10 +177,19 @@ export default function DetailBoardPage({ board }: boardProps) {
         setShowComment((pre) => !pre);
       }
     };
-
     useEffect(() => {
-      getFavoriteListRequest(board.boardNumber).then(getFavoriteListResponse);
-    }, []);
+      if (
+        -1 !==
+        favoriteList.findIndex(
+          (favorite) => favorite.email === loginUser?.email
+        )
+      ) {
+        setIsFavorite(true);
+      }
+    }, [favoriteList]);
+    useEffect(() => {
+      console.log("commentList", commentList);
+    }, [commentList]);
 
     return (
       <div id={style["board-detail-bottom"]}>
@@ -266,7 +208,7 @@ export default function DetailBoardPage({ board }: boardProps) {
               text={"댓글"}
               isMoreShow={showComment}
               moreClick={() => onShowClickHandler("comment")}
-              totCount={commentList.length}
+              totCount={commentList[0] ? commentList[0].totalCount : 0}
             />
           </div>
           {showFavorite && (
@@ -288,7 +230,9 @@ export default function DetailBoardPage({ board }: boardProps) {
             <div className={style["board-detail-bottom-comment-container"]}>
               <div className={style["board-detail-bottom-comment-title"]}>
                 {"댓글"}
-                <span className="emphasis">{commentList.length}</span>
+                <span className="emphasis">
+                  {commentList[0] ? commentList[0].totalCount : 0}
+                </span>
               </div>
               <div
                 className={style["board-detail-bottom-comment-list-container"]}
@@ -301,7 +245,18 @@ export default function DetailBoardPage({ board }: boardProps) {
           )}
           <div className="divider"></div>
           <div className={style["board-detail-bottom-comment-pagination-box"]}>
-            <Pagination />
+            <Pagination
+              curPage={page}
+              limit={limit}
+              totalPage={
+                commentList[0]
+                  ? Math.ceil((+commentList[0].totalCount + 1) / limit)
+                  : 1
+              }
+              setPage={setPage}
+              setLimit={setLimit}
+              onLimitChange={() => {}}
+            />
           </div>
           {loginUser !== null ? (
             <div className={style["board-detail-bottom-comment-input-box"]}>
@@ -387,13 +342,24 @@ export default function DetailBoardPage({ board }: boardProps) {
 
 // 이 함수는 서버에서 실행되어 페이지의 초기 props를 결정합니다.
 export async function getServerSideProps(context: any) {
-  const boardNumber = context.query.boardNumber as string;
-  const board = await getBoardRequest(boardNumber);
+  try {
+    const boardNumber = context.query.boardNumber as string;
+    const board = await getBoardRequest(boardNumber);
 
-  await increaseViewCountRequest(boardNumber);
-  return {
-    props: {
-      board: board,
-    },
-  };
+    await increaseViewCountRequest(boardNumber);
+    return {
+      props: {
+        board: board,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching board:", error);
+    // 에러 발생 시 리다이렉트 처리
+    return {
+      redirect: {
+        destination: "/error", // 오류 페이지 또는 원하는 리다이렉션 대상 URL
+        permanent: false, // 이 리다이렉트가 영구적인지 여부 (301 vs 302)
+      },
+    };
+  }
 }
