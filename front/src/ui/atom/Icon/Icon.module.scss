@@ -31,10 +31,10 @@
   background-size: 100% 100%;
 }
 
-.position-top{
-  position:absolute;
-  top:1rem;
-  right:1rem;
+.position-top {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }
 
 .eye-light-off-icon {
@@ -68,42 +68,46 @@
   background-image: url("/image/search-light.png");
 }
 
-.check-ring-light-icon{
+.check-ring-light-icon {
   background-image: url("/image/check-ring-light.png");
 }
 
-.check-round-fill-icon{
+.check-round-fill-icon {
   background-image: url("/image/check-round-fill.png");
 }
 
-.image-box-light-icon{
+.image-box-light-icon {
   background-image: url("/image/image-box-light.png");
 }
 
-.image-close-icon{
+.image-close-icon {
   background-image: url("/image/close.png");
 }
 
-.more-icon{
+.more-icon {
   background-image: url("/image/more.png");
 }
 
-.favorite-fill-icon{
+.favorite-fill-icon {
   background-image: url("/image/favorite-fill.png");
 }
 
-.favorite-light-icon{
+.favorite-light-icon {
   background-image: url("/image/favorite-light.png");
 }
 
-.comment-icon{
+.comment-icon {
   background-image: url("/image/chat-light.png");
 }
 
-.up-light-icon{
+.up-light-icon {
   background-image: url("/image/expand-up-light.png");
 }
 
-.down-light-icon{
+.down-light-icon {
   background-image: url("/image/expand-down-light.png");
+}
+
+.edit-icon {
+  background-image: url("/image/edit-light.png");
 }

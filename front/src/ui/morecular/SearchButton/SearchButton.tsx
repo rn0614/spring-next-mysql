@@ -2,6 +2,7 @@ import { IconButton } from "@/ui/atom/Icon/Icon";
 import styles from "./SearchButton.module.scss";
 import React, { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { SEARCH_PATH } from "@/constants";
 
 export default function SearchButton() {
   const searchBtnRef = useRef<HTMLInputElement | null>(null);
@@ -19,7 +20,7 @@ export default function SearchButton() {
   };
 
   const onSearchButtonClickHandler = () => {
-    router.push(searchWord);
+    router.push(SEARCH_PATH(searchWord));
   };
 
   const onSearchWordKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {

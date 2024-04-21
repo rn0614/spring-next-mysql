@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./style.module.scss";
 import ProfileImage from "@/ui/atom/ProfileImage/ProfileImage";
-import { favoriteListItem } from "@/types/interface";
+import { FavoriteListItem } from "@/types/interface";
 
 type FavoriteItemProps = {
-  favoriteItem: favoriteListItem;
+  favoriteItem: FavoriteListItem;
 };
 
 export default function FavoriteItem({ favoriteItem }: FavoriteItemProps) {

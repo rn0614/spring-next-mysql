@@ -2,7 +2,7 @@ import { BoardListItemType } from "@/types/interface";
 
 const latestTop3ListMock: BoardListItemType[] = [
   {
-    boardNumber: 1,
+    boardNumber: 11,
     title: "mocking용 title",
     content: "mocking용 content",
     boardTitleImage: "https://www.handmk.com/news/photo/202306/16714_40371_5250.jpg",

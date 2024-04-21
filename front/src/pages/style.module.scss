@@ -1,18 +1,137 @@
-@use '@/styles/global-variable.scss' as *;
+@use "@/styles/global-variable.scss" as *;
 
-.main-wrapper {
-  width: 100%;
-  max-width: var(--max-width);
-  margin: 0 auto;
+#main-top-wrapper {
+  padding: 5rem 0 2.5rem;
+  display: flex;
+  justify-content: center;
+
+  .main-top-container {
+    width: 100%;
+    max-width: var(--max-width);
+
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+
+    .main-top-contents-box {
+      width: 100%;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+
+      .main-top-contents-title {
+        color: rgba(0, 0, 0, 1);
+
+        font-size: 1.5rem;
+        font-weight: 500;
+        line-height: 140%;
+      }
+
+      .main-top-contents {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+
+        width: 100%;
+        padding: 1rem;
+        @media screen and (max-width: 900px) {
+          flex-direction: column;
+        }
+      }
+    }
+  }
 }
 
-.top3-list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  max-width: var(--max-width);
+#main-bottom-wrapper {
+  padding: 2.5rem 0;
+
+  display: flex;
   justify-content: center;
-  gap: 10px;
-  @media screen and (max-width:$mobile-width) {
-    grid-template-columns: repeat(2, 1fr);
+  background-color: rgba(0, 0, 0, 0.05);
+
+  .main-bottom-container {
+    width: 100%;
+    max-width: var(--max-width);
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 1.25rem;
+    .main-bottom-title {
+      color: rgba(0, 0, 0, 1);
+
+      font-size: 1.5rem;
+      font-weight: 500;
+      line-height: 140%;
+    }
+    .main-bottom-contents-box {
+      width: 100%;
+      display: grid;
+
+      grid-template-columns: 8fr 4fr;
+      gap: 1.5rem;
+      .main-bottom-latest-contents {
+        grid-column: 1/2;
+
+        @media screen and (max-width: 900px) {
+          grid-column: 1/3;
+        }
+      }
+      .main-bottom-popular-box {
+        grid-column: 2/3;
+
+        @media screen and (max-width: 900px) {
+          display: none;
+        }
+
+        .main-bottom-popular-card {
+          padding: 1.5rem;
+          background-color: rgba(255, 255, 255, 0.5);
+
+          .main-bottom-popular-card-container {
+            display: flex;
+            flex-direction: column;
+
+            gap: 1.5rem;
+
+            .main-bottom-popular-cart-title {
+              color: rgba(0, 0, 0, 1);
+
+              font-size: 1.5rem;
+              font-weight: 500;
+              line-height: 140%;
+            }
+            .main-bottom-popular-cart-contents {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 0.75rem;
+
+              .word-badge {
+                border: 1px solid rgba(0, 0, 0, 1);
+                border-radius: 1rem;
+                padding: 6px 20px;
+
+                color: rgba(0, 0, 0, 0.5);
+
+                font-size: 0.875rem;
+                font-weight: 500;
+                line-height: 140%;
+
+                &:hover {
+                  background-color: rgba(0, 0, 0, 0.03);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
+}
+.main-bottom-pagination-box {
+  margin-top: 4rem;
+  display: flex;
+  justify-content: center;
 }

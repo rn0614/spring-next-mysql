@@ -7,16 +7,18 @@ import com.backproject.springback.dto.response.board.DeleteBoardResponseDto;
 import com.backproject.springback.dto.response.board.GetBoardResponseDto;
 import com.backproject.springback.dto.response.board.GetCommentListResponseDto;
 import com.backproject.springback.dto.response.board.GetFavoriteListResponseDto;
+import com.backproject.springback.dto.response.board.GetLatestBoardListResponseDto;
+import com.backproject.springback.dto.response.board.GetSearchBoardListResponseDto;
+import com.backproject.springback.dto.response.board.GetTop3BoardListResponseDto;
+import com.backproject.springback.dto.response.board.GetUserBoardListResponseDto;
 import com.backproject.springback.dto.response.board.IncreaseViewCountResponseDto;
 import com.backproject.springback.dto.response.board.PatchBoardResponseDto;
 import com.backproject.springback.dto.response.board.PostBoardResponseDto;
 import com.backproject.springback.dto.response.board.PostCommentResponseDto;
 import com.backproject.springback.dto.response.board.PutFavoriteResponseDto;
 import com.backproject.springback.service.BoardService;
-import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.annotation.QueryAnnotation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -108,8 +110,8 @@ public class BoardController {
   @GetMapping("/{boardNumber}/comment-list")
   public ResponseEntity<? super GetCommentListResponseDto> getCommentList(
     @PathVariable("boardNumber") Integer boardNumber,
-    @RequestParam(value="limit", defaultValue = "5") Integer limit,
-    @RequestParam(value="startNumber", defaultValue = "0") Integer startNumber
+    @RequestParam(value = "limit", defaultValue = "5") Integer limit,
+    @RequestParam(value = "startNumber", defaultValue = "0") Integer startNumber
   ) {
     ResponseEntity<? super GetCommentListResponseDto> reponse = boardService.getCommentList(
       boardNumber,
@@ -140,6 +142,47 @@ public class BoardController {
     ResponseEntity<? super PatchBoardResponseDto> response = boardService.patchBoard(
       boardNumber,
       requestBody,
+      email
+    );
+    return response;
+  }
+
+  @GetMapping("/latest-list")
+  public ResponseEntity<? super GetLatestBoardListResponseDto> getLatestBoardList() {
+    ResponseEntity<? super GetLatestBoardListResponseDto> response = boardService.getLatestBoardList();
+    return response;
+  }
+
+  @GetMapping("/top-3")
+  public ResponseEntity<? super GetTop3BoardListResponseDto> getTop3BoardList() {
+    ResponseEntity<? super GetTop3BoardListResponseDto> response = boardService.getTop3BoardList();
+    return response;
+  }
+
+  @GetMapping(
+    value = {
+      "/search-list/{searchWord}", "/search-list/{searchWord}/{preSearchWord}",
+    }
+  )
+  public ResponseEntity<? super GetSearchBoardListResponseDto> getSearchBoardList(
+    @PathVariable("searchWord") String searchWord,
+    @PathVariable(
+      value = "preSearchWord",
+      required = false
+    ) String preSearchWord
+  ) {
+    ResponseEntity<? super GetSearchBoardListResponseDto> response = boardService.getSearchBoardList(
+      searchWord,
+      preSearchWord
+    );
+    return response;
+  }
+
+  @GetMapping("/user-board-list/{email}")
+  public ResponseEntity<? super GetUserBoardListResponseDto> getUserBoardList(
+    @PathVariable("email") String email
+  ) {
+    ResponseEntity<? super GetUserBoardListResponseDto> response = boardService.getUserBoardList(
       email
     );
     return response;

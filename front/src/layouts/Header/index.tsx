@@ -6,8 +6,6 @@ import Button from "@/ui/atom/Button/Button";
 import Icon from "@/ui/atom/Icon/Icon";
 import { BOARD_DETAIL_PATH, MAIN_PATH, USER_PATH } from "@/constants";
 import { useRecoilState } from "recoil";
-import { CurrUserAtom } from "@/stores/login-user.store";
-import { useCookies } from "react-cookie";
 import { CurBoardAtom } from "@/stores/board.store";
 import { fileUploadRequest } from "@/pages/api";
 import { PostBoardRequestDto } from "@/pages/api/request/board";

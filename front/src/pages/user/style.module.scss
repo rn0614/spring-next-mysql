@@ -1,0 +1,85 @@
+#main-area {
+  display: flex;
+  flex-direction: column;
+}
+
+#user-top-wrapper {
+  grid-area: main;
+  padding: 2rem 0;
+  display: flex;
+  justify-content: center;
+
+  .user-top-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: var(--max-width);
+    gap: 1rem;
+
+    .user-top-my-profile-image-box {
+      width: 100px;
+      height: 100px;
+    }
+    .user-top-info-nickname-box {
+      display: flex;
+      align-items: center;
+      .user-top-info-nickname {
+        font-size: 1.5rem;
+        font-weight: 500;
+        line-height: 140%;
+      }
+    }
+    .user-top-info-email {
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 140%;
+      color: rgba(0, 0, 0, 0.5);
+    }
+  }
+}
+
+#user-bottom-wrapper {
+  display: flex;
+  justify-content: center;
+
+  grid-area: main;
+  background-color: rgba(0, 0, 0, 0.08);
+  flex: 1;
+
+  .user-bottom-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 0 1rem;
+
+    .user-my-board-title{
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 140%;
+      margin:0.5rem 0;
+    }
+
+    .user-my-board-contents{
+      flex:1;
+      display: grid;
+      grid-template-columns: 8fr 4fr;
+      gap: 0.8rem;
+
+      .user-my-board-list{
+        grid-column: 1/2;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+      }
+      .write-new-board-box{
+        grid-column: 2/3;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(255,255,255,1);
+        height:fit-content;
+      }
+    }
+  }
+}

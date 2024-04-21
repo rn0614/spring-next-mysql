@@ -6,6 +6,7 @@ import PutFavoriteResponseDto from "./put-favorite.response.dto";
 import PostCommentResponseDto from "./post-comment.response.dto";
 import increaseViewCountRsponse from "./increase-view-count.response.dto";
 import DeleteBoardResponseDto from "./delete-board.response.dto";
+import GetSearchBoardListResponseDto from "./get-search-board-list.response.dto";
 
 export type {
   GetBoardResponseDto,
@@ -16,4 +17,5 @@ export type {
   PutFavoriteResponseDto,
   increaseViewCountRsponse,
   DeleteBoardResponseDto,
+  GetSearchBoardListResponseDto
 };

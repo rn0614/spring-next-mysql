@@ -1,8 +1,6 @@
 import { CurrUserAtom } from "@/stores/login-user.store";
-import { User } from "@/types/interface";
 import authFetch from "@/utils/axios/axiosInstance";
 import axios from "axios";
-import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useMutation, useQuery } from "react-query";
 import { useRecoilState } from "recoil";
@@ -27,32 +25,41 @@ export const signInRequest = async (requestBody: any) => {
 
 // 쿠키의 토큰을 통해 user가 실제로 인가된 유저인지 확인
 const getSignInUserRequest = async (accessToken: string) => {
-  const result = await authFetch(accessToken)
-    .get(GET_SING_IN_USER_URL())
-    .then((response) => {
-      const responseBody = response;
-      return responseBody;
-    })
-    .catch((error) => {
-      if(error.response=null) return;
-      const responseBody = error.response?.data;
-      return responseBody;
-    });
-  return result;
+  console.log("accessToken", accessToken);
+  if (
+    accessToken !== "undefined" &&
+    accessToken !== undefined &&
+    accessToken !== null
+  ) {
+    const result = await authFetch(accessToken)
+      .get(GET_SING_IN_USER_URL())
+      .then((response) => {
+        const responseBody = response;
+        return responseBody;
+      })
+      .catch((error) => {
+        if ((error.response = null)) return;
+        const responseBody = error.response?.data;
+        return responseBody;
+      });
+    return result;
+  }
+  return null;
 };
 
 // accessToken을 이용해 새로고침 이후 recoil 데이터 유지 및
 export const useGetLoginUser = () => {
   const [loginUser, setLoginUser] = useRecoilState(CurrUserAtom);
-  const [cookies, setCookies] = useCookies();
+  const [cookies, setCookies, removeCookie] = useCookies();
   const { setLoginCookie } = useLoginCookies();
   const { data } = useQuery(
     "accessToken",
     async () => getSignInUserRequest(cookies.accessToken),
     {
       onSuccess: (response) => {
+        console.log("response", response);
         setLoginCookie(response);
-        if (cookies?.accessToken) {
+        if (cookies.accessToken) {
           setLoginUser({
             email: response.email,
             nickname: response.nickname,
@@ -67,7 +74,7 @@ export const useGetLoginUser = () => {
   );
   const resetUser = () => {
     setLoginUser(null);
-    setCookies("accessToken", null);
+    removeCookie("accessToken", { path: "/" });
   };
   return { loginUser, resetUser };
 };

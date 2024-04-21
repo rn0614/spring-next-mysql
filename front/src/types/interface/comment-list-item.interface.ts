@@ -1,6 +1,6 @@
 export default interface CommentListItem{
   nickname:string;
-  profileIamge:string|null;
+  profileImage:string|null;
   writeDatetime:string;
   content:string;
   totalCount:number;

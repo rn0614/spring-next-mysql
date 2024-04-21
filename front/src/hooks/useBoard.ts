@@ -4,9 +4,14 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery } from "react-query";
 import { BOARD_DETAIL_PATH } from "@/constants";
+import { BoardListItemType } from "@/types/interface";
 
 const GET_BOARD_URL = (boardNumber: number | string) =>
   `${process.env.NEXT_PUBLIC_API_BACK}/board/${boardNumber}`;
+const GET_LATEST_BOARD_LIST_URL = () =>
+  `${process.env.NEXT_PUBLIC_API_BACK}/board/latest-list`;
+const GET_TOP3_LIST_URL = () =>
+  `${process.env.NEXT_PUBLIC_API_BACK}/board/top-3`;
 const DELETE_BOARD_URL = (boardNumber: number | string) =>
   `${process.env.NEXT_PUBLIC_API_BACK}/board/${boardNumber}`;
 const POST_BOARD_URL = () => `${process.env.NEXT_PUBLIC_API_BACK}/board`;
@@ -17,6 +22,29 @@ export const getBoardRequest = async (boardNumber: number | string) => {
   return await axios
     .get(GET_BOARD_URL(boardNumber))
     .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+export const getLatestBoardListRequest = async () => {
+  return await axios
+    .get(GET_LATEST_BOARD_LIST_URL())
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+export const getTop3BoardListRequest = async () => {
+  return await axios
+    .get(GET_TOP3_LIST_URL())
+    .then((response) => {
+      console.log(response)
       return response.data;
     })
     .catch((error) => {
@@ -62,6 +90,15 @@ const updateBoardRequest = async ({ boardNumber, requestBody }: any) => {
     });
   return result;
 };
+
+export function useGetLatestBoard() {
+  const { data } = useQuery(["board", "latest"], async () =>
+    getLatestBoardListRequest().then((response) => {
+      return response;
+    })
+  );
+  return data?.latestList?data.latestList:[];
+}
 
 export function useGetBoard(boardNumber: number | string) {
   const { data } = useQuery(["board", boardNumber], async () =>

@@ -3,6 +3,7 @@ import styles from "./style.module.scss";
 import { BoardListItemType } from "@/types/interface";
 import { useRouter } from "next/navigation";
 import { ProfileImageWithNickName } from "@/ui/atom/ProfileImage/ProfileImage";
+import { BOARD_DETAIL_PATH } from "@/constants";
 
 type Props = {
   top3ListItem: BoardListItemType;
@@ -25,7 +26,7 @@ export default function Top3Item({ top3ListItem }: Props) {
   const router = useRouter();
 
   const onClickHandler = () => {
-    router.push(`/board/${boardNumber}`);
+    router.push(BOARD_DETAIL_PATH(boardNumber));
   };
 
   return (

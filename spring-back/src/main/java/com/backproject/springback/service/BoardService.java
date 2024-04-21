@@ -12,13 +12,21 @@ import com.backproject.springback.dto.response.board.PutFavoriteResponseDto;
 import com.backproject.springback.dto.response.board.IncreaseViewCountResponseDto;
 import com.backproject.springback.dto.response.board.DeleteBoardResponseDto;
 import com.backproject.springback.dto.response.board.PatchBoardResponseDto;
+import com.backproject.springback.dto.response.board.GetLatestBoardListResponseDto;
+import com.backproject.springback.dto.response.board.GetTop3BoardListResponseDto;
+import com.backproject.springback.dto.response.board.GetSearchBoardListResponseDto;
+import com.backproject.springback.dto.response.board.GetUserBoardListResponseDto;
+
 import org.springframework.http.ResponseEntity;
 
 public interface BoardService {
   ResponseEntity<? super GetBoardResponseDto> getBoard(Integer boardNumber);
   ResponseEntity<? super GetFavoriteListResponseDto> getFavoriteList(Integer boardNumber);
   ResponseEntity<? super GetCommentListResponseDto> getCommentList(Integer boardNumber, Integer limit, Integer startNumber);
-
+  ResponseEntity<? super GetLatestBoardListResponseDto> getLatestBoardList();
+  ResponseEntity<? super GetTop3BoardListResponseDto> getTop3BoardList();
+  ResponseEntity<? super GetSearchBoardListResponseDto> getSearchBoardList(String searchWord, String preSearchWord);
+  ResponseEntity<? super GetUserBoardListResponseDto> getUserBoardList(String email);
   ResponseEntity<? super PostBoardResponseDto> postBoard(PostBoardRequestDto dto, String email);
   ResponseEntity<? super PostCommentResponseDto> postComment(PostCommentRequestDto dto,Integer boardNumber,  String email);
 

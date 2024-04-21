@@ -1,0 +1,117 @@
+@use "@/styles/global-variable.scss" as *;
+
+#search-wrapper {
+  padding: 5rem 0 2.5rem;
+  display: flex;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.05);
+
+  .search-container {
+    width: 100%;
+    max-width: var(--max-width);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    .search-title-box {
+      display: flex;
+      gap: 0.5rem;
+
+      .search-title-emphasis {
+        color: rgba(0, 0, 0, 1);
+        font-size: 1.5rem;
+        font-weight: 500;
+        line-height: 140%;
+      }
+      .search-count {
+        color: rgba(0, 0, 0, 1);
+        font-size: 1.5rem;
+        font-weight: 600;
+        line-height: 140%;
+      }
+    }
+
+    .search-contents-box {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 8fr 4fr;
+      gap: 1.5rem;
+
+      .search-contents {
+        grid-column: 1/2;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .search-contents-nothing {
+        grid-column: 1/2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 195px;
+
+        color: rgba(0, 0, 0, 0.4);
+        font-size: 1.5rem;
+        font-weight: 600;
+        line-height: 140%;
+      }
+      .search-relation-box {
+        .search-relation-card-container {
+          display: flex;
+          flex-direction: column;
+
+          background-color: rgba(255, 255, 255, 1);
+          color: rgba(0, 0, 0, 0.4);
+
+          gap: 1.5rem;
+          padding: 1rem;
+
+          .search-relation-card-title {
+            color: rgba(0, 0, 0, 1);
+
+            font-size: 1.5rem;
+            font-weight: 500;
+            line-height: 140%;
+          }
+
+          .search-relation-card-contents {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+
+            .word-badge {
+              border: 1px solid rgba(0, 0, 0, 1);
+              border-radius: 1rem;
+              padding: 6px 20px;
+
+              color: rgba(0, 0, 0, 0.5);
+
+              font-size: 0.875rem;
+              font-weight: 500;
+              line-height: 140%;
+
+              &:hover {
+                background-color: rgba(0, 0, 0, 0.03);
+              }
+            }
+
+            .search-relation-card-contents-nothing {
+              display: flex;
+              width: 100%;
+              justify-content: center;
+              align-items: center;
+              min-height: 195px;
+
+              font-size: 1.5rem;
+              font-weight: 600;
+              line-height: 140%;
+            }
+          }
+        }
+      }
+    }
+    .search-pagination-box {
+      margin-top: 2rem;
+    }
+  }
+}

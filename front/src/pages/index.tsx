@@ -1,21 +1,97 @@
 import Head from "next/head";
 import { Inter } from "next/font/google";
 import BoardListItem from "@/components/BoardListItem";
-import {
-  commentListMock,
-  favoriteListMock,
-  latestBoardListMock,
-  latestTop3ListMock,
-} from "@/mocks";
 import Top3Item from "@/components/Top3Item";
-import CommentItem from "@/components/CommentItem";
-import FavoriteItem from "@/components/FavoriteItem";
 import MainLayout from "@/layouts/Layout/MainLayout/MainLayout";
 import style from "./style.module.scss";
+import { useEffect, useState } from "react";
+import { BoardListItemType } from "@/types/interface";
+import { useRouter } from "next/navigation";
+import { SEARCH_PATH } from "@/constants";
+import { getTop3BoardListRequest, useGetLatestBoard } from "@/hooks/useBoard";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const MainTop = () => {
+    const [top3List, setTop3List] = useState<BoardListItemType[]>([]);
+
+    useEffect(() => {
+      getTop3BoardListRequest().then((response) => {
+        setTop3List(response.top3List);
+      });
+    }, []);
+    return (
+      <div id={style["main-top-wrapper"]}>
+        <div className={style["main-top-container"]}>
+          <div className={style["main-top-intro"]}></div>
+          <div className={style["main-top-contents-box"]}>
+            <div className={style["main-top-contents-title"]}>TOP3 LIST</div>
+            <div className={style["main-top-contents"]}>
+              {top3List.map((top3ListItem) => (
+                <Top3Item
+                  key={top3ListItem.boardNumber}
+                  top3ListItem={top3ListItem}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const MainBottom = () => {
+    const router = useRouter();
+    const latestBoardList = useGetLatestBoard();
+    const [popularList, setPopularList] = useState<string[]>([]);
+
+    const onPopularWordClickHandler = (word: string) => {
+      router.push(SEARCH_PATH(word));
+    };
+
+    useEffect(() => {
+      setPopularList(["안녕", "안녕하세요"]);
+    }, []);
+    return (
+      <div id={style["main-bottom-wrapper"]}>
+        <div className={style["main-bottom-container"]}>
+          <div className={style["main-bottom-title"]}>최신 게시물</div>
+          <div className={style["main-bottom-contents-box"]}>
+            <div className={style["main-bottom-latest-contents"]}>
+              {latestBoardList.map((item:BoardListItemType) => (
+                <BoardListItem key={item.boardNumber} boardListItem={item} />
+              ))}
+            </div>
+            <div className={style["main-bottom-popular-box"]}>
+              <div className={style["main-bottom-popular-card"]}>
+                <div className={style["main-bottom-popular-card-container"]}>
+                  <div className={style["main-bottom-popular-cart-title"]}>
+                    인기검색어
+                  </div>
+                  <div className={style["main-bottom-popular-cart-contents"]}>
+                    {popularList.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className={style["word-badge"]}
+                        onClick={() => onPopularWordClickHandler(item)}
+                      >
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={style["main-bottom-pagination-box"]}>
+            <div>pagination</div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <Head>
@@ -24,47 +100,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <MainLayout path="home">
-        <div className={style["main-wrapper"]}>
-          <div className={style["main-container"]}>
-            {latestBoardListMock.map((boardListItem) => (
-              <BoardListItem
-                key={boardListItem.boardNumber}
-                boardListItem={boardListItem}
-              />
-            ))}
-            <div
-              className={style['top3-list']}
-            >
-              {latestTop3ListMock.map((top3ListItem) => (
-                <Top3Item
-                  key={top3ListItem.boardNumber}
-                  top3ListItem={top3ListItem}
-                />
-              ))}
-            </div>
-
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "30px" }}
-            >
-              {commentListMock.map((commentItem, idx) => (
-                <CommentItem
-                  key={`${commentItem.nickname}-${idx}`}
-                  commentItem={commentItem}
-                />
-              ))}
-            </div> 
-
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "30px" }}
-            >
-              {favoriteListMock.map((favoriteItem, idx) => (
-                <FavoriteItem
-                  key={`${favoriteItem.nickname}-${idx}`}
-                  favoriteItem={favoriteItem}
-                />
-              ))}
-            </div>
-          </div>
+        <div>
+          <MainTop />
+          <MainBottom />
         </div>
       </MainLayout>
     </>

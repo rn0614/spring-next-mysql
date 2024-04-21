@@ -7,7 +7,6 @@
   --mobile-width: 600px;
 }
 
-
 * {
   box-sizing: border-box;
   padding: 0;
@@ -17,6 +16,8 @@
 
 html,
 body {
+  display: flex;
+  flex-direction: column;
 }
 
 a {

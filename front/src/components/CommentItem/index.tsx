@@ -9,11 +9,11 @@ type CommentItemProsp = {
 };
 
 export default function CommentItem({ commentItem }: CommentItemProsp) {
-  const { nickname, profileIamge, writeDatetime, content } = commentItem;
+  const { nickname, profileImage, writeDatetime, content } = commentItem;
   return (
     <div className={styles["comment-list-item"]}>
       <div className={styles["comment-list-item-top"]}>
-        <ProfileImage writerProfileImage={profileIamge} />
+        <ProfileImage writerProfileImage={profileImage} />
         <div className={styles["comment-list-item-nickname"]}>{nickname}</div>
         <div className={styles["comment-list-item-divider"]}>{`\|`}</div>
         <div className={styles["comment-list-item-time"]}>{getElapsedTime(writeDatetime)}</div>
