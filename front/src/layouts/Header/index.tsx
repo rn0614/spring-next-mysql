@@ -81,9 +81,11 @@ export default function Header({ path }: Props) {
   };
 
   const onMyPageButtonClickHandler = () => {
+    console.log('loginUser',loginUser)
     if (!loginUser) return;
-    const { nickname } = loginUser;
-    router.push(USER_PATH(nickname));
+    const { email } = loginUser;
+    console.log('nickname',email)
+    router.push(USER_PATH(email));
   };
 
   const onSignInButtonClickHandler = () => {

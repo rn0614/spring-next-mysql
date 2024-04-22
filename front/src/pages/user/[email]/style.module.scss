@@ -12,6 +12,7 @@
   .user-top-container {
     display: flex;
     align-items: center;
+    margin: 0 1rem;
     width: 100%;
     max-width: var(--max-width);
     gap: 1rem;
@@ -20,13 +21,36 @@
       width: 100px;
       height: 100px;
     }
+    .profile-input-box {
+      display: none;
+    }
     .user-top-info-nickname-box {
       display: flex;
       align-items: center;
+
+      .user-top-info-nickname-input {
+        border: none;
+        background: none;
+        outline: none;
+
+        flex: 1;
+
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 1.5rem;
+        font-weight: 400;
+        line-height: 140%;
+      }
       .user-top-info-nickname {
         font-size: 1.5rem;
         font-weight: 500;
         line-height: 140%;
+      }
+      .icon-box{
+        cursor: pointer;
+        &:active{
+          border-radius: 50%;
+          background-color: rgba(0,0,0,0.08);
+        }
       }
     }
     .user-top-info-email {
@@ -53,32 +77,41 @@
     max-width: var(--max-width);
     margin: 0 1rem;
 
-    .user-my-board-title{
+    .user-my-board-title {
       font-size: 2rem;
       font-weight: 400;
       line-height: 140%;
-      margin:0.5rem 0;
+      margin: 0.5rem 0;
     }
 
-    .user-my-board-contents{
-      flex:1;
+    .user-my-board-contents {
+      flex: 1;
       display: grid;
       grid-template-columns: 8fr 4fr;
       gap: 0.8rem;
 
-      .user-my-board-list{
+      .user-my-board-list {
         grid-column: 1/2;
         display: flex;
         flex-direction: column;
         margin-bottom: 1rem;
+        gap: 0.25rem;
       }
-      .write-new-board-box{
+      .write-new-board-box {
         grid-column: 2/3;
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: rgba(255,255,255,1);
-        height:fit-content;
+        background-color: rgba(255, 255, 255, 1);
+        height: fit-content;
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.08);
+        }
+        .new-board-button {
+          font-size: 1.5rem;
+          font-weight: 500;
+          line-height: 140%;
+        }
       }
     }
   }

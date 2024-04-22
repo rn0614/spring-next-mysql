@@ -73,7 +73,10 @@
       grid-template-columns: 8fr 4fr;
       gap: 1.5rem;
       .main-bottom-latest-contents {
+        display: flex;
+        flex-direction: column;
         grid-column: 1/2;
+        gap:0.25rem;
 
         @media screen and (max-width: 900px) {
           grid-column: 1/3;

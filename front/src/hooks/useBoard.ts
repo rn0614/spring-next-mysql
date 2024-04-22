@@ -4,7 +4,6 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery } from "react-query";
 import { BOARD_DETAIL_PATH } from "@/constants";
-import { BoardListItemType } from "@/types/interface";
 
 const GET_BOARD_URL = (boardNumber: number | string) =>
   `${process.env.NEXT_PUBLIC_API_BACK}/board/${boardNumber}`;
@@ -44,7 +43,7 @@ export const getTop3BoardListRequest = async () => {
   return await axios
     .get(GET_TOP3_LIST_URL())
     .then((response) => {
-      console.log(response)
+      console.log(response);
       return response.data;
     })
     .catch((error) => {
@@ -97,7 +96,7 @@ export function useGetLatestBoard() {
       return response;
     })
   );
-  return data?.latestList?data.latestList:[];
+  return data?.latestList ? data.latestList : [];
 }
 
 export function useGetBoard(boardNumber: number | string) {
@@ -134,4 +133,28 @@ export function useUpdateBoard() {
     },
   });
   return mutate;
+}
+
+const GET_USER_BOARD_LIST = (email: string) =>
+  `${process.env.NEXT_PUBLIC_API_BACK}/board/user-board-list/${email}`;
+
+export const getUserBoardListRequest = async (email: string) => {
+  return await axios
+    .get(GET_USER_BOARD_LIST(email))
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+export function useGetUserBoardList(email: string) {
+  const { data } = useQuery(["user-board-list"], async () =>
+    getUserBoardListRequest(email).then((response) => {
+      console.log("user-board-list");
+      return response;
+    })
+  );
+  return data?.latestList ? data.latestList : [];
 }

@@ -34,7 +34,7 @@ const getSignInUserRequest = async (accessToken: string) => {
     const result = await authFetch(accessToken)
       .get(GET_SING_IN_USER_URL())
       .then((response) => {
-        const responseBody = response;
+        const responseBody = response.data;
         return responseBody;
       })
       .catch((error) => {
@@ -42,8 +42,10 @@ const getSignInUserRequest = async (accessToken: string) => {
         const responseBody = error.response?.data;
         return responseBody;
       });
+      console.log('here2',result)
     return result;
   }
+  console.log('here')
   return null;
 };
 
@@ -57,7 +59,6 @@ export const useGetLoginUser = () => {
     async () => getSignInUserRequest(cookies.accessToken),
     {
       onSuccess: (response) => {
-        console.log("response", response);
         setLoginCookie(response);
         if (cookies.accessToken) {
           setLoginUser({
@@ -65,6 +66,7 @@ export const useGetLoginUser = () => {
             nickname: response.nickname,
             profileImage: response.profileImage,
           });
+
         } else {
           setLoginUser(null);
         }

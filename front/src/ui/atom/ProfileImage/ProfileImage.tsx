@@ -1,15 +1,16 @@
 import React from "react";
-import styles from "./ProfileIamge.module.scss";
+import style from "./ProfileIamge.module.scss";
 
 type ProfileProps = {
   writerProfileImage: string | null;
+  size?:"lg"|"md"|"sm"
 };
 
-export default function ProfileImage({ writerProfileImage }: ProfileProps) {
+export default function ProfileImage({ writerProfileImage, size="sm" }: ProfileProps) {
   return (
-    <div className={styles["profile-box"]}>
+    <div className={`${style["profile-box"]} ${style["size-"+size]}`}>
       <div
-        className={styles["profile-image"]}
+        className={style["profile-image"]}
         style={{
           backgroundImage: `url(${
             writerProfileImage
@@ -38,11 +39,11 @@ export function ProfileImageWithNickName({
   return (
     <>
       <ProfileImage writerProfileImage={writerProfileImage} />
-      <div className={`${styles["board-list-item-write-box"]} ${styles[color]}`}>
-        <div className={styles["board-list-item-nickname"]}>
+      <div className={`${style["board-list-item-write-box"]} ${style[color]}`}>
+        <div className={style["board-list-item-nickname"]}>
           {writerNickname}
         </div>
-        <div className={styles["board-list-item-write-datetime"]} suppressHydrationWarning>
+        <div className={style["board-list-item-write-datetime"]} suppressHydrationWarning>
           {writerDatetime}
         </div>
       </div>
