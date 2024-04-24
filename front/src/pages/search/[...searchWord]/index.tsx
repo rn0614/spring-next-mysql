@@ -102,7 +102,6 @@ export default function Search({searchWord}:Props) {
 
 // 이 함수는 서버에서 실행되어 페이지의 초기 props를 결정합니다.
 export async function getServerSideProps(context: any) {
-  console.log('serverSidePropGet')
   const searchWord = context.query.searchWord[0] as string;
   return {
     props: {

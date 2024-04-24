@@ -24,13 +24,6 @@ export default function Pagination({
     .map((_: any, i: number) => {
       return curFirstPage + i;
     });
-
-  useEffect(()=>{
-    console.log('limit',limit);
-    console.log('curPage',curPage);
-    console.log('totalPage',totalPage);
-  },[limit,curPage, totalPage] )
-
   return (
     <div className={style["pagination-wrapper"]}>
       <div

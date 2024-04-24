@@ -38,7 +38,6 @@ export const signInRequest = async (requestBody: SignInRequestDto) => {
 };
 
 export const signUpRequest = async (RequestBody: SignUpRequestDto) => {
-  console.log("signUp front start", RequestBody);
   const result = await axios
     .post(SIGN_UP_URL(), RequestBody)
     .then((response) => {
@@ -46,7 +45,6 @@ export const signUpRequest = async (RequestBody: SignUpRequestDto) => {
       return responseBody;
     })
     .catch((error) => {
-      console.log(error);
       if (!error.response.data) return null;
       const responseBody: ResponseDto = error.response.data;
       return responseBody;
@@ -78,12 +76,10 @@ export const fileUploadRequest = async (data: FormData) => {
       headers: { "Content-Type": "multipart/form-data" },
     })
     .then((response) => {
-      console.log('response2',response)
       const responseBody: string = response.data;
       return responseBody;
     })
     .catch((error) => {
-      console.log('error2',error)
       const responseBody: ResponseDto = error.response.data;
       return responseBody;
     });

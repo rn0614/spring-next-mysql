@@ -12,6 +12,7 @@ import { PostBoardRequestDto } from "@/pages/api/request/board";
 import { usePostBoard, useUpdateBoard } from "@/hooks/useBoard";
 import { queryClient } from "@/utils/react-query/queryClient";
 import { useGetLoginUser } from "@/hooks/useLogin";
+import { useCookies } from "react-cookie";
 
 type Props = {
   path: string;
@@ -20,7 +21,8 @@ type Props = {
 export default function Header({ path }: Props) {
   const {loginUser,resetUser} = useGetLoginUser();
   const [board, setBorad] = useRecoilState(CurBoardAtom);
-  const accessToken = queryClient.getQueryData("accessToken");
+  const [cookies, setCookies] = useCookies();
+  const accessToken = cookies.accessToken;
 
   const postBoard = usePostBoard();
   const updateBoard = useUpdateBoard();
@@ -81,10 +83,8 @@ export default function Header({ path }: Props) {
   };
 
   const onMyPageButtonClickHandler = () => {
-    console.log('loginUser',loginUser)
     if (!loginUser) return;
     const { email } = loginUser;
-    console.log('nickname',email)
     router.push(USER_PATH(email));
   };
 

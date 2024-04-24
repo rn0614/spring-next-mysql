@@ -33,7 +33,6 @@ export default function SignInCard({ setIsSigned }: any) {
     useState<string>("eye-light-off-icon");
 
   const signInResponse = (responseBody: any) => {
-    console.log('inputdata',inputData)
     setUser(inputData)
     router.push(MAIN_PATH());
   };

@@ -43,7 +43,6 @@ export const getTop3BoardListRequest = async () => {
   return await axios
     .get(GET_TOP3_LIST_URL())
     .then((response) => {
-      console.log(response);
       return response.data;
     })
     .catch((error) => {
@@ -79,11 +78,9 @@ const updateBoardRequest = async ({ boardNumber, requestBody }: any) => {
   const result = await authFetch()
     .patch(UPDATE_BOARD_URL(boardNumber), requestBody)
     .then((response) => {
-      console.log("response1", response);
       return response.data;
     })
     .catch((error) => {
-      console.log("error1", error);
       if (!error.response.data) return null;
       return error.response.data;
     });
@@ -109,7 +106,7 @@ export function useGetBoard(boardNumber: number | string) {
 export function useDeleteBoard() {
   const { mutate } = useMutation(deleteBoardRequest, {
     onSuccess: () => {
-      console.log("요청성공");
+      console.log("삭제 요청성공");
     },
   });
   return mutate;
@@ -152,7 +149,6 @@ export const getUserBoardListRequest = async (email: string) => {
 export function useGetUserBoardList(email: string) {
   const { data } = useQuery(["user-board-list"], async () =>
     getUserBoardListRequest(email).then((response) => {
-      console.log("user-board-list");
       return response;
     })
   );

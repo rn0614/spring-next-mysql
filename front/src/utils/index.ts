@@ -1,16 +1,9 @@
-import { useCookies } from "react-cookie";
-
 export const convertUrlsToFile = async (url: string) => {
-  console.log('url',url);
   const response = await fetch(url);
   const data = await response.blob();
   const extend = url.split(".").pop();
   const fileName = url.split("/").pop();
   const meta = { type: `image/${extend}` };
-  console.log('1',response);
-  console.log('2',data);
-  console.log('3',extend);
-  console.log('4',fileName);
 
   return new File([data], fileName as string, meta);
 };

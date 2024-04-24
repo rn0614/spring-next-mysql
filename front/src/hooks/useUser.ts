@@ -11,7 +11,6 @@ export const getUserInfo = async (email:string) => {
     .get(GET_USER_INFO(email))
     .then((response) => response.data)
     .catch((error) => error);
-    console.log('result',result);
   return result;
 };
 

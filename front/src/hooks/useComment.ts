@@ -47,7 +47,6 @@ export function useGetCommentList({
   );
   useEffect(() => {
     if (data !== undefined) {
-      console.log("react-query", data, error);
       setCommentList(data.commentList);
     }
   }, [data, error]);

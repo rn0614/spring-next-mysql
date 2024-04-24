@@ -139,8 +139,6 @@ export default function DetailBoardPage({ board }: boardProps) {
     const favoriteList = useGetFavoriteList(board.boardNumber);
 
     const onFavoriteClickHandler = () => {
-      console.log("loginuser", loginUser);
-      console.log("cookies.accessToken", cookies.accessToken);
       if (!loginUser || !cookies.accessToken) {
         alert("로그인 후 좋아요가 가능합니다.");
         return;

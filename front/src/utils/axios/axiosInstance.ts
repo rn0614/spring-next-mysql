@@ -33,7 +33,7 @@ const authFetch = (accessToken?: string, contentType?: string) => {
       return request;
     },
     (error) => {
-      console.log("requestError", error);
+      return error;
     }
   );
 

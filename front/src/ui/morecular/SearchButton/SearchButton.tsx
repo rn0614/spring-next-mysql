@@ -25,7 +25,6 @@ export default function SearchButton() {
 
   const onSearchWordKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter" ) return;
-    console.log('keydown')
     searchBtnRef.current!.click();
   };
 

@@ -40,7 +40,6 @@ export function useGetSearch(searchWord: string) {
 
   const { data = [] } = useQuery(["search", searchWord], () =>
     getSearchBoardListRequest(searchWord, preSearchWord).then((response) => {
-      console.log("preSearchWord", preSearchWord);
       setPreSearchWord(searchWord);
       return response.searchList;
     })
@@ -84,7 +83,6 @@ const getRelationListRequest = async (searchWord: string) => {
 export function useGetRelation(searchWord: string) {
   const { data = [] } = useQuery(["search-relation", searchWord], () =>
     getRelationListRequest(searchWord).then((response) => {
-      console.log("response", response);
       return response.relativeWordList;
     })
   );

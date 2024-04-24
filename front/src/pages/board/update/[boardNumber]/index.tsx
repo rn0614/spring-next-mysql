@@ -46,7 +46,6 @@ export default function BoardUpdate({ boardinit }: any) {
     setBoard((pre) => {
       return { ...pre, boardImageFileList: newBoardImageFileList } as Board;
     });
-    console.log('board1',board);
     if (!imageInputRef.current) return;
     imageInputRef.current.value = "";
   };
@@ -69,14 +68,11 @@ export default function BoardUpdate({ boardinit }: any) {
   };
   useEffect(() => {
     let newBoardImageFileList: File[] = [];
-    console.log('boardinit.boardImageList',boardinit.boardImageList);
     convertUrlsToFiles(boardinit.boardImageList).then((response) => {
       newBoardImageFileList = response;
-      console.log('newBoardImageFileList',newBoardImageFileList);
     });
     setBoard({ ...boardinit, boardImageFileList: newBoardImageFileList });
     setImageUrls(boardinit.boardImageList);
-    console.log("board", board);
   }, []);
 
   return (

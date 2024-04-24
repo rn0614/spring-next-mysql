@@ -17,7 +17,6 @@ type boardProps = {
 };
 
 export default function User({ user, boardList }: boardProps) {
-  console.log('user',user)
   const UserTop = () => {
     const [isMyPage, setMyPage] = useState<boolean>(true);
     const imageInputRef = useRef<HTMLInputElement>(null);
@@ -41,10 +40,10 @@ export default function User({ user, boardList }: boardProps) {
 
       patchProfileImageRequest({ profileImage: url })
         .then((response) => {
-          console.log(response);
+          return response
         })
         .catch((error) => {
-          console.log(error);
+          return error
         });
     };
 
