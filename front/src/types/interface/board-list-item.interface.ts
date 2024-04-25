@@ -4,7 +4,7 @@ export default interface BoardListItemType {
   content: string;
   boardTitleImage: string | null;
   favoriteCount: number;
-  commentCounter: number;
+  commentCount: number;
   viewCount: number;
   writerDatetime: string;
   writerNickname: string;

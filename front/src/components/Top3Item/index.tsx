@@ -16,7 +16,7 @@ export default function Top3Item({ top3ListItem }: Props) {
     content,
     boardTitleImage,
     favoriteCount,
-    commentCounter,
+    commentCount,
     viewCount,
     writerDatetime,
     writerNickname,
@@ -50,7 +50,7 @@ export default function Top3Item({ top3ListItem }: Props) {
         </div>
         <div className={styles["top-3-list-item-bottom"]}>
           <div className={styles["top-3-list-item-counts"]}>
-            {`하트:${favoriteCount} 댓글:${commentCounter} 조회수:${viewCount}`}
+            {`하트:${favoriteCount} 댓글:${commentCount} 조회수:${viewCount}`}
           </div>
         </div>
       </div>

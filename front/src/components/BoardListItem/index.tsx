@@ -19,7 +19,7 @@ export default function BoardListItem({ boardListItem }: Props) {
     title,
     content,
     favoriteCount,
-    commentCounter,
+    commentCount,
     viewCount,
     boardTitleImage,
   } = boardListItem;
@@ -44,7 +44,7 @@ export default function BoardListItem({ boardListItem }: Props) {
         </div>
         <div className={styles["board-list-item-bottom"]}>
           <div className={styles["board-list-item-counts"]}>
-            {`하트:${favoriteCount} 댓글:${commentCounter} 조회수:${viewCount}`}
+            {`하트:${favoriteCount} 댓글:${commentCount} 조회수:${viewCount}`}
           </div>
         </div>
       </div>
