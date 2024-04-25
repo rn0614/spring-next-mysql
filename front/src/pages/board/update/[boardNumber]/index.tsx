@@ -5,7 +5,7 @@ import { useRecoilState } from "recoil";
 import { Board, CurBoardAtom } from "@/stores/board.store";
 import MainLayout from "@/layouts/Layout/MainLayout/MainLayout";
 import { getBoardRequest } from "@/hooks/useBoard";
-import { convertUrlsToFiles } from "@/utils";
+
 
 export default function BoardUpdate({ boardinit }: any) {
   const titleRef = useRef<HTMLTextAreaElement | null>(null);
@@ -62,16 +62,15 @@ export default function BoardUpdate({ boardinit }: any) {
     const newBoardImageFileList = board?.boardImageFileList.filter(
       (_, idx) => idx !== index
     );
+    const newBoardImageList = board?.boardImageList!.filter(
+      (_, idx) => idx !== index
+    );
     setBoard((pre) => {
-      return { ...pre, boardImageFileList: newBoardImageFileList } as Board;
+      return { ...pre,boardImageList:newBoardImageList, boardImageFileList: newBoardImageFileList } as Board;
     });
   };
   useEffect(() => {
-    let newBoardImageFileList: File[] = [];
-    convertUrlsToFiles(boardinit.boardImageList).then((response) => {
-      newBoardImageFileList = response;
-    });
-    setBoard({ ...boardinit, boardImageFileList: newBoardImageFileList });
+    setBoard({ ...boardinit });
     setImageUrls(boardinit.boardImageList);
   }, []);
 
@@ -143,6 +142,7 @@ export async function getServerSideProps(context: any) {
     title: board.title,
     content: board.content,
     boardImageList: board.boardImageList,
+    boardImageFileList:[]
   };
   return {
     props: {

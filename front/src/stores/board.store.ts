@@ -4,6 +4,7 @@ export type Board = {
   boardNumber?:number;
   title: string;
   content: string;
+  boardImageList?:string[];
   boardImageFileList: File[];
 };
 

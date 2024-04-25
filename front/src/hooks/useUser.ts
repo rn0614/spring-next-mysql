@@ -2,11 +2,14 @@ import authFetch from "@/utils/axios/axiosInstance";
 import { queryClient } from "@/utils/react-query/queryClient";
 import axios from "axios";
 import { useMutation } from "react-query";
-const PATCH_NICNAME_URL = () => `${process.env.NEXT_PUBLIC_API_BACK}/user/nickname`;
-const PATCH_PROFILEIMAGE_URL = () => `${process.env.NEXT_PUBLIC_API_BACK}/user/profile-image`;
-const GET_USER_INFO = (email:string) => `${process.env.NEXT_PUBLIC_API_BACK}/user/${email}`;
+const PATCH_NICNAME_URL = () =>
+  `${process.env.NEXT_PUBLIC_API_BACK}/user/nickname`;
+const PATCH_PROFILEIMAGE_URL = () =>
+  `${process.env.NEXT_PUBLIC_API_BACK}/user/profile-image`;
+const GET_USER_INFO = (email: string) =>
+  `${process.env.NEXT_PUBLIC_API_BACK}/user/${email}`;
 
-export const getUserInfo = async (email:string) => {
+export const getUserInfo = async (email: string) => {
   const result = await axios
     .get(GET_USER_INFO(email))
     .then((response) => response.data)
@@ -14,8 +17,7 @@ export const getUserInfo = async (email:string) => {
   return result;
 };
 
-
-export const patchNicknameRequest = async (requestBody) => {
+export const patchNicknameRequest = async (requestBody: any) => {
   const result = await authFetch()
     .patch(PATCH_NICNAME_URL(), requestBody)
     .then((response) => response)
@@ -23,7 +25,7 @@ export const patchNicknameRequest = async (requestBody) => {
   return result;
 };
 
-export const patchProfileImageRequest = async (requestBody) => {
+export const patchProfileImageRequest = async (requestBody: any) => {
   const result = await authFetch()
     .patch(PATCH_PROFILEIMAGE_URL(), requestBody)
     .then((response) => response)
@@ -31,8 +33,7 @@ export const patchProfileImageRequest = async (requestBody) => {
   return result;
 };
 
-
-export function useNicknameChange(){
+export function useNicknameChange() {
   const { mutate } = useMutation(patchNicknameRequest, {
     onSuccess: () => {
       queryClient.invalidateQueries(["user"]);
@@ -41,7 +42,7 @@ export function useNicknameChange(){
   return mutate;
 }
 
-export function useProfileChange(){
+export function useProfileChange() {
   const { mutate } = useMutation(patchProfileImageRequest, {
     onSuccess: () => {
       queryClient.invalidateQueries(["user"]);

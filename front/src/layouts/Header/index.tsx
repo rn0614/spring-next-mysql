@@ -57,7 +57,7 @@ export default function Header({ path }: Props) {
     if (!accessToken || !board) return;
     const boardNumber = board.boardNumber;
 
-    const boardImageList: string[] = [];
+    const boardImageList: string[] = [...board.boardImageList!];
     if (board?.boardImageFileList) {
       for (const file of board?.boardImageFileList) {
         const data = new FormData();
