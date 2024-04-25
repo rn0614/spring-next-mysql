@@ -1,5 +1,5 @@
 import MainLayout from "@/layouts/Layout/MainLayout/MainLayout";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import style from "./style.module.scss";
 import Icon from "@/ui/atom/Icon/Icon";
 import { getUserBoardListRequest } from "@/hooks/useBoard";
@@ -10,6 +10,8 @@ import { BOARD_WRITE_PATH } from "@/constants";
 import ProfileImage from "@/ui/atom/ProfileImage/ProfileImage";
 import { getUserInfo, patchNicknameRequest, patchProfileImageRequest } from "@/hooks/useUser";
 import { fileUploadRequest } from "@/pages/api";
+import { useRecoilValue } from "recoil";
+import { CurrUserAtom } from "@/stores/login-user.store";
 
 type boardProps = {
   user: any;
@@ -18,7 +20,8 @@ type boardProps = {
 
 export default function User({ user, boardList }: boardProps) {
   const UserTop = () => {
-    const [isMyPage, setMyPage] = useState<boolean>(true);
+    const Loginuser = useRecoilValue(CurrUserAtom);
+    const [isMyPage, setMyPage] = useState<boolean>(false);
     const imageInputRef = useRef<HTMLInputElement>(null);
     const [userName, setUserName]= useState<string>(user.nickname);
 
@@ -55,13 +58,18 @@ export default function User({ user, boardList }: boardProps) {
       patchNicknameRequest({"nickname":userName});
     };
 
+    useEffect(()=>{
+      if(Loginuser?.email===user.email){
+        setMyPage(true)
+      }
+    },[Loginuser])
 
     return (
       <div id={style["user-top-wrapper"]}>
         <div className={style["user-top-container"]}>
           {isMyPage ? (
             <div
-              className={style["user-top-my-profile-image-box"]}
+              className={style["user-top-profile-image-box"]}
               onClick={onProfileImageClickHandler}
             >
               <ProfileImage size="lg" writerProfileImage={user.profileImage} />
