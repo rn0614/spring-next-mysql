@@ -14,6 +14,7 @@ public class ResponseDto {
   private String code;
   private String message;
 
+  // common : DB 에러
   public static ResponseEntity<ResponseDto> databaseError() {
     ResponseDto responseBody = new ResponseDto(
       ResponseCode.DATABASE_ERROR,
@@ -24,6 +25,7 @@ public class ResponseDto {
       .body(responseBody);
   }
 
+  // common : 유효성 에러
   public static ResponseEntity<ResponseDto> validationFailed() {
     ResponseDto responseBody = new ResponseDto(
       ResponseCode.VALIDATION_FAILED,
