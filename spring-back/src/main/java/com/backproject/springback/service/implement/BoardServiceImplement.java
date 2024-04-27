@@ -268,7 +268,7 @@ public class BoardServiceImplement implements BoardService {
 
       String writerEmail = boardEntity.getWriterEmail();
       boolean isWriter = writerEmail.equals(email);
-      if (!isWriter) return PatchBoardResponseDto.noPermision();
+      if (!isWriter) return PatchBoardResponseDto.noPermission();
 
       boardEntity.pathBoard(dto);
       boardRepository.save(boardEntity);

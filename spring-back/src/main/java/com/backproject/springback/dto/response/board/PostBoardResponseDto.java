@@ -17,13 +17,11 @@ public class PostBoardResponseDto extends ResponseDto {
     this.boardNumber = boardNumber;
   }
 
-  public static ResponseEntity<PostBoardResponseDto> success(Integer boardNumber) {
-    return ResponseEntity.status(HttpStatus.OK).body(new PostBoardResponseDto(boardNumber));
+  public static ResponseEntity<PostBoardResponseDto> success(
+    Integer boardNumber
+  ) {
+    return ResponseEntity
+      .status(HttpStatus.OK)
+      .body(new PostBoardResponseDto(boardNumber));
   }
-
-  public static ResponseEntity<ResponseDto> noExistUser(){
-    ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_USER, ResponseMessage.NOT_EXISTED_USER);
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
-  }
-  
 }

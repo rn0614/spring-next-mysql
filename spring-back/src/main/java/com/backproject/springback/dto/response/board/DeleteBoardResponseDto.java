@@ -36,9 +36,4 @@ public class DeleteBoardResponseDto extends ResponseDto{
     );
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
   }
-
-  public static ResponseEntity<ResponseDto> noPermission(){
-    ResponseDto result = new ResponseDto(ResponseCode.NO_PERMISSION, ResponseMessage.NO_PERMISSION);
-    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
-  }
 }
