@@ -1,0 +1,23 @@
+.wrapper-container{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: 400px;
+  width: 100%;
+  background-color: rgba(0,0,0,0.05);
+  .black{
+    background-color: rgba(0,0,0,0.4);
+  }
+  .green{
+    background-color: green ;
+  }
+  .yellow{
+    background-color: yellow ;
+  }
+}
+
+.drag-target{
+  width: 100px;
+  height: 20px;
+  background-color: bisque;
+
+}
