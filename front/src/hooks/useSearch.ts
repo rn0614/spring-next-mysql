@@ -22,16 +22,15 @@ const getSearchBoardListRequest = async (
   searchWord: string,
   preSearchWord: string | null
 ) => {
-  return await axios
+  try {
+    const response =await axios
     .get<GetSearchBoardListResponseDto>(
       GET_SEARCH_BOARD_LIST_URL(searchWord, preSearchWord)
     )
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      throw error;
-    });
+    return response.data;
+  } catch (error) {
+    throw error
+  }
 };
 
 /** 검색어 Hook*/

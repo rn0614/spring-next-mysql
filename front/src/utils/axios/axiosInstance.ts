@@ -28,7 +28,7 @@ const authFetch = (accessToken?: string, contentType?: string) => {
   Instance.interceptors.request.use(
     (request) => {
       const token = accessToken ? accessToken : getCookie("accessToken"); // 'accessToken' 쿠키에서 액세스 토큰을 가져옴
-      if (token !== null || token !== "null")
+      if (!!token && token !== "null")
         request.headers.Authorization = `Bearer ${token}`;
       return request;
     },

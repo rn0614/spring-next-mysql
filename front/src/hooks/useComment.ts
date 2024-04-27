@@ -14,19 +14,22 @@ const getCommentListRequest = async ({
   limit,
   page,
 }: getCommentType) => {
-  const { data } = await authFetch()
+  try {
+    const response = await authFetch()
     .get(GET_COMMENT_LIST_URL({ boardNumber, limit, page }))
-    .then((response) => {
-      return response;
-    })
-    .catch((error) => {
-      throw error;
-    });
-  return data;
+    return response.data
+  } catch (error) {
+    throw error
+  }
 };
 
 const postCommentRequest = async ({ boardNumber, requestBody }: any) => {
-  return await authFetch().post(POST_COMMENT_URL(boardNumber), requestBody);
+  try {
+    const response = await authFetch().post(POST_COMMENT_URL(boardNumber), requestBody);
+    return response
+  } catch (error) {
+    throw error;
+  }
 };
 
 type getCommentType = {
@@ -43,7 +46,7 @@ export function useGetCommentList({
   const [commentList, setCommentList] = useState<CommentListItem[]>([]);
   const { data, error } = useQuery(
     ["comment-list", boardNumber, limit, page],
-    async () => getCommentListRequest({ boardNumber, limit, page })
+    () => getCommentListRequest({ boardNumber, limit, page })
   );
   useEffect(() => {
     if (data !== undefined) {

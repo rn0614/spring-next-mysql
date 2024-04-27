@@ -4,6 +4,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery } from "react-query";
 import { BOARD_DETAIL_PATH } from "@/constants";
+import GetBoardResponseDto from "@/stores/get-board.store";
 
 const GET_BOARD_URL = (boardNumber: number | string) =>
   `${process.env.NEXT_PUBLIC_API_BACK}/board/${boardNumber}`;
@@ -16,88 +17,84 @@ const DELETE_BOARD_URL = (boardNumber: number | string) =>
 const POST_BOARD_URL = () => `${process.env.NEXT_PUBLIC_API_BACK}/board`;
 const UPDATE_BOARD_URL = (boardNumber: number | string) =>
   `${process.env.NEXT_PUBLIC_API_BACK}/board/${boardNumber}`;
+const GET_USER_BOARD_LIST = (email: string) =>
+  `${process.env.NEXT_PUBLIC_API_BACK}/board/user-board-list/${email}`;
 
 export const getBoardRequest = async (boardNumber: number | string) => {
-  return await axios
-    .get(GET_BOARD_URL(boardNumber))
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      throw error;
-    });
+  try {
+    const response = await axios.get<GetBoardResponseDto>(
+      GET_BOARD_URL(boardNumber)
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getLatestBoardListRequest = async () => {
-  return await axios
-    .get(GET_LATEST_BOARD_LIST_URL())
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      throw error;
-    });
+  try {
+    const response = await axios.get(GET_LATEST_BOARD_LIST_URL());
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getTop3BoardListRequest = async () => {
-  return await axios
-    .get(GET_TOP3_LIST_URL())
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      throw error;
-    });
+  try {
+    const response = await axios.get(GET_TOP3_LIST_URL());
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getUserBoardListRequest = async (email: string) => {
+  try {
+    const response = await axios.get(GET_USER_BOARD_LIST(email));
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const deleteBoardRequest = async (boardNumber: number | string) => {
-  return await authFetch()
-    .delete(DELETE_BOARD_URL(boardNumber))
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      throw error;
-    });
+  try {
+    const response = await authFetch().delete(DELETE_BOARD_URL(boardNumber));
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const postBoardRequest = async (requestBody: PostBoardRequestDto) => {
-  const result = await authFetch()
-    .post(POST_BOARD_URL(), requestBody)
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      if (!error.response.data) return null;
-      return error.response.data;
-    });
-  return result;
+  try {
+    const response = await authFetch().post(POST_BOARD_URL(), requestBody);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const updateBoardRequest = async ({ boardNumber, requestBody }: any) => {
-  const result = await authFetch()
-    .patch(UPDATE_BOARD_URL(boardNumber), requestBody)
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      if (!error.response.data) return null;
-      return error.response.data;
-    });
-  return result;
+  try {
+    const response = await authFetch().patch(
+      UPDATE_BOARD_URL(boardNumber),
+      requestBody
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export function useGetLatestBoard() {
-  const { data } = useQuery(["board", "latest"], async () =>
-    getLatestBoardListRequest().then((response) => {
-      return response;
-    })
-  );
+  const { data } = useQuery(["board", "latest"], getLatestBoardListRequest);
   return data?.latestList ? data.latestList : [];
 }
 
 export function useGetBoard(boardNumber: number | string) {
-  const { data } = useQuery(["board", boardNumber], async () =>
+  const { data } = useQuery(["board", boardNumber], () =>
     getBoardRequest(boardNumber)
   );
   return data;
@@ -132,25 +129,9 @@ export function useUpdateBoard() {
   return mutate;
 }
 
-const GET_USER_BOARD_LIST = (email: string) =>
-  `${process.env.NEXT_PUBLIC_API_BACK}/board/user-board-list/${email}`;
-
-export const getUserBoardListRequest = async (email: string) => {
-  return await axios
-    .get(GET_USER_BOARD_LIST(email))
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      throw error;
-    });
-};
-
 export function useGetUserBoardList(email: string) {
-  const { data } = useQuery(["user-board-list"], async () =>
-    getUserBoardListRequest(email).then((response) => {
-      return response;
-    })
+  const { data } = useQuery(["user-board-list"], () =>
+    getUserBoardListRequest(email)
   );
   return data?.latestList ? data.latestList : [];
 }

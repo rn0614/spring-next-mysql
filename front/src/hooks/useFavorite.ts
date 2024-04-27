@@ -10,38 +10,32 @@ const PUT_FAVORITE_URL = (boardNumber: string | number) =>
   `${process.env.NEXT_PUBLIC_API_BACK}/board/${boardNumber}/favorite`;
 
 export const getFavoriteListRequest = async (boardNumber: string | number) => {
-  const { data } = await authFetch()
-    .get(GET_FAVORITE_LIST_URL(boardNumber))
-    .then((response) => {
-      return response;
-    })
-    .catch((error) => {
-      throw error;
-    });
-  return data;
+  try {
+    const response = await authFetch().get(GET_FAVORITE_LIST_URL(boardNumber));
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const putFavoriteRequest = async (boardNumber: number | string) => {
-  const result = await authFetch()
-    .put(PUT_FAVORITE_URL(boardNumber))
-    .then((response) => {
-      return response.data ;
-    })
-    .catch((error) => {
-      throw error;
-    });
-  return result;
+  try {
+    const response = await authFetch().put(PUT_FAVORITE_URL(boardNumber))
+    return response.data;
+  } catch (error) {
+    throw error
+  }
 };
 
 export function useGetFavoriteList(boardNumber: number | string) {
   const [favoriteList, setFavoriteList] = useState<FavoriteListItem[]>([]);
-  const { data, error } = useQuery(["favorite-list", boardNumber], async () =>
+  const { data, error } = useQuery(["favorite-list", boardNumber], () =>
     getFavoriteListRequest(boardNumber)
   );
   useEffect(() => {
-    if (data !== undefined){
+    if (data !== undefined) {
       setFavoriteList(data.favoriteList);
-    } 
+    }
   }, [data, error]);
   return favoriteList;
 }

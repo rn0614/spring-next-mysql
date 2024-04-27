@@ -11,16 +11,12 @@ const GET_SING_IN_USER_URL = () => `${process.env.NEXT_PUBLIC_API_BACK}/user`;
 
 // 아이디 비번을 통해 유저 로그인
 export const signInRequest = async (requestBody: any) => {
-  const result = await axios
-    .post(SIGN_IN_URL(), requestBody)
-    .then((response: any) => {
-      return response.data;
-    })
-    .catch((error: any) => {
-      if (!error.response) return null;
-      return error.response.data;
-    });
-  return result;
+  try {
+    const response = await axios.post(SIGN_IN_URL(), requestBody);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 // 쿠키의 토큰을 통해 user가 실제로 인가된 유저인지 확인
@@ -30,18 +26,12 @@ const getSignInUserRequest = async (accessToken: string) => {
     accessToken !== undefined &&
     accessToken !== null
   ) {
-    const result = await authFetch(accessToken)
-      .get(GET_SING_IN_USER_URL())
-      .then((response) => {
-        const responseBody = response.data;
-        return responseBody;
-      })
-      .catch((error) => {
-        if ((error.response = null)) return;
-        const responseBody = error.response?.data;
-        return responseBody;
-      });
-    return result;
+    try {
+      const response = await authFetch(accessToken).get(GET_SING_IN_USER_URL());
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
   return null;
 };
@@ -53,7 +43,7 @@ export const useGetLoginUser = () => {
   const { setLoginCookie } = useLoginCookies();
   const { data } = useQuery(
     "accessToken",
-    async () => getSignInUserRequest(cookies.accessToken),
+    () => getSignInUserRequest(cookies.accessToken),
     {
       onSuccess: (response) => {
         setLoginCookie(response);
@@ -63,7 +53,6 @@ export const useGetLoginUser = () => {
             nickname: response.nickname,
             profileImage: response.profileImage,
           });
-
         } else {
           setLoginUser(null);
         }

@@ -36,7 +36,7 @@ export default function Search({searchWord}:Props) {
             <div className={style["search-count"]}>{searchList.length}</div>
           </div>
           <div className={style["search-contents-box"]}>
-            {count === 0 ? (
+            {searchList.length === 0 ? (
               <div className={style["search-contents-nothing"]}>
                 {"검색 결과가 없습니다."}
               </div>
