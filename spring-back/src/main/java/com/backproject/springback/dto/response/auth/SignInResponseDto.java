@@ -1,7 +1,6 @@
 package com.backproject.springback.dto.response.auth;
 
 import com.backproject.springback.common.ResponseCode;
-import com.backproject.springback.common.ResponseMessage;
 import com.backproject.springback.dto.response.ResponseDto;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

@@ -5,7 +5,6 @@ import com.backproject.springback.common.ResponseMessage;
 import com.backproject.springback.dto.object.BoardListItem;
 import com.backproject.springback.dto.response.ResponseDto;
 import com.backproject.springback.entity.BoardListViewEntity;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

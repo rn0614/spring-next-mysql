@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { DragEvent, forwardRef, useState } from 'react';
 
 interface DraggableAreaProps {
   children?: React.ReactNode;
@@ -7,13 +7,13 @@ interface DraggableAreaProps {
 const DraggableArea = forwardRef<HTMLDivElement, DraggableAreaProps>((props, ref) => {
   const { children } = props;
   const [items, setItems] = useState([]);
-  const [draggedId, setDraggedId] = useState(null);
+  const [draggedId, setDraggedId] = useState<string>("");
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
 
-  const handleDragStart = (event: React.DragEvent<HTMLDivElement>, id: string, type: string) => {
+  const handleDragStart = (event: React.DragEvent, id: string, type: string) => {
     event.dataTransfer.setData("text", id); // 이 요소의 ID를 설정
     event.dataTransfer.setData("type", type); // 이 요소의 타입을 설정
     setDraggedId(id);
@@ -38,7 +38,7 @@ const DraggableArea = forwardRef<HTMLDivElement, DraggableAreaProps>((props, ref
       newElement.style.justifyContent = "center";
       newElement.style.backgroundColor = draggableElementType === "red" ? "red" : draggableElementType === "blue" ? "blue" : "gray";
       newElement.draggable = true; // 드래그 가능하게 설정
-      newElement.addEventListener('dragstart', (e) => handleDragStart(e, newElement.id, draggableElementType));
+      newElement.addEventListener('dragstart', (e:any) => handleDragStart(e, newElement.id, draggableElementType));
 
       (ref as React.MutableRefObject<HTMLDivElement>).current.appendChild(newElement);
     }
