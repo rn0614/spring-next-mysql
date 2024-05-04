@@ -1,4 +1,3 @@
-import { ResponseDto } from "@/pages/api/response";
 import { MutationCache, QueryCache, QueryClient } from "react-query";
 
 export function queryErrorHandler(error: any) {
