@@ -18,5 +18,5 @@ export async function middleware(request: NextRequest) {
 
 // Supports both a single value or an array of matches
 export const config = {
-  matcher: ["/board/write","/api"],
+  matcher: ["/api"],
 };
