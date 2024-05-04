@@ -18,12 +18,15 @@ import { useRecoilValue } from "recoil";
 import { CurrUserAtom } from "@/stores/login-user.store";
 import { useRouter } from "next/router";
 import { BOARD_UPDATE_PATH, MAIN_PATH, USER_PATH } from "@/constants";
-import { increaseViewCountRequest } from "@/pages/api";
 import { useGetCommentList, usePostComment } from "@/hooks/useComment";
 import { getElapsedTime } from "@/utils/day";
 import { useCookies } from "react-cookie";
 import { PostCommentRequestDto } from "@/pages/api/request/board";
-import { useDeleteBoard, getBoardRequest } from "@/hooks/useBoard";
+import {
+  useDeleteBoard,
+  getBoardRequest,
+  increaseViewCountRequest,
+} from "@/hooks/useBoard";
 import { useGetFavoriteList, usePutFavorite } from "@/hooks/useFavorite";
 
 type boardProps = {

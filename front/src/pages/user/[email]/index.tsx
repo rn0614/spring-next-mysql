@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { BOARD_WRITE_PATH } from "@/constants";
 import ProfileImage from "@/ui/atom/ProfileImage/ProfileImage";
 import { getUserInfo, patchNicknameRequest, patchProfileImageRequest } from "@/hooks/useUser";
-import { fileUploadRequest } from "@/pages/api";
+import { fileUploadRequest } from "@/hooks/useBoard";
 import { useRecoilValue } from "recoil";
 import { CurrUserAtom } from "@/stores/login-user.store";
 

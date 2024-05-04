@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSignInUserRequest } from "./pages/api";
+import { getSignInUserRequest } from "@/hooks/useLogin";
 
 // If the incoming req has the "beta" cookie
 // then we'll rewrite the req to /beta

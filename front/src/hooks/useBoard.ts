@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useMutation, useQuery } from "react-query";
 import { BOARD_DETAIL_PATH } from "@/constants";
 import GetBoardResponseDto from "@/stores/get-board.store";
+import { ResponseDto } from "@/pages/api/response/index";
 
 const GET_BOARD_URL = (boardNumber: number | string) =>
   `${process.env.NEXT_PUBLIC_API_BACK}/board/${boardNumber}`;
@@ -19,6 +20,9 @@ const UPDATE_BOARD_URL = (boardNumber: number | string) =>
   `${process.env.NEXT_PUBLIC_API_BACK}/board/${boardNumber}`;
 const GET_USER_BOARD_LIST = (email: string) =>
   `${process.env.NEXT_PUBLIC_API_BACK}/board/user-board-list/${email}`;
+const INCREASE_VIEW_COUNT_URL = (boardNumber: string | number) =>
+  `${process.env.NEXT_PUBLIC_API_BACK}/board/${boardNumber}/increas-view-count`;
+const FILE_UPLOAD_URL = () => `${process.env.NEXT_PUBLIC_API_BACK}/file/upload`;
 
 export const getBoardRequest = async (boardNumber: number | string) => {
   try {
@@ -65,6 +69,38 @@ const deleteBoardRequest = async (boardNumber: number | string) => {
   } catch (error) {
     throw error;
   }
+};
+
+export const fileUploadRequest = async (data: FormData) => {
+  const reuslt = await axios
+    .post(FILE_UPLOAD_URL(), data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    .then((response) => {
+      const responseBody: string = response.data;
+      return responseBody;
+    })
+    .catch((error) => {
+      const responseBody: ResponseDto = error.response.data;
+      return responseBody;
+    });
+  return reuslt;
+};
+
+export const increaseViewCountRequest = async (
+  boardNumber: number | string
+) => {
+  const result = await axios
+    .get(INCREASE_VIEW_COUNT_URL(boardNumber))
+    .then((response) => {
+      const responseBody: string = response.data;
+      return responseBody;
+    })
+    .catch((error) => {
+      const responseBody: ResponseDto = error.response.data;
+      return responseBody;
+    });
+  return result;
 };
 
 const postBoardRequest = async (requestBody: PostBoardRequestDto) => {

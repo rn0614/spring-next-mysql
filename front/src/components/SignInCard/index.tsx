@@ -2,7 +2,7 @@ import React, { useState, KeyboardEvent, useRef, ChangeEvent } from "react";
 import style from "./style.module.scss";
 import InputBox from "../InputBox";
 import Button from "@/ui/atom/Button/Button";
-import { signInRequest } from "@/pages/api";
+import { signInRequest } from "@/hooks/useLogin";
 import { SignInRequestDto } from "@/pages/api/request/auth";
 import { MAIN_PATH } from "@/constants";
 import { useRouter } from "next/navigation";

@@ -7,7 +7,7 @@ import Icon from "@/ui/atom/Icon/Icon";
 import { BOARD_DETAIL_PATH, MAIN_PATH, USER_PATH } from "@/constants";
 import { useRecoilState } from "recoil";
 import { CurBoardAtom } from "@/stores/board.store";
-import { fileUploadRequest } from "@/pages/api";
+import { fileUploadRequest } from "@/hooks/useBoard";
 import { PostBoardRequestDto } from "@/pages/api/request/board";
 import { usePostBoard, useUpdateBoard } from "@/hooks/useBoard";
 import { queryClient } from "@/utils/react-query/queryClient";

@@ -20,7 +20,7 @@ export const signInRequest = async (requestBody: any) => {
 };
 
 // 쿠키의 토큰을 통해 user가 실제로 인가된 유저인지 확인
-const getSignInUserRequest = async (accessToken: string) => {
+export const getSignInUserRequest = async (accessToken: string) => {
   if (
     accessToken !== "undefined" &&
     accessToken !== undefined &&
