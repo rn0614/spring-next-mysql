@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 
 const GET_COMMENT_LIST_URL = ({ boardNumber, limit, page }: getCommentType) =>
-  `/board/${boardNumber}/comment-list?limit=${limit}&startNumber=${(page-1)*limit}`;
+  `${process.env.NEXT_PUBLIC_API_BACK}/board/${boardNumber}/comment-list?limit=${limit}&startNumber=${(page-1)*limit}`;
 const POST_COMMENT_URL = (boardNumber: number | string) =>
   `${process.env.NEXT_PUBLIC_API_BACK}/board/${boardNumber}/comment`;
 
