@@ -72,7 +72,7 @@ const deleteBoardRequest = async (boardNumber: number | string) => {
 };
 
 export const fileUploadRequest = async (data: FormData) => {
-  const reuslt = await axios
+  const reuslt = await authFetch()
     .post(FILE_UPLOAD_URL(), data, {
       headers: { "Content-Type": "multipart/form-data" },
     })
