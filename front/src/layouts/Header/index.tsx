@@ -37,8 +37,8 @@ export default function Header({ path }: Props) {
       for (const file of board?.boardImageFileList) {
         const data = new FormData();
         data.append("file", file);
-        const buffer = Buffer.from(await file.arrayBuffer());
-        const fileKey = await uploadFileToS3(buffer, file.name, file.type);
+        //const buffer = Buffer.from(await file.arrayBuffer());
+        //const fileKey = await uploadFileToS3(buffer, file.name, file.type);
 
         const url = (await fileUploadRequest(data)) as string;
         if (url) boardImageList.push(url);
