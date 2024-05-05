@@ -2,11 +2,10 @@ import React, { useState, KeyboardEvent, useRef, ChangeEvent } from "react";
 import style from "./style.module.scss";
 import InputBox from "../InputBox";
 import Button from "@/ui/atom/Button/Button";
-import { signInRequest } from "@/hooks/useLogin";
+import { signInRequest, useSetLoginUser } from "@/hooks/useLogin";
 import { SignInRequestDto } from "@/pages/api/request/auth";
 import { MAIN_PATH } from "@/constants";
 import { useRouter } from "next/navigation";
-import { useSetLoginUser } from "@/hooks/useLogin";
 
 type inputDataType = {
   email: string;
@@ -15,7 +14,7 @@ type inputDataType = {
 
 export default function SignInCard({ setIsSigned }: any) {
   const router = useRouter();
-
+  const setUser = useSetLoginUser();
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const initInputDate = {
@@ -23,8 +22,6 @@ export default function SignInCard({ setIsSigned }: any) {
     password: "",
   };
   const [inputData, setInputData] = useState<inputDataType>(initInputDate);
-  const setUser = useSetLoginUser();
-
   const [viewPassword, setViewPassword] = useState<"password" | "text">(
     "password"
   );
@@ -32,14 +29,10 @@ export default function SignInCard({ setIsSigned }: any) {
   const [passwordIcon, setPasswordIcon] =
     useState<string>("eye-light-off-icon");
 
-  const signInResponse = (responseBody: any) => {
-    setUser(inputData)
-    router.push(MAIN_PATH());
-  };
-
-  const onSignInButtonClickHandler = () => {
+  const onSignInButtonClickHandler = async () => {
     const requestBody: SignInRequestDto = inputData;
-    signInRequest(requestBody).then(signInResponse);
+    setUser(requestBody);
+    router.push(MAIN_PATH());
   };
 
   const onSignUpLinkClickHandler = () => {

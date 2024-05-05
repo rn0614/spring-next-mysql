@@ -1,25 +1,25 @@
 import { useRouter } from "next/navigation";
 import styles from "./style.module.scss";
-import React from "react";
+import React, { useEffect } from "react";
 import SearchButton from "@/ui/morecular/SearchButton/SearchButton";
 import Button from "@/ui/atom/Button/Button";
 import Icon from "@/ui/atom/Icon/Icon";
-import { BOARD_DETAIL_PATH, MAIN_PATH, USER_PATH } from "@/constants";
-import { useRecoilState } from "recoil";
+import { BOARD_DETAIL_PATH, USER_PATH } from "@/constants";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { CurBoardAtom } from "@/stores/board.store";
 import { fileUploadRequest } from "@/hooks/useBoard";
 import { PostBoardRequestDto } from "@/pages/api/request/board";
 import { usePostBoard, useUpdateBoard } from "@/hooks/useBoard";
-import { queryClient } from "@/utils/react-query/queryClient";
-import { useGetLoginUser } from "@/hooks/useLogin";
+import { uploadFileToS3 } from "@/utils/s3/awsS3";
 import { useCookies } from "react-cookie";
+import { CurrUserAtom } from "@/stores/login-user.store";
 
 type Props = {
   path: string;
 };
 
 export default function Header({ path }: Props) {
-  const {loginUser,resetUser} = useGetLoginUser();
+  const [loginUser,setLoginUser] = useRecoilState(CurrUserAtom);
   const [board, setBorad] = useRecoilState(CurBoardAtom);
   const [cookies, setCookies] = useCookies();
   const accessToken = cookies.accessToken;
@@ -37,6 +37,8 @@ export default function Header({ path }: Props) {
       for (const file of board?.boardImageFileList) {
         const data = new FormData();
         data.append("file", file);
+        const buffer = Buffer.from(await file.arrayBuffer());
+        const fileKey = await uploadFileToS3(buffer, file.name, file.type);
 
         const url = (await fileUploadRequest(data)) as string;
         if (url) boardImageList.push(url);
@@ -93,7 +95,7 @@ export default function Header({ path }: Props) {
   };
 
   const onLogOutButtonClickHandler = () => {
-    resetUser();
+    setLoginUser(null);
     router.push("/");
   };
 

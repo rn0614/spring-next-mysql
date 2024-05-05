@@ -3,13 +3,13 @@ import authFetch from "@/utils/axios/axiosInstance";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useMutation, useQuery } from "react-query";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useLoginCookies } from "./useLoginCookies";
 
 const SIGN_IN_URL = () => `${process.env.NEXT_PUBLIC_API_BACK}/auth/sign-in`;
 const GET_SING_IN_USER_URL = () => `${process.env.NEXT_PUBLIC_API_BACK}/user`;
 
-// 아이디 비번을 통해 유저 로그인
+// 1. id/pw to token
 export const signInRequest = async (requestBody: any) => {
   try {
     const response = await axios.post(SIGN_IN_URL(), requestBody);
@@ -19,7 +19,7 @@ export const signInRequest = async (requestBody: any) => {
   }
 };
 
-// 쿠키의 토큰을 통해 user가 실제로 인가된 유저인지 확인
+// 2. token to userName/email
 export const getSignInUserRequest = async (accessToken: string) => {
   if (
     accessToken !== "undefined" &&
@@ -36,50 +36,39 @@ export const getSignInUserRequest = async (accessToken: string) => {
   return null;
 };
 
-// accessToken을 이용해 새로고침 이후 recoil 데이터 유지 및
-export const useGetLoginUser = () => {
-  const [loginUser, setLoginUser] = useRecoilState(CurrUserAtom);
-  const [cookies, setCookies, removeCookie] = useCookies();
-  const { setLoginCookie } = useLoginCookies();
-  const { data } = useQuery(
-    "accessToken",
-    () => getSignInUserRequest(cookies.accessToken),
-    {
-      onSuccess: (response) => {
-        setLoginCookie(response);
-        if (cookies.accessToken) {
-          setLoginUser({
-            email: response.email,
-            nickname: response.nickname,
-            profileImage: response.profileImage,
-          });
-        } else {
-          setLoginUser(null);
-        }
-      },
-      onError: (error) => {},
+// 3. token to LoginRecoil
+export const useSetRecoilByToken =  ()=>{
+  const [cookies] = useCookies();
+  const setLoginUser = useSetRecoilState(CurrUserAtom);
+  let userData;
+  const setRecoilByToken = async (accessToken:string|undefined)=>{
+    if(accessToken||cookies?.accessToken){
+      userData = await getSignInUserRequest(accessToken||cookies?.accessToken);
+      if(userData){
+        setLoginUser({
+          email: userData.email,
+          nickname: userData.nickname,
+          profileImage: userData.profileImage,
+        });
+      }
+    }else{
+      setLoginUser(null);
     }
-  );
-  const resetUser = () => {
-    setLoginUser(null);
-    removeCookie("accessToken", { path: "/" });
-  };
-  return { loginUser, resetUser };
-};
+  }
+  return setRecoilByToken
+}
 
-// 로그인 아이디비번 로그인 => token 발번
+
+
+// 로그인 아이디비번 로그인 => token 발번 => setCookies, setRecoilData
 export const useSetLoginUser = () => {
   const [loginUser, setLoginUser] = useRecoilState(CurrUserAtom);
   const { setLoginCookie } = useLoginCookies();
+  const setRecoilByToken = useSetRecoilByToken();
   const { mutate } = useMutation(signInRequest, {
     onSuccess: async (response) => {
       setLoginCookie(response);
-      const result = await getSignInUserRequest(response.token); // 해당 토큰 => 유저정보 Fn
-      setLoginUser({
-        email: result.email,
-        nickname: result.nickname,
-        profileImage: result.profileImage,
-      });
+      await setRecoilByToken(response.token)
     },
   });
   return mutate;
