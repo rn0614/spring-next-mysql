@@ -35,4 +35,4 @@ build/
 
 ### property files ###
 
-/main/resources/*.properties
+src/main/resources/*.properties
