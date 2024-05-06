@@ -53,8 +53,8 @@ public class BoardServiceImplement implements BoardService {
   private final UserRespository userRespository;
   private final FavoriteRepository favoriteRepository;
   private final CommentRepository commentRepository;
-  private final SearchLogRepository searchLogRepository;
   private final BoardListViewRepository boardListViewRepository;
+  private final SearchLogRepository searchLogRepository;
 
   @Override
   public ResponseEntity<? super GetBoardResponseDto> getBoard(
@@ -291,10 +291,20 @@ public class BoardServiceImplement implements BoardService {
   }
 
   @Override
-  public ResponseEntity<? super GetLatestBoardListResponseDto> getLatestBoardList() {
+  public ResponseEntity<? super GetLatestBoardListResponseDto> getLatestBoardList(
+    Integer limit,
+    Integer startNumber
+  ) {
     try {
-      List<BoardListViewEntity> boardListViewEntities = boardListViewRepository.findByOrderByWriteDatetimeDesc();
-      return GetLatestBoardListResponseDto.success(boardListViewEntities);
+      List<BoardListViewEntity> boardListViewEntities = boardListViewRepository.getLatestBoardList(
+        limit,
+        startNumber
+      );
+      long totalCount = boardListViewRepository.count();
+      return GetLatestBoardListResponseDto.success(
+        boardListViewEntities,
+        totalCount
+      );
     } catch (Exception exception) {
       exception.printStackTrace();
       return ResponseDto.databaseError();

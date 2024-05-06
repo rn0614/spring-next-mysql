@@ -10,13 +10,13 @@ import { useRouter } from "next/navigation";
 import { SEARCH_PATH } from "@/constants";
 import { getTop3BoardListRequest, useGetLatestBoard } from "@/hooks/useBoard";
 import { useGetPopularList } from "@/hooks/useSearch";
+import Pagination from "@/components/Pagination";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const MainTop = () => {
     const [top3List, setTop3List] = useState<BoardListItemType[]>([]);
-
     useEffect(() => {
       getTop3BoardListRequest().then((response) => {
         setTop3List(response.top3List);
@@ -43,21 +43,27 @@ export default function Home() {
   };
 
   const MainBottom = () => {
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(8);
+
     const router = useRouter();
-    const latestBoardList = useGetLatestBoard();
+    const { latestBoardList, totalCount } = useGetLatestBoard({ limit, page });
     const popularList = useGetPopularList();
 
     const onPopularWordClickHandler = (word: string) => {
       router.push(SEARCH_PATH(word));
     };
 
+    useEffect(() => {
+      console.log(totalCount);
+    }, [totalCount]);
     return (
       <div id={style["main-bottom-wrapper"]}>
         <div className={style["main-bottom-container"]}>
           <div className={style["main-bottom-title"]}>최신 게시물</div>
           <div className={style["main-bottom-contents-box"]}>
             <div className={style["main-bottom-latest-contents"]}>
-              {latestBoardList.map((item:BoardListItemType) => (
+              {latestBoardList.map((item: BoardListItemType) => (
                 <BoardListItem key={item.boardNumber} boardListItem={item} />
               ))}
             </div>
@@ -83,7 +89,15 @@ export default function Home() {
             </div>
           </div>
           <div className={style["main-bottom-pagination-box"]}>
-            <div>pagination</div>
+            <h1></h1>
+            <Pagination
+              curPage={page}
+              limit={limit}
+              totalPage={totalCount ? Math.ceil(totalCount / limit) : 1}
+              setPage={setPage}
+              setLimit={setLimit}
+              onLimitChange={() => {}}
+            />
           </div>
         </div>
       </div>

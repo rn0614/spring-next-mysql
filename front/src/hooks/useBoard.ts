@@ -6,11 +6,14 @@ import { useMutation, useQuery } from "react-query";
 import { BOARD_DETAIL_PATH } from "@/constants";
 import GetBoardResponseDto from "@/stores/get-board.store";
 import { ResponseDto } from "@/pages/api/response/index";
+import { useEffect, useState } from "react";
 
 const GET_BOARD_URL = (boardNumber: number | string) =>
   `${process.env.NEXT_PUBLIC_API_BACK}/board/${boardNumber}`;
-const GET_LATEST_BOARD_LIST_URL = () =>
-  `${process.env.NEXT_PUBLIC_API_BACK}/board/latest-list`;
+const GET_LATEST_BOARD_LIST_URL = (limit: number, page: number) =>
+  `${
+    process.env.NEXT_PUBLIC_API_BACK
+  }/board/latest-list?limit=${limit}&startNumber=${(page - 1) * limit}`;
 const GET_TOP3_LIST_URL = () =>
   `${process.env.NEXT_PUBLIC_API_BACK}/board/top-3`;
 const DELETE_BOARD_URL = (boardNumber: number | string) =>
@@ -35,9 +38,12 @@ export const getBoardRequest = async (boardNumber: number | string) => {
   }
 };
 
-export const getLatestBoardListRequest = async () => {
+export const getLatestBoardListRequest = async (
+  limit: number,
+  page: number
+) => {
   try {
-    const response = await axios.get(GET_LATEST_BOARD_LIST_URL());
+    const response = await axios.get(GET_LATEST_BOARD_LIST_URL(limit, page));
     return response.data;
   } catch (error) {
     throw error;
@@ -72,7 +78,7 @@ const deleteBoardRequest = async (boardNumber: number | string) => {
 };
 
 export const fileUploadRequest = async (data: FormData) => {
-  const reuslt = await authFetch(undefined,"multipart/form-data")
+  const reuslt = await authFetch(undefined, "multipart/form-data")
     .post(FILE_UPLOAD_URL(), data)
     .then((response) => {
       const responseBody: string = response.data;
@@ -122,9 +128,26 @@ const updateBoardRequest = async ({ boardNumber, requestBody }: any) => {
   }
 };
 
-export function useGetLatestBoard() {
-  const { data } = useQuery(["board", "latest"], getLatestBoardListRequest);
-  return data?.latestList ? data.latestList : [];
+type latestListType = {
+  limit: number;
+  page: number;
+};
+
+export function useGetLatestBoard({ limit, page }: latestListType) {
+  const [latestBoardList, setLatestBoardList] = useState([]);
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const { data } = useQuery(["board", "latest", limit, page], () =>
+    getLatestBoardListRequest(limit, page)
+  );
+
+  useEffect(() => {
+    if (data !== undefined) {
+      setLatestBoardList(data.latestList);
+      setTotalCount(data.totalCount)
+    }
+  }, [data]);
+
+  return {latestBoardList, totalCount};
 }
 
 export function useGetBoard(boardNumber: number | string) {

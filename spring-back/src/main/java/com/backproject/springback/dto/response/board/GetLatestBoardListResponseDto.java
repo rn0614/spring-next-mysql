@@ -17,14 +17,17 @@ import lombok.Getter;
 public class GetLatestBoardListResponseDto extends ResponseDto{
 
   private List<BoardListItem> latestList;
+  private long totalCount;
 
-  private GetLatestBoardListResponseDto(List<BoardListViewEntity> boardEntities){
+  private GetLatestBoardListResponseDto(List<BoardListViewEntity> boardEntities, long totalCount){
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     this.latestList = BoardListItem.getList(boardEntities);
+    this.totalCount = totalCount;
+    System.out.println(totalCount);
   }
 
-  public static ResponseEntity<GetLatestBoardListResponseDto> success(List<BoardListViewEntity> boardEntities){
-    GetLatestBoardListResponseDto result = new GetLatestBoardListResponseDto(boardEntities);
+  public static ResponseEntity<GetLatestBoardListResponseDto> success(List<BoardListViewEntity> boardEntities, long totalCount){
+    GetLatestBoardListResponseDto result = new GetLatestBoardListResponseDto(boardEntities,totalCount);
     return ResponseEntity.status(HttpStatus.OK).body(result);
   }
 }

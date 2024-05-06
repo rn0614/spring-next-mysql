@@ -1,4 +1,5 @@
-import { Html, Head, Main, NextScript } from 'next/document'
+import { Html, Head, Main, NextScript } from "next/document";
+import Loading from "@/ui/atom/Loading/Loading";
 export default function Document() {
   return (
     <Html lang="en">
@@ -8,5 +9,5 @@ export default function Document() {
         <NextScript />
       </body>
     </Html>
-  )
+  );
 }

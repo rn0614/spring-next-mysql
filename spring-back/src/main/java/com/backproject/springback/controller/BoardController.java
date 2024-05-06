@@ -148,8 +148,11 @@ public class BoardController {
   }
 
   @GetMapping("/latest-list")
-  public ResponseEntity<? super GetLatestBoardListResponseDto> getLatestBoardList() {
-    ResponseEntity<? super GetLatestBoardListResponseDto> response = boardService.getLatestBoardList();
+  public ResponseEntity<? super GetLatestBoardListResponseDto> getLatestBoardList(
+    @RequestParam(value = "limit", defaultValue = "5") Integer limit,
+    @RequestParam(value = "startNumber", defaultValue = "0") Integer startNumber
+  ) {
+    ResponseEntity<? super GetLatestBoardListResponseDto> response = boardService.getLatestBoardList(limit,startNumber);
     return response;
   }
 
