@@ -41,14 +41,11 @@
         line-height: 140%;
       }
     }
+  }
 
-    .board-list-item-bottom {
-      .board-list-item-counts {
-        color: rgba(0, 0, 0, 0.7);
-        font-size: 0.75rem;
-        font-weight: 400;
-        line-height: 140%;
-      }
-    }
+  .board-list-item-image-box{
+    width:100px;
+    height:100px;
+    border-radius: 5px;
   }
 }

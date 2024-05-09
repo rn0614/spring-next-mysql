@@ -1,6 +1,7 @@
 import { FavoriteListItem } from "@/types/interface";
 import authFetch from "@/utils/axios/axiosInstance";
 import { queryClient } from "@/utils/react-query/queryClient";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 
@@ -11,7 +12,7 @@ const PUT_FAVORITE_URL = (boardNumber: string | number) =>
 
 export const getFavoriteListRequest = async (boardNumber: string | number) => {
   try {
-    const response = await authFetch().get(GET_FAVORITE_LIST_URL(boardNumber));
+    const response = await axios.get(GET_FAVORITE_LIST_URL(boardNumber));
     return response.data;
   } catch (error) {
     throw error;

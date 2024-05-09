@@ -4,6 +4,7 @@ import { BoardListItemType } from "@/types/interface";
 import { useRouter } from "next/navigation";
 import { ProfileImageWithNickName } from "@/ui/atom/ProfileImage/ProfileImage";
 import { BOARD_DETAIL_PATH } from "@/constants";
+import Text from "@/ui/atom/Text/Text";
 
 type Props = {
   boardListItem: BoardListItemType;
@@ -28,6 +29,7 @@ export default function BoardListItem({ boardListItem }: Props) {
     router.push(BOARD_DETAIL_PATH(boardNumber));
   };
 
+  console.log("boardListItem", boardListItem);
   return (
     <div className={styles["board-list-item"]} onClick={onClickHandler}>
       <div className={styles["board-list-item-main-box"]}>
@@ -39,22 +41,18 @@ export default function BoardListItem({ boardListItem }: Props) {
           />
         </div>
         <div className={styles["board-list-item-middle"]}>
-          <div className={styles["board-list-item-title"]}>{title}</div>
-          <div className={styles["board-list-item-content"]}>{content}</div>
+          <Text size="md">{title}</Text>
+          <Text size="sm">{content}</Text>
         </div>
-        <div className={styles["board-list-item-bottom"]}>
-          <div className={styles["board-list-item-counts"]}>
-            {`하트:${favoriteCount} 댓글:${commentCount} 조회수:${viewCount}`}
-          </div>
-        </div>
+        <Text size="sm">
+          {`하트:${favoriteCount} 댓글:${commentCount} 조회수:${viewCount}`}
+        </Text>
       </div>
       {boardTitleImage && (
-        <div className={styles["board-list-item-image-box"]}>
-          <div
-            className={styles["board-list-item-image"]}
-            style={{ backgroundImage: `url(${boardTitleImage})` }}
-          ></div>
-        </div>
+        <div
+          className={styles["board-list-item-image-box"]}
+          style={{ backgroundImage: `url(${boardTitleImage})`,backgroundSize: "cover" }}
+        ></div>
       )}
     </div>
   );

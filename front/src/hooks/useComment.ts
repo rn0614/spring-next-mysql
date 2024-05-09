@@ -1,6 +1,7 @@
 import { CommentListItem } from "@/types/interface";
 import authFetch from "@/utils/axios/axiosInstance";
 import { queryClient } from "@/utils/react-query/queryClient";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 
@@ -15,7 +16,7 @@ const getCommentListRequest = async ({
   page,
 }: getCommentType) => {
   try {
-    const response = await authFetch()
+    const response = await axios
     .get(GET_COMMENT_LIST_URL({ boardNumber, limit, page }))
     return response.data
   } catch (error) {

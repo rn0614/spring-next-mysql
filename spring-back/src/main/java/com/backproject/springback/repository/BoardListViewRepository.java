@@ -25,24 +25,33 @@ public interface BoardListViewRepository
   @Query(
     value = """
       SELECT 
-        B.board_number,
-        B.title,
-        B.content,
-        NULL as title_image,
-        B.view_count,
-        B.favorite_count,
-        B.comment_count,
-        B.write_datetime,
-        B.writer_email,
-        U.nickname AS writer_nickname,
-        U.profile_image AS writer_profile_image
+          B.board_number,
+          B.title,
+          B.content,
+          I.image AS title_image,
+          B.view_count,
+          B.favorite_count,
+          B.comment_count,
+          B.write_datetime,
+          B.writer_email,
+          U.nickname AS writer_nickname,
+          U.profile_image AS writer_profile_image
       FROM 
           board AS B
       INNER JOIN 
-          user AS U
-      ON 
-          B.writer_email = U.email
-      ORDER BY write_datetime DESC
+          user AS U ON B.writer_email = U.email
+      LEFT JOIN (
+          SELECT 
+              board_number,
+              MAX(sequence) AS max_sequence
+          FROM 
+              image
+          GROUP BY 
+              board_number
+      ) AS MaxSeq ON B.board_number = MaxSeq.board_number
+      LEFT JOIN image AS I ON MaxSeq.board_number = I.board_number AND MaxSeq.max_sequence = I.sequence
+      ORDER BY 
+          B.write_datetime DESC
       LIMIT ?1 OFFSET ?2
       """,
     nativeQuery = true

@@ -1,16 +1,15 @@
 import { useRouter } from "next/navigation";
 import styles from "./style.module.scss";
-import React, { useEffect } from "react";
+import React from "react";
 import SearchButton from "@/ui/morecular/SearchButton/SearchButton";
 import Button from "@/ui/atom/Button/Button";
 import Icon from "@/ui/atom/Icon/Icon";
 import { BOARD_DETAIL_PATH, USER_PATH } from "@/constants";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState} from "recoil";
 import { CurBoardAtom } from "@/stores/board.store";
 import { fileUploadRequest } from "@/hooks/useBoard";
 import { PostBoardRequestDto } from "@/pages/api/request/board";
 import { usePostBoard, useUpdateBoard } from "@/hooks/useBoard";
-import { uploadFileToS3 } from "@/utils/s3/awsS3";
 import { useCookies } from "react-cookie";
 import { CurrUserAtom } from "@/stores/login-user.store";
 
