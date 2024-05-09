@@ -23,7 +23,6 @@ public class GetLatestBoardListResponseDto extends ResponseDto{
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     this.latestList = BoardListItem.getList(boardEntities);
     this.totalCount = totalCount;
-    System.out.println(totalCount);
   }
 
   public static ResponseEntity<GetLatestBoardListResponseDto> success(List<BoardListViewEntity> boardEntities, long totalCount){

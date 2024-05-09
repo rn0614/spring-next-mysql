@@ -24,7 +24,7 @@ const UPDATE_BOARD_URL = (boardNumber: number | string) =>
 const GET_USER_BOARD_LIST = (email: string) =>
   `${process.env.NEXT_PUBLIC_API_BACK}/board/user-board-list/${email}`;
 const INCREASE_VIEW_COUNT_URL = (boardNumber: string | number) =>
-  `${process.env.NEXT_PUBLIC_API_BACK}/board/${boardNumber}/increas-view-count`;
+  `${process.env.NEXT_PUBLIC_API_BACK}/board/${boardNumber}/increase-view-count`;
 const FILE_UPLOAD_URL = () => `${process.env.NEXT_PUBLIC_API_FILE}/file/upload`;
 
 export const getBoardRequest = async (boardNumber: number | string) => {
