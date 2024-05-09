@@ -12,6 +12,7 @@ import { PostBoardRequestDto } from "@/pages/api/request/board";
 import { usePostBoard, useUpdateBoard } from "@/hooks/useBoard";
 import { useCookies } from "react-cookie";
 import { CurrUserAtom } from "@/stores/login-user.store";
+import Text from "@/ui/atom/Text/Text";
 
 type Props = {
   path: string;
@@ -103,7 +104,7 @@ export default function Header({ path }: Props) {
       <div className={styles["header-container"]}>
         <div className={styles["header-left-box"]} onClick={onLogoClickHander}>
           <Icon icon="logo-dark-icon" heading={true} />
-          <div className={styles["header-log"]}>{"Koo"}</div>
+          <Text size="lg">{"Koo"}</Text>
         </div>
         <div className={styles["header-right-box"]}>
           <SearchButton />
