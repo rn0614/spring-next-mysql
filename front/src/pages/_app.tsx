@@ -6,6 +6,7 @@ import { QueryClientProvider } from "react-query";
 import { queryClient as QueryClient } from "@/utils/react-query/queryClient";
 import { ReactQueryDevtools } from "react-query/devtools";
 import Loading from "@/ui/atom/Loading/Loading";
+import ToastProvider from "@/components/ToastProvider/ToastProvider";
 
 const queryClient = QueryClient;
 export default function App({ Component, pageProps }: AppProps) {
@@ -13,11 +14,12 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <RecoilRoot>
         <CookiesProvider>
-          <Component {...pageProps} />
-          <ReactQueryDevtools />
-          <div id="portal">
-          <Loading />
-        </div>
+          <ToastProvider/>
+            <Component {...pageProps} />
+            <ReactQueryDevtools />
+            <div id="portal">
+              <Loading />
+            </div>
         </CookiesProvider>
       </RecoilRoot>
     </QueryClientProvider>

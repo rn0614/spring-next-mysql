@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./style.module.scss";
-import Icon, { IconButton } from "@/ui/atom/Icon/Icon";
+import { IconButton } from "@/ui/atom/Icon/Icon";
+import Logo from "@/ui/morecular/Logo/Logo";
 
 export default function Footer() {
 
@@ -15,12 +16,8 @@ export default function Footer() {
     <footer id={styles['footer']}>
       <div className={styles["footer-container"]}>
         <div className={styles["footer-top"]}>
-          <div className={styles["footer-logo-box"]}>
-            <Icon icon={"footer-logo-icon"} />
-            <div className={styles["footer-logo-text"]}></div>
-          </div>
+          <Logo icon="footer-logo-icon"/>
           <div className={styles["footer-link-box"]}>
-            <div className={styles["footer-email-link"]}></div>
             <IconButton onButtonClick={onInstaIconButtonClickHandler} icon={"insta-icon"} />
             <IconButton onButtonClick={onNaverBlogIconButtonClickHandler} icon={"naver-blog-icon"} />
           </div>

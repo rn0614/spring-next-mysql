@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { Inter } from "next/font/google";
 import BoardListItem from "@/components/BoardListItem";
 import Top3Item from "@/components/Top3Item";
 import MainLayout from "@/layouts/Layout/MainLayout/MainLayout";
@@ -11,8 +10,7 @@ import { SEARCH_PATH } from "@/constants";
 import { getTop3BoardListRequest, useGetLatestBoard } from "@/hooks/useBoard";
 import { useGetPopularList } from "@/hooks/useSearch";
 import Pagination from "@/components/Pagination";
-
-const inter = Inter({ subsets: ["latin"] });
+import Text from "@/ui/atom/Text/Text";
 
 export default function Home() {
   const MainTop = () => {
@@ -25,9 +23,8 @@ export default function Home() {
     return (
       <div id={style["main-top-wrapper"]}>
         <div className={style["main-top-container"]}>
-          <div className={style["main-top-intro"]}></div>
           <div className={style["main-top-contents-box"]}>
-            <div className={style["main-top-contents-title"]}>TOP3 LIST</div>
+            <Text size="lg">TOP3 LIST</Text>
             <div className={style["main-top-contents"]}>
               {top3List.map((top3ListItem) => (
                 <Top3Item
@@ -60,7 +57,7 @@ export default function Home() {
     return (
       <div id={style["main-bottom-wrapper"]}>
         <div className={style["main-bottom-container"]}>
-          <div className={style["main-bottom-title"]}>최신 게시물</div>
+          <Text size="lg">최신 게시물</Text>
           <div className={style["main-bottom-contents-box"]}>
             <div className={style["main-bottom-latest-contents"]}>
               {latestBoardList.map((item: BoardListItemType) => (
@@ -70,9 +67,7 @@ export default function Home() {
             <div className={style["main-bottom-popular-box"]}>
               <div className={style["main-bottom-popular-card"]}>
                 <div className={style["main-bottom-popular-card-container"]}>
-                  <div className={style["main-bottom-popular-cart-title"]}>
-                    인기검색어
-                  </div>
+                  <Text size="lg">인기검색어</Text>
                   <div className={style["main-bottom-popular-cart-contents"]}>
                     {popularList.map((item, idx) => (
                       <div
@@ -89,7 +84,6 @@ export default function Home() {
             </div>
           </div>
           <div className={style["main-bottom-pagination-box"]}>
-            <h1></h1>
             <Pagination
               curPage={page}
               limit={limit}
@@ -112,10 +106,8 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <MainLayout path="home">
-        <div>
-          <MainTop />
-          <MainBottom />
-        </div>
+        <MainTop />
+        <MainBottom />
       </MainLayout>
     </>
   );

@@ -12,27 +12,35 @@
   font-weight: 500;
   line-height: 140%;
   cursor: pointer;
+
+  &[disabled]{
+    cursor:not-allowed
+  }
 }
+.primary{
+  background-color: var(--color-primary);
+  color:var(--color-white)
 
-.white {
-  color: rgba(0, 0, 0, 1);
-  background-color: rgba(230, 230, 230, 1);
+  &[disabled]{
+    background-color: var(--dark-gray);
+    color:bar(--light-gray)
+  }
 
-  &:hover {
-    background-color: rgba(230, 230, 230, 0.8);
+  &:hover{
+    background-color: var(--color-primary2);
   }
 }
 
-.black {
-  color: rgba(255, 255, 255, 1);
-  background-color: rgba(0, 0, 0, 1);
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-  }
-}
+.secondary{
+  background-color: var(--color-white);
+  color:var(--color-primary)
 
-.gray{
-  color: rgba(255, 255, 255, 1);
-  background-color: rgb(110, 110, 110);
-  cursor: default;
+  &[disabled]{
+    background-color: var(--light-gray);
+    color:bar(--dark-gray)
+  }
+
+  &:hover{
+    background-color: var(--color-primary2);
+  }
 }

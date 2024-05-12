@@ -13,6 +13,7 @@ import { usePostBoard, useUpdateBoard } from "@/hooks/useBoard";
 import { useCookies } from "react-cookie";
 import { CurrUserAtom } from "@/stores/login-user.store";
 import Text from "@/ui/atom/Text/Text";
+import Logo from "@/ui/morecular/Logo/Logo";
 
 type Props = {
   path: string;
@@ -102,10 +103,9 @@ export default function Header({ path }: Props) {
   return (
     <header id={styles["header"]} className="header">
       <div className={styles["header-container"]}>
-        <div className={styles["header-left-box"]} onClick={onLogoClickHander}>
-          <Icon icon="logo-dark-icon" heading={true} />
-          <Text size="lg">{"Koo"}</Text>
-        </div>
+        <Logo icon="logo-dark-icon" size="lg" onClick={()=>router.push("/")}>
+          Koo
+        </Logo>
         <div className={styles["header-right-box"]}>
           <SearchButton />
           {loginUser && path === "home" && (

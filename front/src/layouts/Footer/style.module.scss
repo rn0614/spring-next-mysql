@@ -2,7 +2,6 @@
   width:100%;
   padding: 2rem 0 0 0;
   background-color: rgba(55, 55, 55, 1);
-
   display: flex;
   justify-content: center;
 }
@@ -21,12 +20,6 @@
   align-items: center;
 }
 
-.footer-logo-box {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .footer-log-text {
   color: rgba(255, 255, 255, 1);
   font-size: 20px;
@@ -39,21 +32,17 @@
   display: flex;
   align-items: center;
   gap: 20px;
+  padding:0 1rem;
 }
 
 .footer-email-link {
   color: rgba(255, 255, 255, 1);
-
   font-size: 0.75rem;
   font-weight: 400;
 }
 
-.footer-bottom {
-}
-
 .footer-copyright {
   color: rgba(255, 255, 255, 1);
-
   font-size: 0.75rem;
   font-weight: 400;
 }

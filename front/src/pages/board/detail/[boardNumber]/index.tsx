@@ -275,7 +275,7 @@ export default function DetailBoardPage({ board }: boardProps) {
                   className={style["board-detail-bottom-comment-button-box"]}
                 >
                   <Button
-                    isDisable={comment === undefined || comment === ""}
+                    disabled={comment === undefined || comment === ""}
                     color="black"
                     onClick={onCommentSubmitHandler}
                   >
