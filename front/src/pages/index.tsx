@@ -11,6 +11,7 @@ import { getTop3BoardListRequest, useGetLatestBoard } from "@/hooks/useBoard";
 import { useGetPopularList } from "@/hooks/useSearch";
 import Pagination from "@/components/Pagination";
 import Text from "@/ui/atom/Text/Text";
+import ListWrapper from "@/ui/atom/ListWrapper/ListWrapper";
 
 export default function Home() {
   const MainTop = () => {
@@ -25,14 +26,14 @@ export default function Home() {
         <div className={style["main-top-container"]}>
           <div className={style["main-top-contents-box"]}>
             <Text size="lg">TOP3 LIST</Text>
-            <div className={style["main-top-contents"]}>
+            <ListWrapper>
               {top3List.map((top3ListItem) => (
                 <Top3Item
                   key={top3ListItem.boardNumber}
                   top3ListItem={top3ListItem}
                 />
               ))}
-            </div>
+            </ListWrapper>
           </div>
         </div>
       </div>

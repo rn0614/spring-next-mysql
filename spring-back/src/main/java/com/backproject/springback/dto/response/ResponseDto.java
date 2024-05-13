@@ -71,8 +71,11 @@ public class ResponseDto {
   }
 
   // board : 권한 없음
-  public static ResponseEntity<ResponseDto> noPermission(){
-    ResponseDto result = new ResponseDto(ResponseCode.NO_PERMISSION, ResponseMessage.NO_PERMISSION);
+  public static ResponseEntity<ResponseDto> noPermission() {
+    ResponseDto result = new ResponseDto(
+      ResponseCode.NO_PERMISSION,
+      ResponseMessage.NO_PERMISSION
+    );
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
   }
 

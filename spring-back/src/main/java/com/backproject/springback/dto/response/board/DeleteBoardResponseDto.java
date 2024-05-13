@@ -20,20 +20,4 @@ public class DeleteBoardResponseDto extends ResponseDto{
     DeleteBoardResponseDto responseDto = new DeleteBoardResponseDto();
     return ResponseEntity.status(HttpStatus.OK).body(responseDto);
   }
-
-  public static ResponseEntity<ResponseDto> noExistBoard(){
-    ResponseDto result = new ResponseDto(
-      ResponseCode.NOT_EXISTED_BORAD,
-      ResponseMessage.NOT_EXISTED_BORAD
-    );
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-  }
-
-  public static ResponseEntity<ResponseDto> noExistUser(){
-    ResponseDto result = new ResponseDto(
-      ResponseCode.NOT_EXISTED_USER,
-      ResponseMessage.NOT_EXISTED_USER
-    );
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
-  }
 }
