@@ -1,0 +1,31 @@
+.sheet-wrapper {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: rgb(178, 178, 178);
+  border: 1px solid black;
+}
+.area {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid black;
+  height: 20px;
+
+  .time {
+    width: 30px;
+  }
+  .droppable{
+    background-color: greenyellow;
+  }
+}
+.box {
+  background-color: antiquewhite;
+  width: 200px;
+  height: 20px;
+}

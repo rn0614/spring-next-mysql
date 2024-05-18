@@ -15,10 +15,14 @@
     "classnames": "^2.5.1",
     "dayjs": "^1.11.10",
     "env-cmd": "^10.1.0",
+    "immutability-helper": "^3.1.1",
+    "lodash": "^4.17.21",
     "next": "14.0.4",
     "nginx": "^1.0.8",
     "react": "^18",
     "react-cookie": "^7.1.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18",
     "react-hook-form": "^7.51.4",
     "react-icons": "^5.2.1",
@@ -30,6 +34,7 @@
     "stores": "^1.0.0"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.4",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-cookies": "^0.1.3",
