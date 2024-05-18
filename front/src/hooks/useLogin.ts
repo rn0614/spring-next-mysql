@@ -20,7 +20,7 @@ export const signInRequest = async (requestBody: any) => {
 };
 
 // 2. token to userName/email
-export const getSignInUserRequest = async (accessToken: string) => {
+export const getSignInUserRequest = async (accessToken: string | undefined) => {
   if (
     accessToken !== "undefined" &&
     accessToken !== undefined &&
@@ -37,28 +37,28 @@ export const getSignInUserRequest = async (accessToken: string) => {
 };
 
 // 3. token to LoginRecoil
-export const useSetRecoilByToken =  ()=>{
+export const useSetRecoilByToken = () => {
   const [cookies] = useCookies();
   const setLoginUser = useSetRecoilState(CurrUserAtom);
   let userData;
-  const setRecoilByToken = async (accessToken:string|undefined)=>{
-    if(accessToken||cookies?.accessToken){
-      userData = await getSignInUserRequest(accessToken||cookies?.accessToken);
-      if(userData){
+  const setRecoilByToken = async (accessToken: string | undefined) => {
+    if (accessToken || cookies?.accessToken) {
+      userData = await getSignInUserRequest(
+        accessToken || cookies?.accessToken
+      );
+      if (userData) {
         setLoginUser({
           email: userData.email,
           nickname: userData.nickname,
           profileImage: userData.profileImage,
         });
       }
-    }else{
+    } else {
       setLoginUser(null);
     }
-  }
-  return setRecoilByToken
-}
-
-
+  };
+  return setRecoilByToken;
+};
 
 // 로그인 아이디비번 로그인 => token 발번 => setCookies, setRecoilData
 export const useSetLoginUser = () => {
@@ -68,7 +68,7 @@ export const useSetLoginUser = () => {
   const { mutate } = useMutation(signInRequest, {
     onSuccess: async (response) => {
       setLoginCookie(response);
-      await setRecoilByToken(response.token)
+      await setRecoilByToken(response.token);
     },
   });
   return mutate;

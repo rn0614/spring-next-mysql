@@ -3,12 +3,16 @@ import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import style from "./style.module.scss";
 import Icon from "@/ui/atom/Icon/Icon";
 import { getUserBoardListRequest } from "@/hooks/useBoard";
-import { BoardListItemType,  } from "@/types/interface";
+import { BoardListItemType } from "@/types/interface";
 import BoardListItem from "@/components/BoardListItem";
 import { useRouter } from "next/navigation";
 import { BOARD_WRITE_PATH } from "@/constants";
 import ProfileImage from "@/ui/atom/ProfileImage/ProfileImage";
-import { getUserInfo, patchNicknameRequest, patchProfileImageRequest } from "@/hooks/useUser";
+import {
+  getUserInfo,
+  patchNicknameRequest,
+  patchProfileImageRequest,
+} from "@/hooks/useUser";
 import { fileUploadRequest } from "@/hooks/useBoard";
 import { useRecoilValue } from "recoil";
 import { CurrUserAtom } from "@/stores/login-user.store";
@@ -23,7 +27,7 @@ export default function User({ user, boardList }: boardProps) {
     const Loginuser = useRecoilValue(CurrUserAtom);
     const [isMyPage, setMyPage] = useState<boolean>(false);
     const imageInputRef = useRef<HTMLInputElement>(null);
-    const [userName, setUserName]= useState<string>(user.nickname);
+    const [userName, setUserName] = useState<string>(user.nickname);
 
     const onProfileImageClickHandler = () => {
       if (!isMyPage) return;
@@ -43,26 +47,26 @@ export default function User({ user, boardList }: boardProps) {
 
       patchProfileImageRequest({ profileImage: url })
         .then((response) => {
-          return response
+          return response;
         })
         .catch((error) => {
-          return error
+          return error;
         });
     };
 
     const onNicknameChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-      setUserName(event.target.value)
+      setUserName(event.target.value);
     };
 
     const onNicknameSetHandler = () => {
-      patchNicknameRequest({"nickname":userName});
+      patchNicknameRequest({ nickname: userName });
     };
 
-    useEffect(()=>{
-      if(Loginuser?.email===user.email){
-        setMyPage(true)
+    useEffect(() => {
+      if (Loginuser?.email === user.email) {
+        setMyPage(true);
       }
-    },[Loginuser])
+    }, [Loginuser]);
 
     return (
       <div id={style["user-top-wrapper"]}>
@@ -101,14 +105,15 @@ export default function User({ user, boardList }: boardProps) {
                 </div>
               )}
               {isMyPage && (
-                <div className={style["icon-box"]} onClick={onNicknameSetHandler}>
+                <div
+                  className={style["icon-box"]}
+                  onClick={onNicknameSetHandler}
+                >
                   <Icon icon="edit-icon" />
                 </div>
               )}
             </div>
-            <div className={style["user-top-info-email"]}>
-              {user.email}
-            </div>
+            <div className={style["user-top-info-email"]}>{user.email}</div>
           </div>
         </div>
       </div>
@@ -131,13 +136,11 @@ export default function User({ user, boardList }: boardProps) {
                 <BoardListItem key={idx} boardListItem={item} />
               ))}
             </div>
-            <div className={style["write-new-board-box"]}>
-              <div
-                className={style["new-board-button"]}
-                onClick={writeBoardHandler}
-              >
-                {"글쓰기"}
-              </div>
+            <div
+              className={style["write-new-board-box"]}
+              onClick={writeBoardHandler}
+            >
+              <div className={style["new-board-button"]}>{"글쓰기"}</div>
             </div>
           </div>
         </div>

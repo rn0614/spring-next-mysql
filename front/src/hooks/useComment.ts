@@ -59,8 +59,8 @@ export function useGetCommentList({
 
 export function usePostComment() {
   const { mutate } = useMutation(postCommentRequest, {
-    onSuccess: (response) => {
-      queryClient.invalidateQueries(["comment-list"]);
+    onSuccess: async (response) => {
+      await queryClient.invalidateQueries(["comment-list"]); // invaludateQueries 가 비동기되면 fetching 계속 돔
       alert("댓글이 등록됐습니다.");
     },
   });
