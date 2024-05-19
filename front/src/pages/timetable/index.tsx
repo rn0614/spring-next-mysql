@@ -5,15 +5,7 @@ import styles from "./styles.module.scss";
 import { cloneDeep } from "lodash";
 import DropWrapper from "@/ui/atom/DropWrapper/DropWrapper";
 import MainLayout from "@/layouts/Layout/MainLayout/MainLayout";
-
-type Item ={
-  id:number;
-  text:string;
-  startTime:number;
-  endTime:number;
-  wrapperNo:number;
-  isChange:boolean;
-}
+import TimeSchedule from "@/types/timeSchedule";
 
 
 const initItem = [
@@ -96,10 +88,10 @@ export default function DragDropPage() {
           monitor.getInitialSourceClientOffset()!.y) /
           20
       );
-      setWrapper((preRows: any) => {
+      setWrapper((preRows: TimeSchedule[][]) => {
         let itemToMove = cloneDeep(preRows);
         // 전체 배열을 순회하며 요소 찾기
-        itemToMove.forEach((group, index) => {
+        itemToMove.forEach((group:TimeSchedule[]) => {
           const itemIndex = group.findIndex((row) => item.id === row.id);
           if (itemIndex !== -1) {
             // 요소를 찾았으면 제거
@@ -118,7 +110,6 @@ export default function DragDropPage() {
             isChange: true,
           });
         }
-        itemToMove.sort((a, b) => a.time - b.time);
         console.log("itemToMove", itemToMove);
         return itemToMove;
       });
