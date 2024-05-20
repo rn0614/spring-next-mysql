@@ -3,6 +3,6 @@ export default interface TimeSchedule {
   text: string;
   startTime: number;
   endTime: number;
-  wrapperNo: number;
+  type: string;
   isChange: boolean;
 }

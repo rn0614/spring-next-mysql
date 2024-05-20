@@ -141,6 +141,7 @@ export function useGetLatestBoard({ limit, page }: latestListType) {
   );
 
   useEffect(() => {
+    console.log('latest',data)
     if (data !== undefined) {
       setLatestBoardList(data.latestList);
       setTotalCount(data.totalCount)

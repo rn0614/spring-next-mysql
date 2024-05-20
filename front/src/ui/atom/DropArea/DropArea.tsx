@@ -8,11 +8,11 @@ type DropAreaType<T> = {
     time: number,
     item: any,
     monitor: DropTargetMonitor<unknown, unknown>,
-    wrapperNo: number
+    type: string
   ) => void;
   data: any;
   time: number;
-  wrapperNo: number;
+  type: string;
   dropCheckHandler: any;
 };
 
@@ -20,14 +20,14 @@ export default function DropArea<T>({
   addBox,
   data,
   time,
-  wrapperNo,
+  type,
   dropCheckHandler,
 }: DropAreaType<T>) {
   const ref = useRef<HTMLTableRowElement>(null);
   const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
       accept: "row",
-      drop: (item, monitor) => addBox(time, item, monitor, wrapperNo),
+      drop: (item, monitor) => addBox(time, item, monitor, type),
       canDrop: (item, monitor) => dropCheckHandler(data, item, monitor),
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
@@ -52,7 +52,6 @@ export default function DropArea<T>({
       className={`${styles["area"]} ${color !== "" ? styles[color] : ""}`}
       onClick={() => console.log(data, data.id === null, canDrop)}
     >
-      <div className={`${styles["time"]}`}>{time}</div>
       {data?.data?.id ? (
         <DragBox
           id={data.data.id}

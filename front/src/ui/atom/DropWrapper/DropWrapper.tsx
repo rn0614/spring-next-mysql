@@ -3,19 +3,19 @@ import DropArea from "../DropArea/DropArea";
 import styles from "./DropWrapper.module.scss";
 
 type DropWrapperProps<T> = {
-  areaList: T[];
+  areaList: T[]|undefined;
   addBox: any;
-  wrapperNo: number;
+  type: string;
 };
 
 export default function DropWrapper<
   T extends { startTime: number; id: number }
->({ areaList, addBox, wrapperNo }: DropWrapperProps<T>) {
+>({ areaList, addBox, type }: DropWrapperProps<T>) {
   const ref = useRef<HTMLTableRowElement>(null);
-  const wrapperList = Array.from({ length: 10 }, (v, k) => k + 9);
+  const wrapperList = Array.from({ length: 24 }, (v, k) => k);
   const resultList = wrapperList.map((time) => {
     // areaList에서 해당 시간과 일치하는 요소 찾기
-    const found = areaList.find((area) => area.startTime === time) ?? null;
+    const found = areaList?.find((area) => area.startTime === time) ?? null;
     // 일치하는 요소가 있으면 그 요소의 id를 사용, 없으면 null
     return {
       time,
@@ -33,7 +33,7 @@ export default function DropWrapper<
     let upsideCheck =
       data.time + item.data.endTime - item.data.startTime - diff;
     let check = resultList.every((row) => {
-      if (upsideCheck > 19 || downsideCheck < 9) return false;
+      if (upsideCheck > 24 || downsideCheck < 0) return false;
       if (row.data?.id == item.data.id) return true;
       if (row.time >= upsideCheck || row.time < downsideCheck) return true;
       if (row.data === null) return true;
@@ -44,13 +44,14 @@ export default function DropWrapper<
 
   return (
     <div ref={ref} className={styles["wrapper"]}>
+      <div>날짜</div>
       {wrapperList.map((_, idx) => (
         <DropArea
           key={idx}
           addBox={addBox}
-          time={idx + 9}
+          time={idx}
           data={resultList[idx]}
-          wrapperNo={wrapperNo}
+          type={type}
           dropCheckHandler={dropCheckHandler}
         ></DropArea>
       ))}

@@ -190,4 +190,14 @@ public class BoardController {
     );
     return response;
   }
+
+  @GetMapping("/path/1")
+  public ResponseEntity<? super GetUserBoardListResponseDto> getMethodName() {
+    String email="rn0614@naver.com";
+    ResponseEntity<? super GetUserBoardListResponseDto> response = boardService.getUserBoardList(
+      email
+    );
+    return response;
+  }
+  
 }

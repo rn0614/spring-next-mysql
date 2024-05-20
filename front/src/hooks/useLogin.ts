@@ -62,7 +62,6 @@ export const useSetRecoilByToken = () => {
 
 // 로그인 아이디비번 로그인 => token 발번 => setCookies, setRecoilData
 export const useSetLoginUser = () => {
-  const [loginUser, setLoginUser] = useRecoilState(CurrUserAtom);
   const { setLoginCookie } = useLoginCookies();
   const setRecoilByToken = useSetRecoilByToken();
   const { mutate } = useMutation(signInRequest, {

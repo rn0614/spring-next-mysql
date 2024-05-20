@@ -22,7 +22,7 @@ type Props = {
 export default function Header({ path }: Props) {
   const [loginUser,setLoginUser] = useRecoilState(CurrUserAtom);
   const [board, setBorad] = useRecoilState(CurBoardAtom);
-  const [cookies, setCookies] = useCookies();
+  const [cookies,setCookie, removeCookie] = useCookies();
   const accessToken = cookies.accessToken;
 
   const postBoard = usePostBoard();
@@ -97,7 +97,7 @@ export default function Header({ path }: Props) {
 
   const onLogOutButtonClickHandler = () => {
     setLoginUser(null);
-    setCookies("accessToken", null, { path: "/" });
+    removeCookie("accessToken");
     router.push("/");
   };
 

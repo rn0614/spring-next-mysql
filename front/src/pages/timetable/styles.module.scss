@@ -1,5 +1,20 @@
-.sheet-wrapper {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.time-schedule-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .sheet-wrapper {
+    padding-block:5px;
+    padding-right: 5px;
+    background-color: rgb(178, 178, 178);
+    width: 100%;
+    max-width: var(--max-width);
+    display: grid;
+    align-items: center;
+    border-radius: 5px;
+    grid-template-columns: 30px repeat(3, 1fr);
+
+    .time-wrapper{
+      background-color: rgb(178, 178, 178);
+    }
+  }
 }
