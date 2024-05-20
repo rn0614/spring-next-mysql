@@ -97,13 +97,14 @@ export default function Header({ path }: Props) {
 
   const onLogOutButtonClickHandler = () => {
     setLoginUser(null);
+    setCookies("accessToken", null, { path: "/" });
     router.push("/");
   };
 
   return (
     <header id={styles["header"]} className="header">
       <div className={styles["header-container"]}>
-        <Logo icon="logo-dark-icon" size="lg" onClick={()=>router.push("/")}>
+        <Logo icon="logo-dark-icon" size="lg" onClick={onLogoClickHander}>
           Koo
         </Logo>
         <div className={styles["header-right-box"]}>
