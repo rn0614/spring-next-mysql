@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { DndProvider, DropTargetMonitor } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { DropTargetMonitor } from "react-dnd";
+// for mobile
+import { DndProvider } from 'react-dnd-multi-backend'
+import { HTML5toTouch } from 'rdndmb-html5-to-touch' // or any other pipeline
 import styles from "./styles.module.scss";
 import { cloneDeep } from "lodash";
 import DropWrapper from "@/ui/atom/DropWrapper/DropWrapper";
@@ -76,7 +78,7 @@ export default function DragDropPage() {
   },[scheduleList])
   return (
     <MainLayout path="home">
-      <DndProvider backend={HTML5Backend}>
+      <DndProvider options={HTML5toTouch}>
         <div className={styles["time-schedule-top"]}>
           <div className={styles["sheet-wrapper"]}>
             <div className={styles["time-wrapper"]}>
