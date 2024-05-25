@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backproject.springback.mapper.BoardListMapper">
+  <select id="count" resultType="int">
+    SELECT COUNT(*)
+    FROM board
+  </select>
+  
+  <select id="getTop3BoardList" resultType="com.backproject.springback.entity.BoardListViewEntity">
+    SELECT 
+      board_number,
+      title,
+      content,
+      title_image,
+      view_count,
+      favorite_count,
+      write_datetime,
+      writer_email,
+      writer_nickname,
+      writer_profile_image
+    FROM board_list_view 
+    WHERE write_datetime > #{writeDatetime} 
+    ORDER BY favorite_count
+    DESC, comment_count DESC, view_count DESC, write_datetime DESC 
+    LIMIT 3 
+  </select>
+
+  <select id="getSearchBoardContainTitleNContent"
+    resultType="com.backproject.springback.entity.BoardListViewEntity"
+  > SELECT 
+      board_number,
+      title,
+      content,
+      title_image,
+      view_count,
+      favorite_count,
+      write_datetime,
+      writer_email,
+      writer_nickname,
+      writer_profile_image
+    FROM board_list_view
+    WHERE title LIKE CONCAT('%', #{title}, '%') OR content LIKE CONCAT('%', #{content}, '%') 
+    ORDER BY write_datetime desc
+  </select>
+
+  <select id="findByWriterEmailOrderByWriteDatetimeDesc"
+    resultType="com.backproject.springback.entity.BoardListViewEntity"
+  > SELECT 
+      board_number,
+      title,
+      content,
+      title_image,
+      view_count,
+      favorite_count,
+      write_datetime,
+      writer_email,
+      writer_nickname,
+      writer_profile_image 
+    FROM board_list_view
+    WHERE writer_email=#{writerEmail} 
+    ORDER BY write_datetime desc
+  </select>
+
+  <select id="getLatestBoardList"
+    resultType="com.backproject.springback.entity.BoardListViewEntity"
+  > SELECT 
+      B.board_number,
+      B.title, 
+      B.content, 
+      I.image, 
+      B.view_count, 
+      B.favorite_count, 
+      B.comment_count,
+      B.write_datetime, 
+      B.writer_email, 
+      U.nickname, 
+      U.profile_image 
+    FROM board AS B 
+    INNER JOIN user AS U ON B.writer_email = U.email 
+    LEFT JOIN ( SELECT board_number, MAX(sequence) AS max_sequence FROM image GROUP BY board_number ) AS MaxSeq 
+      ON B.board_number = MaxSeq.board_number 
+    LEFT JOIN image AS I 
+      ON MaxSeq.board_number = I.board_number AND MaxSeq.max_sequence = I.sequence 
+    ORDER BY B.write_datetime DESC 
+    LIMIT #{limit} OFFSET #{startNumber}
+  </select>
+</mapper>

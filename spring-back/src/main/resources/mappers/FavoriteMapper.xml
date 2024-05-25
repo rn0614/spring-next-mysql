@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backproject.springback.mapper.FavoriteMapper">
+  <select id="getFavoriteList" resultType="com.backproject.springback.repository.resultSet.GetFavoriteListResultSet">
+    SELECT
+      U.email AS email,
+      U.nickname AS nickname,
+      U.profile_image AS profileImage
+    FROM favorite AS F
+    INNER JOIN user AS U
+    ON F.user_email = U.email
+    WHERE F.board_number = #{boardNumber}
+  </select>
+
+  <select id="findByBoardNumberAndUserEmail" resultType="com.backproject.springback.entity.FavoriteEntity">
+    SELECT
+      F.user_email,
+      F.board_number
+    FROM favorite as F
+    WHERE F.board_number = #{boardNumber}
+    AND F.user_email = #{userEmail}
+  </select>
+
+  <insert id="insert">
+    INSERT INTO favorite(user_email, board_number)
+    values(#{userEmail}, #{boardNumber})
+  </insert>
+
+  <delete id="deleteByBoardNumber">
+    DELETE FROM favorite
+    WHERE board_number = #{boardNumber}
+  </delete>
+  
+  <delete id="delete">
+    DELETE FROM favorite
+    WHERE board_number = #{boardNumber}
+    AND user_email = #{userEmail}
+  </delete>
+</mapper>

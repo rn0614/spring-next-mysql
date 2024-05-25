@@ -141,22 +141,21 @@ export function useGetLatestBoard({ limit, page }: latestListType) {
   );
 
   useEffect(() => {
-    console.log('latest',data)
     if (data !== undefined) {
       setLatestBoardList(data.latestList);
-      setTotalCount(data.totalCount)
+      setTotalCount(data.totalCount);
     }
   }, [data]);
 
-  return {latestBoardList, totalCount};
+  return { latestBoardList, totalCount };
 }
 
-export function useGetBoard(boardNumber: number | string) {
-  const { data } = useQuery(["board", boardNumber], () =>
-    getBoardRequest(boardNumber)
-  );
-  return data;
-}
+// export function useGetBoard(boardNumber: number | string) {
+//   const { data } = useQuery(["board", boardNumber], () =>
+//     getBoardRequest(boardNumber)
+//   );
+//   return data;
+// }
 
 export function useDeleteBoard() {
   const { mutate } = useMutation(deleteBoardRequest, {
@@ -170,7 +169,7 @@ export function useDeleteBoard() {
 export function usePostBoard() {
   const router = useRouter();
   const { mutate } = useMutation(postBoardRequest, {
-    onSuccess: (response) => {
+    onSuccess: async (response) => {
       router.push(BOARD_DETAIL_PATH(response.boardNumber));
     },
   });
@@ -180,8 +179,8 @@ export function usePostBoard() {
 export function useUpdateBoard() {
   const router = useRouter();
   const { mutate } = useMutation(updateBoardRequest, {
-    onSuccess: (response) => {
-      router.push(BOARD_DETAIL_PATH(response.boardNumber));
+    onSuccess: async (response) => {
+      await router.push(BOARD_DETAIL_PATH(response.boardNumber));
     },
   });
   return mutate;

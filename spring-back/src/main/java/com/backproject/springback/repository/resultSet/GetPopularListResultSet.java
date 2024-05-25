@@ -1,6 +1,15 @@
 package com.backproject.springback.repository.resultSet;
 
-public interface GetPopularListResultSet {
-  String getSearchWord();
-  int getCount();
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class GetPopularListResultSet {
+  private String searchWord;
+  private int count;
 }

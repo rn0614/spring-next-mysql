@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backproject.springback.mapper.ImageMapper">
+  <select id="findByBoardNumber" resultType="com.backproject.springback.entity.ImageEntity">
+    SELECT 
+      sequence,
+      board_number,
+      image
+    FROM image
+    WHERE board_number = #{boardNumber}
+  </select>
+  <delete id="deleteByBoardNumber" >
+    DELETE FROM image
+    WHERE board_number = #{boardNumber}
+  </delete>
+
+  <insert id="saveAll" parameterType="java.util.List">
+    INSERT INTO image (board_number, image)
+    VALUES <foreach item="imageEntity" collection="list" separator=",">
+        (#{imageEntity.boardNumber}, #{imageEntity.image})
+    </foreach>
+  </insert>
+</mapper>

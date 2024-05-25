@@ -8,7 +8,7 @@ import com.backproject.springback.dto.response.user.GetUserResponseDto;
 import com.backproject.springback.dto.response.user.PatchNicknameResponseDto;
 import com.backproject.springback.dto.response.user.PatchProfileImageResponseDto;
 import com.backproject.springback.entity.UserEntity;
-import com.backproject.springback.repository.UserRespository;
+import com.backproject.springback.mapper.UserMapper;
 import com.backproject.springback.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImplement implements UserService {
 
-  private final UserRespository userRespository;
+  private final UserMapper userMapper;
 
   @Override
   public ResponseEntity<? super GetSignInUserResponseDto> getSignInUser(
@@ -27,7 +27,7 @@ public class UserServiceImplement implements UserService {
     UserEntity userEntity = null;
 
     try {
-      userEntity = userRespository.findByEmail(email);
+      userEntity = userMapper.findByEmail(email);
       if (userEntity == null) return GetSignInUserResponseDto.noExistUser();
 
       return GetSignInUserResponseDto.success(userEntity);
@@ -40,7 +40,7 @@ public class UserServiceImplement implements UserService {
   @Override
   public ResponseEntity<? super GetUserResponseDto> getUser(String email) {
     try {
-      UserEntity userEntity = userRespository.findByEmail(email);
+      UserEntity userEntity = userMapper.findByEmail(email);
       if (userEntity == null) return GetUserResponseDto.noExistUser();
       return GetUserResponseDto.success(userEntity);
     } catch (Exception exception) {
@@ -55,16 +55,16 @@ public class UserServiceImplement implements UserService {
     String email
   ) {
     try {
-      UserEntity userEntity = userRespository.findByEmail(email);
+      UserEntity userEntity = userMapper.findByEmail(email);
 
       if (userEntity == null) return PatchNicknameResponseDto.noExistUser();
       String nickname = dto.getNickname();
-      boolean existedNickname = userRespository.existsByNickname(email);
+      boolean existedNickname = userMapper.existsByNickname(email);
 
       if (existedNickname) return PatchNicknameResponseDto.duplicateNickname();
 
       userEntity.setNickname(nickname);
-      userRespository.save(userEntity);
+      userMapper.update(userEntity);
 
       return PatchNicknameResponseDto.success();
 
@@ -80,12 +80,12 @@ public class UserServiceImplement implements UserService {
     String email
   ) {
     try {
-      UserEntity userEntity = userRespository.findByEmail(email);
+      UserEntity userEntity = userMapper.findByEmail(email);
       if(userEntity== null) return PatchProfileImageResponseDto.noExistUser();
 
       String profileImage = dto.getProfileImage();
       userEntity.setProfileImage(profileImage);
-      userRespository.save(userEntity);
+      userMapper.update(userEntity);
       return PatchProfileImageResponseDto.success();
       
     } catch (Exception exception) {

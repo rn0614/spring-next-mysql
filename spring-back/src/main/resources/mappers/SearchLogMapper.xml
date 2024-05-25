@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backproject.springback.mapper.SearchLogMapper">
+  <select id="getPopularList" resultType="com.backproject.springback.repository.resultSet.GetPopularListResultSet">
+    SELECT 
+      search_word as searchWord, 
+      count(search_word) as count
+    FROM search_log
+    WHERE relation IS FALSE
+    GROUP BY search_word
+    ORDER BY count DESC
+    LIMIT 15
+  </select>
+  
+  <select id="getRelationList" resultType="com.backproject.springback.repository.resultSet.GetRelationListResultSet">
+    SELECT 
+      relation_word as relationWord, 
+      count(search_word) as count
+    FROM search_log
+    WHERE search_word = #{searchWord}
+    and relation_word IS NOT NULL
+    GROUP BY relation_word
+    ORDER BY count DESC
+    LIMIT 15
+  </select>
+
+  <insert id="insert" parameterType="com.backproject.springback.entity.SearchLogEntity">
+    INSERT INTO search_log( search_word, relation_word, relation)
+    VALUES(#{searchWord}, #{relationWord}, #{relation})
+  </insert>
+</mapper>

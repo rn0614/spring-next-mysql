@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.backproject.springback.dto.response.ResponseDto;
 import com.backproject.springback.dto.response.schedule.GetScheduleListResponseDto;
-import com.backproject.springback.entity.ScheduleEntity;
-import com.backproject.springback.repository.ScheduleRepository;
+import com.backproject.springback.mapper.ScheduleMapper;
 import com.backproject.springback.repository.resultSet.GetScheduleListResultSet;
 import com.backproject.springback.service.ScheduleService;
 
@@ -18,12 +17,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ScheduleServiceImplement implements ScheduleService{
   
-  private final ScheduleRepository scheduleRepository;
+  private final ScheduleMapper scheduleMapper;
 
   @Override
   public ResponseEntity<? super GetScheduleListResponseDto> getScheduleList() {
     try {
-      List<GetScheduleListResultSet> resultSets = scheduleRepository.getScheduleList();
+      List<GetScheduleListResultSet> resultSets = scheduleMapper.getScheduleList();
       return GetScheduleListResponseDto.success(resultSets);
     } catch (Exception e) {
       e.printStackTrace();

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backproject.springback.mapper.BoardMapper">
+  <select id="findByBoardNumber"
+    resultType="com.backproject.springback.entity.BoardEntity"
+  > SELECT 
+      board_number,
+      title,
+      content,
+      write_datetime,
+      favorite_count,
+      comment_count,
+      view_count,
+      writer_email
+    FROM board
+    WHERE board_number = #{boardNumber}
+  </select>
+  <select id="getBoard"
+    resultType="com.backproject.springback.repository.resultSet.GetBoardResultSet"
+  > SELECT 
+      B.board_number AS boardNumber,
+      B.title AS title,
+      B.content AS content,
+      B.write_datetime AS writeDatetime,
+      B.writer_email AS writerEmail,
+      U.nickname AS writerNickname,
+      U.profile_image AS writerProfileImage
+    FROM board AS B
+    INNER JOIN `user` AS U
+    ON B.writer_email = U.email
+    WHERE board_number = #{boardNumber}
+  </select>
+
+  <select id="existsByBoardNumber"
+    resultType="boolean"
+  > SELECT EXISTS (SELECT 1 FROM board WHERE board_number = #{boardNumber})
+  </select>
+
+  <insert id="insertBoard" parameterType="com.backproject.springback.entity.BoardEntity" useGeneratedKeys="true" keyProperty="boardNumber">
+    INSERT INTO board (title, content, write_datetime, favorite_count, comment_count, view_count, writer_email)
+    VALUES (#{title}, #{content}, #{writeDatetime}, #{favoriteCount}, #{commentCount}, #{viewCount}, #{writerEmail})
+  </insert>
+
+  <update id="update">
+    UPDATE board
+    SET title = #{title},
+        content = #{content},
+        favorite_count = #{favoriteCount},
+        comment_count = #{commentCount},
+        view_count = #{viewCount}
+    WHERE board_number= #{boardNumber}
+  </update>
+</mapper>

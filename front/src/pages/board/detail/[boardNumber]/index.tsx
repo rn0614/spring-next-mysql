@@ -345,6 +345,7 @@ export default function DetailBoardPage({ board }: boardProps) {
 export async function getServerSideProps(context: any) {
   try {
     const boardNumber = context.query.boardNumber as string;
+    
     const board = await getBoardRequest(boardNumber);
 
     await increaseViewCountRequest(boardNumber);

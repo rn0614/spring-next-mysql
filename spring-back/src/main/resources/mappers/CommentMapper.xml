@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backproject.springback.mapper.CommentMapper">
+  <select id="getCommentList" resultType="com.backproject.springback.repository.resultSet.GetCommentListResultSet">
+    SELECT
+      U.nickname AS nickname,
+      U.profile_image AS profileImage,
+      C.write_datetime AS writeDatetime,
+      C.content AS content,
+      COUNT(*) OVER() AS totalCount
+    FROM comment AS C
+    INNER JOIN user AS U
+    ON C.user_email = U.email
+    WHERE C.board_number = #{boardNumber}
+    ORDER BY write_datetime DESC
+    LIMIT #{limit} OFFSET #{startNumber}
+  </select>
+  <insert id="insertComment">
+    INSERT INTO comment(contnet, write_datetime, user_email, board_number)
+    VALUES(#{content}, #{write_datetime}, #{user_email}, #{board_number})
+  </insert>
+  <delete id="deleteByBoardNumber">
+    DELETE FROM comment
+    WHERE board_number = #{boardNumber}
+  </delete>
+</mapper>

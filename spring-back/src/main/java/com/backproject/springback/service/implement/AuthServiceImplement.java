@@ -6,7 +6,7 @@ import com.backproject.springback.dto.response.ResponseDto;
 import com.backproject.springback.dto.response.auth.SignInResponseDto;
 import com.backproject.springback.dto.response.auth.SignUpResponseDto;
 import com.backproject.springback.entity.UserEntity;
-import com.backproject.springback.repository.UserRespository;
+import com.backproject.springback.mapper.UserMapper;
 import com.backproject.springback.service.AuthService;
 import com.backproject.springback.provider.JwtProvider;
 
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthServiceImplement implements AuthService {
 
-  private final UserRespository userRespository;
+  private final UserMapper userMapper;
   private final JwtProvider jwtProvider;
   private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -31,15 +31,15 @@ public class AuthServiceImplement implements AuthService {
     try {
       //제약조건 검사
       String email = dto.getEmail();
-      boolean existedEmail = userRespository.existsByEmail(email);
+      boolean existedEmail = userMapper.existsByEmail(email);
       if (existedEmail) return SignUpResponseDto.duplicateEmail();
 
       String nickname = dto.getNickname();
-      boolean existedNickname = userRespository.existsByNickname(nickname);
+      boolean existedNickname = userMapper.existsByNickname(nickname);
       if (existedNickname) return SignUpResponseDto.duplicateNickname();
 
       String telNumber = dto.getTelNumber();
-      boolean existedTelNumber = userRespository.existsByTelNumber(telNumber);
+      boolean existedTelNumber = userMapper.existsByTelNumber(telNumber);
       if (existedTelNumber) return SignUpResponseDto.duplicateTelNumber();
 
       // 암호화
@@ -48,7 +48,7 @@ public class AuthServiceImplement implements AuthService {
       dto.setPassword(encodedPassword);
 
       UserEntity userEntity = new UserEntity(dto);
-      userRespository.save(userEntity);
+      userMapper.insert(userEntity);
 
       return SignUpResponseDto.succes();
     } catch (Exception exception) {
@@ -63,7 +63,7 @@ public class AuthServiceImplement implements AuthService {
 
     try{
       String email = dto.getEmail();
-      UserEntity userEntity = userRespository.findByEmail(email);
+      UserEntity userEntity = userMapper.findByEmail(email);
       if(userEntity==null) return SignInResponseDto.signInFailed();
 
       String password = dto.getPassword();

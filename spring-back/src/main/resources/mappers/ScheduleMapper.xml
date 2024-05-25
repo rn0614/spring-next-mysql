@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backproject.springback.mapper.ScheduleMapper">
+  <select id="getScheduleList" resultType="com.backproject.springback.repository.resultSet.GetScheduleListResultSet">
+    SELECT 
+      id as id,
+      text as text,
+      start_time as startTime,
+      end_time as endTime,
+      type as type
+    FROM time_scheduler
+  </select>
+</mapper>

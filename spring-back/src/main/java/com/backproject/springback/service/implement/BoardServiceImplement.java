@@ -23,13 +23,13 @@ import com.backproject.springback.entity.CommentEntity;
 import com.backproject.springback.entity.FavoriteEntity;
 import com.backproject.springback.entity.ImageEntity;
 import com.backproject.springback.entity.SearchLogEntity;
-import com.backproject.springback.repository.BoardListViewRepository;
-import com.backproject.springback.repository.BoardRepository;
-import com.backproject.springback.repository.CommentRepository;
-import com.backproject.springback.repository.FavoriteRepository;
-import com.backproject.springback.repository.ImageRepository;
-import com.backproject.springback.repository.SearchLogRepository;
-import com.backproject.springback.repository.UserRespository;
+import com.backproject.springback.mapper.BoardListMapper;
+import com.backproject.springback.mapper.BoardMapper;
+import com.backproject.springback.mapper.CommentMapper;
+import com.backproject.springback.mapper.FavoriteMapper;
+import com.backproject.springback.mapper.ImageMapper;
+import com.backproject.springback.mapper.SearchLogMapper;
+import com.backproject.springback.mapper.UserMapper;
 import com.backproject.springback.repository.resultSet.GetBoardResultSet;
 import com.backproject.springback.repository.resultSet.GetCommentListResultSet;
 import com.backproject.springback.repository.resultSet.GetFavoriteListResultSet;
@@ -40,6 +40,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -48,23 +51,23 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BoardServiceImplement implements BoardService {
 
-  private final BoardRepository boardRepository;
-  private final ImageRepository imageRepository;
-  private final UserRespository userRespository;
-  private final FavoriteRepository favoriteRepository;
-  private final CommentRepository commentRepository;
-  private final BoardListViewRepository boardListViewRepository;
-  private final SearchLogRepository searchLogRepository;
+  private final UserMapper userMapper;
+  private final SearchLogMapper searchLogMapper;
+  private final BoardListMapper boardListMapper;
+  private final BoardMapper boardMapper;
+  private final ImageMapper imageMapper;
+  private final CommentMapper commentMapper;
+  private final FavoriteMapper favoriteMapper;
 
   @Override
   public ResponseEntity<? super GetBoardResponseDto> getBoard(
     Integer boardNumber
   ) {
     try {
-      GetBoardResultSet resultSet = boardRepository.getBoard(boardNumber);
+      GetBoardResultSet resultSet = boardMapper.getBoard(boardNumber);
       if (resultSet == null) return GetBoardResponseDto.noExistBoard();
 
-      List<ImageEntity> imageEntities = imageRepository.findByBoardNumber(
+      List<ImageEntity> imageEntities = imageMapper.findByBoardNumber(
         boardNumber
       );
 
@@ -82,10 +85,10 @@ public class BoardServiceImplement implements BoardService {
     try {
       List<GetFavoriteListResultSet> resultSets = new ArrayList<>();
 
-      boolean existedBoard = boardRepository.existsByBoardNumber(boardNumber);
+      boolean existedBoard = boardMapper.existsByBoardNumber(boardNumber);
       if (!existedBoard) return GetFavoriteListResponseDto.noExistBoard();
 
-      resultSets = favoriteRepository.getFavoriteList(boardNumber);
+      resultSets = favoriteMapper.getFavoriteList(boardNumber);
 
       return GetFavoriteListResponseDto.success(resultSets);
     } catch (Exception exception) {
@@ -102,10 +105,10 @@ public class BoardServiceImplement implements BoardService {
   ) {
     try {
       List<GetCommentListResultSet> resultSets = new ArrayList<>();
-      boolean existedBoard = boardRepository.existsByBoardNumber(boardNumber);
+      boolean existedBoard = boardMapper.existsByBoardNumber(boardNumber);
       if (!existedBoard) return GetCommentListResponseDto.noExistBoard();
       resultSets =
-        commentRepository.getCommentList(boardNumber, limit, startNumber);
+      commentMapper.getCommentList(boardNumber, limit, startNumber);
       return GetCommentListResponseDto.success(resultSets);
     } catch (Exception exception) {
       exception.printStackTrace();
@@ -114,16 +117,17 @@ public class BoardServiceImplement implements BoardService {
   }
 
   @Override
+  @Transactional
   public ResponseEntity<? super PostBoardResponseDto> postBoard(
     PostBoardRequestDto dto,
     String email
   ) {
     try {
-      boolean existedEmail = userRespository.existsByEmail(email);
+      boolean existedEmail = userMapper.existsByEmail(email);
       if (!existedEmail) return PostBoardResponseDto.noExistUser();
 
       BoardEntity boardEntity = new BoardEntity(dto, email);
-      boardRepository.save(boardEntity);
+      boardMapper.insertBoard(boardEntity);
 
       int boardNumber = boardEntity.getBoardNumber();
 
@@ -134,7 +138,9 @@ public class BoardServiceImplement implements BoardService {
         ImageEntity imageEntity = new ImageEntity(boardNumber, image);
         imageEntities.add(imageEntity);
       }
-      imageRepository.saveAll(imageEntities);
+      if(boardImageList.size()>0){
+        imageMapper.saveAll(imageEntities);
+      }
 
       return PostBoardResponseDto.success(boardNumber);
     } catch (Exception exception) {
@@ -144,23 +150,24 @@ public class BoardServiceImplement implements BoardService {
   }
 
   @Override
+  @Transactional
   public ResponseEntity<? super PostCommentResponseDto> postComment(
     PostCommentRequestDto dto,
     Integer boardNumber,
     String email
   ) {
     try {
-      BoardEntity boardEntity = boardRepository.findByBoardNumber(boardNumber);
+      BoardEntity boardEntity = boardMapper.findByBoardNumber(boardNumber);
       if (boardEntity == null) return PostCommentResponseDto.noExistBoard();
 
-      boolean existedUser = userRespository.existsByEmail(email);
+      boolean existedUser = userMapper.existsByEmail(email);
       if (!existedUser) return PostCommentResponseDto.noExistUser();
 
       CommentEntity commentEntity = new CommentEntity(dto, boardNumber, email);
-      commentRepository.save(commentEntity);
+      commentMapper.insertComment(commentEntity);
 
       boardEntity.increaseCommentCount();
-      boardRepository.save(boardEntity);
+      boardMapper.update(boardEntity);
 
       return PostCommentResponseDto.success();
     } catch (Exception exception) {
@@ -170,32 +177,33 @@ public class BoardServiceImplement implements BoardService {
   }
 
   @Override
+  @Transactional
   public ResponseEntity<? super PutFavoriteResponseDto> putFavorite(
     Integer boardNumber,
     String email
   ) {
     try {
       // 존재하는 유저가 favorite 등록하는지 확인
-      boolean existedUser = userRespository.existsByEmail(email);
+      boolean existedUser = userMapper.existsByEmail(email);
       if (!existedUser) return PutFavoriteResponseDto.noExistUser();
 
       //
-      BoardEntity boardEntity = boardRepository.findByBoardNumber(boardNumber);
+      BoardEntity boardEntity = boardMapper.findByBoardNumber(boardNumber);
       if (boardEntity == null) return PutFavoriteResponseDto.noExistBoard();
 
-      FavoriteEntity favoriteEntity = favoriteRepository.findByBoardNumberAndUserEmail(
+      FavoriteEntity favoriteEntity = favoriteMapper.findByBoardNumberAndUserEmail(
         boardNumber,
         email
       );
       if (favoriteEntity == null) {
         favoriteEntity = new FavoriteEntity(email, boardNumber);
-        favoriteRepository.save(favoriteEntity);
+        favoriteMapper.insert(favoriteEntity);
         boardEntity.increaseFavoriteCount();
       } else {
-        favoriteRepository.delete(favoriteEntity);
+        favoriteMapper.delete(favoriteEntity);
         boardEntity.decreaseFavoriteCount();
       }
-      boardRepository.save(boardEntity);
+      boardMapper.update(boardEntity);
 
       return PutFavoriteResponseDto.success();
     } catch (Exception e) {
@@ -209,13 +217,13 @@ public class BoardServiceImplement implements BoardService {
     Integer boardNumber
   ) {
     try {
-      BoardEntity boardEntity = boardRepository.findByBoardNumber(boardNumber);
+      BoardEntity boardEntity = boardMapper.findByBoardNumber(boardNumber);
       if (
         boardEntity == null
       ) return IncreaseViewCountResponseDto.noExistBoard();
 
       boardEntity.increaseViewCount();
-      boardRepository.save(boardEntity);
+      //boardMapper.save(boardEntity);
       return IncreaseViewCountResponseDto.success();
     } catch (Exception exception) {
       exception.printStackTrace();
@@ -224,15 +232,16 @@ public class BoardServiceImplement implements BoardService {
   }
 
   @Override
+  @Transactional
   public ResponseEntity<? super DeleteBoardResponseDto> deleteBoard(
     Integer boardNumber,
     String email
   ) {
     try {
-      boolean existedUser = userRespository.existsByEmail(email);
+      boolean existedUser = userMapper.existsByEmail(email);
       if (!existedUser) return DeleteBoardResponseDto.noExistUser();
 
-      BoardEntity boardEntity = boardRepository.findByBoardNumber(boardNumber);
+      BoardEntity boardEntity = boardMapper.findByBoardNumber(boardNumber);
       if (boardEntity == null) return DeleteBoardResponseDto.noExistBoard();
 
       String writerEmail = boardEntity.getWriterEmail();
@@ -240,11 +249,11 @@ public class BoardServiceImplement implements BoardService {
         !email.equals(writerEmail)
       ) return DeleteBoardResponseDto.noPermission();
 
-      imageRepository.deleteByBoardNumber(boardNumber);
-      commentRepository.deleteByBoardNumber(boardNumber);
-      favoriteRepository.deleteByBoardNumber(boardNumber);
+      imageMapper.deleteByBoardNumber(boardNumber);
+      commentMapper.deleteByBoardNumber(boardNumber);
+      favoriteMapper.deleteByBoardNumber(boardNumber);
 
-      boardRepository.delete(boardEntity);
+      //boardMapper.delete(boardEntity);
 
       return DeleteBoardResponseDto.success();
     } catch (Exception exception) {
@@ -254,16 +263,17 @@ public class BoardServiceImplement implements BoardService {
   }
 
   @Override
+  @Transactional
   public ResponseEntity<? super PatchBoardResponseDto> patchBoard(
     Integer boardNumber,
     UpdateBoardRequestDto dto,
     String email
   ) {
     try {
-      boolean existedEmail = userRespository.existsByEmail(email);
+      boolean existedEmail = userMapper.existsByEmail(email);
       if (!existedEmail) return PostBoardResponseDto.noExistUser();
 
-      BoardEntity boardEntity = boardRepository.findByBoardNumber(boardNumber);
+      BoardEntity boardEntity = boardMapper.findByBoardNumber(boardNumber);
       if (boardEntity == null) return PatchBoardResponseDto.noExistBoard();
 
       String writerEmail = boardEntity.getWriterEmail();
@@ -271,9 +281,9 @@ public class BoardServiceImplement implements BoardService {
       if (!isWriter) return PatchBoardResponseDto.noPermission();
 
       boardEntity.pathBoard(dto);
-      boardRepository.save(boardEntity);
+      boardMapper.update(boardEntity);
 
-      imageRepository.deleteByBoardNumber(boardNumber);
+      imageMapper.deleteByBoardNumber(boardNumber);
       List<String> boardImageList = dto.getBoardImageList();
       List<ImageEntity> imageEntities = new ArrayList<>();
 
@@ -281,7 +291,7 @@ public class BoardServiceImplement implements BoardService {
         ImageEntity imageEntity = new ImageEntity(boardNumber, image);
         imageEntities.add(imageEntity);
       }
-      imageRepository.saveAll(imageEntities);
+      imageMapper.saveAll(imageEntities);
 
       return PatchBoardResponseDto.success(boardNumber);
     } catch (Exception exception) {
@@ -296,11 +306,11 @@ public class BoardServiceImplement implements BoardService {
     Integer startNumber
   ) {
     try {
-      List<BoardListViewEntity> boardListViewEntities = boardListViewRepository.getLatestBoardList(
+      List<BoardListViewEntity> boardListViewEntities = boardListMapper.getLatestBoardList(
         limit,
         startNumber
       );
-      long totalCount = boardListViewRepository.count();
+      long totalCount = boardListMapper.count();
       return GetLatestBoardListResponseDto.success(
         boardListViewEntities,
         totalCount
@@ -319,10 +329,9 @@ public class BoardServiceImplement implements BoardService {
         "yyyy-MM-dd HH:mm:ss"
       );
       String sevenDaysAgo = simpleDateFormat.format(beforeWeek);
+      //findTop3ByWriteDatetimeGreaterThanOrderByFavoriteCountDescCommentCountDescViewCountDescWriteDatetimeDesc
+      List<BoardListViewEntity> boardListViewEntities =  boardListMapper.getTop3BoardList(sevenDaysAgo);
 
-      List<BoardListViewEntity> boardListViewEntities = boardListViewRepository.findTop3ByWriteDatetimeGreaterThanOrderByFavoriteCountDescCommentCountDescViewCountDescWriteDatetimeDesc(
-        sevenDaysAgo
-      );
       return GetTop3BoardListResponseDto.success(boardListViewEntities);
     } catch (Exception exception) {
       return ResponseDto.databaseError();
@@ -336,8 +345,9 @@ public class BoardServiceImplement implements BoardService {
   ) {
     try {
       List<BoardListViewEntity> boardListViewEntities = new ArrayList<>();
+      //findByTitleContainsOrContentContainsOrderByWriteDatetimeDesc
       boardListViewEntities =
-        boardListViewRepository.findByTitleContainsOrContentContainsOrderByWriteDatetimeDesc(
+      boardListMapper.getSearchBoardContainTitleNContent(
           searchWord,
           searchWord
         );
@@ -347,13 +357,13 @@ public class BoardServiceImplement implements BoardService {
         preSearchWord,
         false
       );
-      searchLogRepository.save(searchLogEntity);
+      searchLogMapper.insert(searchLogEntity);
 
       boolean relation = (preSearchWord != null);
       if (relation && !searchWord.equals(preSearchWord)) {
         searchLogEntity =
           new SearchLogEntity(preSearchWord, searchWord, relation);
-        searchLogRepository.save(searchLogEntity);
+          searchLogMapper.insert(searchLogEntity);
       }
 
       return GetSearchBoardListResponseDto.success(boardListViewEntities);
@@ -368,9 +378,9 @@ public class BoardServiceImplement implements BoardService {
     String email
   ) {
     try {
-      boolean existedUser = userRespository.existsByEmail(email);
+      boolean existedUser = userMapper.existsByEmail(email);
       if (!existedUser) return GetUserBoardListResponseDto.noExistUser();
-      List<BoardListViewEntity> boardListViewEntities = boardListViewRepository.findByWriterEmailOrderByWriteDatetimeDesc(
+      List<BoardListViewEntity> boardListViewEntities = boardListMapper.findByWriterEmailOrderByWriteDatetimeDesc(
         email
       );
 
