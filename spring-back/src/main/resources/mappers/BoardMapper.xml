@@ -2,26 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.backproject.springback.mapper.BoardMapper">
   <select id="findByBoardNumber"
-    resultType="com.backproject.springback.entity.BoardEntity"
+    resultType="hashmap"
   > SELECT 
-      board_number,
+      board_number as boardNumber,
       title,
       content,
-      write_datetime,
-      favorite_count,
-      comment_count,
-      view_count,
-      writer_email
+      write_datetime as writeDatetime,
+      favorite_count as favoriteCount,
+      comment_count as commentCount,
+      view_count as viewCount,
+      writer_email as writerEmail
     FROM board
     WHERE board_number = #{boardNumber}
   </select>
   <select id="getBoard"
-    resultType="com.backproject.springback.repository.resultSet.GetBoardResultSet"
+    resultType="hashmap"
   > SELECT 
       B.board_number AS boardNumber,
       B.title AS title,
       B.content AS content,
-      B.write_datetime AS writeDatetime,
+      DATE_FORMAT(B.write_datetime, '%Y-%m-%d %H:%i:%s') AS writeDatetime,
       B.writer_email AS writerEmail,
       U.nickname AS writerNickname,
       U.profile_image AS writerProfileImage
@@ -50,4 +50,41 @@
         view_count = #{viewCount}
     WHERE board_number= #{boardNumber}
   </update>
+
+  <update id="pathBoard" parameterType="com.backproject.springback.dto.request.board.UpdateBoardRequestDto">
+    UPDATE board
+    SET title = #{title},
+        content = #{content}
+    WHERE board_number= #{boardNumber}
+  </update>
+
+  <update id="increaseCommentCount">
+    UPDATE board
+    SET comment_count = comment_count+1
+    WHERE board_number= #{boardNumber}
+  </update>
+  <update id="increaseFavoriteCount">
+    UPDATE board
+    SET favorite_count = favorite_count+1
+    WHERE board_number= #{boardNumber}
+  </update>
+  <update id="decreaseFavoriteCount">
+    UPDATE board
+    SET favorite_count = favorite_count-1
+    WHERE board_number= #{boardNumber}
+    AND favorite_count > 0;
+  </update>
+
+  <update id="increaseViewCount">
+    UPDATE board
+    SET view_count = view_count+1
+    WHERE board_number= #{boardNumber}
+  </update>
+
+  <delete id="delete">
+    DELETE FROM board
+    WHERE board_number= #{boardNumber}
+  </delete>
+  
+  
 </mapper>

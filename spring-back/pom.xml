@@ -41,6 +41,14 @@
 			<version>2.2.0</version>
 		</dependency>
 
+		<!-- 디버깅을 위한 devtools-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
 		<!-- 데이터베이스 드라이버, 여기서는 예로 H2 데이터베이스를 사용 -->
 		<dependency>
 			<groupId>com.h2database</groupId>

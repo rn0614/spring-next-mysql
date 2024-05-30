@@ -13,6 +13,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class UpdateBoardRequestDto {
+
+  private int boardNumber;
   @NotBlank
   private String title;
   @NotBlank

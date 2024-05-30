@@ -40,9 +40,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import java.util.Map;
 import javax.transaction.Transactional;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -64,7 +63,7 @@ public class BoardServiceImplement implements BoardService {
     Integer boardNumber
   ) {
     try {
-      GetBoardResultSet resultSet = boardMapper.getBoard(boardNumber);
+      Map<String, Object> resultSet = boardMapper.getBoard(boardNumber);
       if (resultSet == null) return GetBoardResponseDto.noExistBoard();
 
       List<ImageEntity> imageEntities = imageMapper.findByBoardNumber(
@@ -108,7 +107,7 @@ public class BoardServiceImplement implements BoardService {
       boolean existedBoard = boardMapper.existsByBoardNumber(boardNumber);
       if (!existedBoard) return GetCommentListResponseDto.noExistBoard();
       resultSets =
-      commentMapper.getCommentList(boardNumber, limit, startNumber);
+        commentMapper.getCommentList(boardNumber, limit, startNumber);
       return GetCommentListResponseDto.success(resultSets);
     } catch (Exception exception) {
       exception.printStackTrace();
@@ -138,7 +137,7 @@ public class BoardServiceImplement implements BoardService {
         ImageEntity imageEntity = new ImageEntity(boardNumber, image);
         imageEntities.add(imageEntity);
       }
-      if(boardImageList.size()>0){
+      if (boardImageList.size() > 0) {
         imageMapper.saveAll(imageEntities);
       }
 
@@ -157,7 +156,9 @@ public class BoardServiceImplement implements BoardService {
     String email
   ) {
     try {
-      BoardEntity boardEntity = boardMapper.findByBoardNumber(boardNumber);
+      Map<String, Object> boardEntity = boardMapper.findByBoardNumber(
+        boardNumber
+      );
       if (boardEntity == null) return PostCommentResponseDto.noExistBoard();
 
       boolean existedUser = userMapper.existsByEmail(email);
@@ -166,8 +167,7 @@ public class BoardServiceImplement implements BoardService {
       CommentEntity commentEntity = new CommentEntity(dto, boardNumber, email);
       commentMapper.insertComment(commentEntity);
 
-      boardEntity.increaseCommentCount();
-      boardMapper.update(boardEntity);
+      boardMapper.increaseCommentCount(boardNumber);
 
       return PostCommentResponseDto.success();
     } catch (Exception exception) {
@@ -188,7 +188,9 @@ public class BoardServiceImplement implements BoardService {
       if (!existedUser) return PutFavoriteResponseDto.noExistUser();
 
       //
-      BoardEntity boardEntity = boardMapper.findByBoardNumber(boardNumber);
+      Map<String, Object> boardEntity = boardMapper.findByBoardNumber(
+        boardNumber
+      );
       if (boardEntity == null) return PutFavoriteResponseDto.noExistBoard();
 
       FavoriteEntity favoriteEntity = favoriteMapper.findByBoardNumberAndUserEmail(
@@ -198,12 +200,11 @@ public class BoardServiceImplement implements BoardService {
       if (favoriteEntity == null) {
         favoriteEntity = new FavoriteEntity(email, boardNumber);
         favoriteMapper.insert(favoriteEntity);
-        boardEntity.increaseFavoriteCount();
+        boardMapper.increaseFavoriteCount(boardNumber);
       } else {
         favoriteMapper.delete(favoriteEntity);
-        boardEntity.decreaseFavoriteCount();
+        boardMapper.decreaseFavoriteCount(boardNumber);
       }
-      boardMapper.update(boardEntity);
 
       return PutFavoriteResponseDto.success();
     } catch (Exception e) {
@@ -217,12 +218,14 @@ public class BoardServiceImplement implements BoardService {
     Integer boardNumber
   ) {
     try {
-      BoardEntity boardEntity = boardMapper.findByBoardNumber(boardNumber);
+      Map<String, Object> boardEntity = boardMapper.findByBoardNumber(
+        boardNumber
+      );
       if (
         boardEntity == null
       ) return IncreaseViewCountResponseDto.noExistBoard();
 
-      boardEntity.increaseViewCount();
+      boardMapper.increaseViewCount(boardNumber);
       //boardMapper.save(boardEntity);
       return IncreaseViewCountResponseDto.success();
     } catch (Exception exception) {
@@ -241,19 +244,20 @@ public class BoardServiceImplement implements BoardService {
       boolean existedUser = userMapper.existsByEmail(email);
       if (!existedUser) return DeleteBoardResponseDto.noExistUser();
 
-      BoardEntity boardEntity = boardMapper.findByBoardNumber(boardNumber);
+      Map<String, Object> boardEntity = boardMapper.findByBoardNumber(
+        boardNumber
+      );
       if (boardEntity == null) return DeleteBoardResponseDto.noExistBoard();
 
-      String writerEmail = boardEntity.getWriterEmail();
+      String writerEmail = (String) boardEntity.get("writerEmail");
       if (
         !email.equals(writerEmail)
       ) return DeleteBoardResponseDto.noPermission();
 
+      boardMapper.delete(boardNumber);
       imageMapper.deleteByBoardNumber(boardNumber);
       commentMapper.deleteByBoardNumber(boardNumber);
       favoriteMapper.deleteByBoardNumber(boardNumber);
-
-      //boardMapper.delete(boardEntity);
 
       return DeleteBoardResponseDto.success();
     } catch (Exception exception) {
@@ -273,15 +277,17 @@ public class BoardServiceImplement implements BoardService {
       boolean existedEmail = userMapper.existsByEmail(email);
       if (!existedEmail) return PostBoardResponseDto.noExistUser();
 
-      BoardEntity boardEntity = boardMapper.findByBoardNumber(boardNumber);
+      Map<String, Object> boardEntity = boardMapper.findByBoardNumber(
+        boardNumber
+      );
       if (boardEntity == null) return PatchBoardResponseDto.noExistBoard();
 
-      String writerEmail = boardEntity.getWriterEmail();
+      String writerEmail = (String) boardEntity.get("writerEmail");
       boolean isWriter = writerEmail.equals(email);
       if (!isWriter) return PatchBoardResponseDto.noPermission();
-
-      boardEntity.pathBoard(dto);
-      boardMapper.update(boardEntity);
+      dto.setBoardNumber(boardNumber);
+      // dto 객체를 받을 때 dto에 boardNumber가 없어서 dto랑 boardNumber
+      boardMapper.pathBoard(dto);
 
       imageMapper.deleteByBoardNumber(boardNumber);
       List<String> boardImageList = dto.getBoardImageList();
@@ -330,7 +336,9 @@ public class BoardServiceImplement implements BoardService {
       );
       String sevenDaysAgo = simpleDateFormat.format(beforeWeek);
       //findTop3ByWriteDatetimeGreaterThanOrderByFavoriteCountDescCommentCountDescViewCountDescWriteDatetimeDesc
-      List<BoardListViewEntity> boardListViewEntities =  boardListMapper.getTop3BoardList(sevenDaysAgo);
+      List<Map<String, Object>> boardListViewEntities = boardListMapper.getTop3BoardList(
+        sevenDaysAgo
+      );
 
       return GetTop3BoardListResponseDto.success(boardListViewEntities);
     } catch (Exception exception) {
@@ -347,7 +355,7 @@ public class BoardServiceImplement implements BoardService {
       List<BoardListViewEntity> boardListViewEntities = new ArrayList<>();
       //findByTitleContainsOrContentContainsOrderByWriteDatetimeDesc
       boardListViewEntities =
-      boardListMapper.getSearchBoardContainTitleNContent(
+        boardListMapper.getSearchBoardContainTitleNContent(
           searchWord,
           searchWord
         );
@@ -363,7 +371,7 @@ public class BoardServiceImplement implements BoardService {
       if (relation && !searchWord.equals(preSearchWord)) {
         searchLogEntity =
           new SearchLogEntity(preSearchWord, searchWord, relation);
-          searchLogMapper.insert(searchLogEntity);
+        searchLogMapper.insert(searchLogEntity);
       }
 
       return GetSearchBoardListResponseDto.success(boardListViewEntities);

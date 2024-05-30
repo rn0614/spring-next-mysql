@@ -16,8 +16,8 @@
     LIMIT #{limit} OFFSET #{startNumber}
   </select>
   <insert id="insertComment">
-    INSERT INTO comment(contnet, write_datetime, user_email, board_number)
-    VALUES(#{content}, #{write_datetime}, #{user_email}, #{board_number})
+    INSERT INTO comment(content, write_datetime, user_email, board_number)
+    VALUES(#{content}, #{writeDatetime}, #{userEmail}, #{boardNumber})
   </insert>
   <delete id="deleteByBoardNumber">
     DELETE FROM comment

@@ -5,8 +5,15 @@ import com.backproject.springback.common.ResponseMessage;
 import com.backproject.springback.dto.response.ResponseDto;
 import com.backproject.springback.entity.ImageEntity;
 import com.backproject.springback.repository.resultSet.GetBoardResultSet;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +29,10 @@ public class GetBoardResponseDto extends ResponseDto {
   private String writerEmail;
   private String writerNickname;
   private String writerProfileImage;
+  
 
   private GetBoardResponseDto(
-    GetBoardResultSet resultSet,
+    Map<String,Object> resultSet,
     List<ImageEntity> imageEntities
   ) {
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
@@ -34,18 +42,18 @@ public class GetBoardResponseDto extends ResponseDto {
       boardImageList.add(boardImage);
     }
 
-    this.boardNumber = resultSet.getBoardNumber();
-    this.title = resultSet.getTitle();
-    this.content = resultSet.getContent();
+    this.boardNumber = (Integer) resultSet.get("boardNumber");
+    this.title = (String) resultSet.get("title");
+    this.content = (String) resultSet.get("content");
     this.boardImageList = boardImageList;
-    this.writeDatetime = resultSet.getWriteDatetime();
-    this.writerEmail = resultSet.getWriterEmail();
-    this.writerNickname = resultSet.getWriterNickname();
-    this.writerProfileImage = resultSet.getWriterProfileImage();
+    this.writeDatetime = (String) resultSet.get("writeDatetime");;
+    this.writerEmail = (String) resultSet.get("writerEmail");
+    this.writerNickname = (String) resultSet.get("writerNickname");
+    this.writerProfileImage = (String) resultSet.get("writerProfileImage");
   }
 
   public static ResponseEntity<GetBoardResponseDto> success(
-    GetBoardResultSet resultSet,
+    Map<String,Object> resultSet,
     List<ImageEntity> imageEntities
   ) {
     GetBoardResponseDto result = new GetBoardResponseDto(

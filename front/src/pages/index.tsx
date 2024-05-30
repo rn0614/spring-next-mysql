@@ -12,6 +12,7 @@ import { useGetPopularList } from "@/hooks/useSearch";
 import Pagination from "@/components/Pagination";
 import Text from "@/ui/atom/Text/Text";
 import ListWrapper from "@/ui/atom/ListWrapper/ListWrapper";
+import Section from "@/ui/morecular/Section/Section";
 
 export default function Home() {
   const MainTop = () => {
@@ -22,11 +23,10 @@ export default function Home() {
       });
     }, []);
     return (
-      <div id={style["main-top-wrapper"]}>
-        <div className={style["main-top-container"]}>
+      <article id={style["main-top-wrapper"]}>
+        <Section className={style["main-top-container"]} title="TOP3 LIST">
           <div className={style["main-top-contents-box"]}>
-            <Text size="lg">TOP3 LIST</Text>
-            <ListWrapper>
+            <ListWrapper name="reactive-list">
               {top3List.map((top3ListItem) => (
                 <Top3Item
                   key={top3ListItem.boardNumber}
@@ -35,8 +35,8 @@ export default function Home() {
               ))}
             </ListWrapper>
           </div>
-        </div>
-      </div>
+        </Section>
+      </article>
     );
   };
 
@@ -56,19 +56,24 @@ export default function Home() {
       console.log(totalCount);
     }, [totalCount]);
     return (
-      <div id={style["main-bottom-wrapper"]}>
-        <div className={style["main-bottom-container"]}>
-          <Text size="lg">최신 게시물</Text>
-          <div className={style["main-bottom-contents-box"]}>
-            <div className={style["main-bottom-latest-contents"]}>
-              {latestBoardList.map((item: BoardListItemType) => (
-                <BoardListItem key={item.boardNumber} boardListItem={item} />
-              ))}
-            </div>
-            <div className={style["main-bottom-popular-box"]}>
-              <div className={style["main-bottom-popular-card"]}>
-                <div className={style["main-bottom-popular-card-container"]}>
-                  <Text size="lg">인기검색어</Text>
+      <article id={style["main-bottom-wrapper"]}>
+        <div className={style["main-bottom-contents-box"]}>
+          <div className={style["main-bottom-latest-contents"]}>
+            <Section
+              title="최신 게시물"
+              className={style["main-bottom-container"]}
+            >
+              <ListWrapper name="column-list">
+                {latestBoardList.map((item: BoardListItemType) => (
+                  <BoardListItem key={item.boardNumber} boardListItem={item} />
+                ))}
+              </ListWrapper>
+            </Section>
+          </div>
+          <div className={style["main-bottom-popular-box"]}>
+            <div className={style["main-bottom-popular-card"]}>
+              <div className={style["main-bottom-popular-card-container"]}>
+                <Section title="인기검색어">
                   <div className={style["main-bottom-popular-cart-contents"]}>
                     {popularList.map((item, idx) => (
                       <div
@@ -80,22 +85,22 @@ export default function Home() {
                       </div>
                     ))}
                   </div>
-                </div>
+                </Section>
               </div>
             </div>
           </div>
-          <div className={style["main-bottom-pagination-box"]}>
-            <Pagination
-              curPage={page}
-              limit={limit}
-              totalPage={totalCount ? Math.ceil(totalCount / limit) : 1}
-              setPage={setPage}
-              setLimit={setLimit}
-              onLimitChange={() => {}}
-            />
-          </div>
         </div>
-      </div>
+        <div className={style["main-bottom-pagination-box"]}>
+          <Pagination
+            curPage={page}
+            limit={limit}
+            totalPage={totalCount ? Math.ceil(totalCount / limit) : 1}
+            setPage={setPage}
+            setLimit={setLimit}
+            onLimitChange={() => {}}
+          />
+        </div>
+      </article>
     );
   };
 

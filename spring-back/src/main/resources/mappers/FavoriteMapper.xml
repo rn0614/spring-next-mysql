@@ -18,7 +18,7 @@
       F.board_number
     FROM favorite as F
     WHERE F.board_number = #{boardNumber}
-    AND F.user_email = #{userEmail}
+    AND F.user_email = #{email}
   </select>
 
   <insert id="insert">

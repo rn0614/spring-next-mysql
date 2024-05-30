@@ -11,6 +11,7 @@ import TimeSchedule from "@/types/timeSchedule";
 import { timeScheduleMock } from "@/mocks/time-schedule-list.mock";
 import Button from "@/ui/atom/Button/Button";
 import { useScheduler } from "@/hooks/useSchedule";
+import InputBox from "@/components/InputBox";
 
 const changeData = (inputData:any) => {
   // Creating a Map to group data by type
@@ -30,6 +31,7 @@ const changeData = (inputData:any) => {
 export default function DragDropPage() {
   const scheduleList = useScheduler();
   const [wrapper, setWrapper] = useState<any>(changeData(timeScheduleMock));
+  const [inputs, setInputs] = useState();
   const addBox = useCallback(
     (
       time: number,
@@ -100,6 +102,12 @@ export default function DragDropPage() {
             <DropWrapper areaList={wrapper[1]} addBox={addBox} type={"1"} />
             <DropWrapper areaList={wrapper[2]} addBox={addBox} type={"2"} />
           </div>
+        </div>
+        <div>
+          <label htmlFor="날짜">날짜</label>
+          <input name="날짜"placeholder="날짜"></input>
+          <label htmlFor="시작"></label>
+          <input placeholder=""></input>
         </div>
         <div>
           <Button

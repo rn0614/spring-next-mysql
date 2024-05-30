@@ -31,7 +31,7 @@
     UPDATE user
     SET password = #{password}, 
         nickname = #{nickname}, 
-        tel_number = #{tel_number}, 
+        tel_number = #{telNumber}, 
         address = #{address}, 
         address_detail = #{addressDetail}, 
         profile_image = #{profileImage}, 

@@ -28,6 +28,7 @@ export default function User({ user, boardList }: boardProps) {
     const [isMyPage, setMyPage] = useState<boolean>(false);
     const imageInputRef = useRef<HTMLInputElement>(null);
     const [userName, setUserName] = useState<string>(user.nickname);
+    const [profileImage, setProfileImage] = useState(user.profileImage);
 
     const onProfileImageClickHandler = () => {
       if (!isMyPage) return;
@@ -44,9 +45,11 @@ export default function User({ user, boardList }: boardProps) {
       const data = new FormData();
       data.append("file", file);
       const url = (await fileUploadRequest(data)) as string;
+      setProfileImage(url);
 
       patchProfileImageRequest({ profileImage: url })
         .then((response) => {
+          alert("프로필 사진이 업데이트 됐습니다")
           return response;
         })
         .catch((error) => {
@@ -76,11 +79,11 @@ export default function User({ user, boardList }: boardProps) {
               className={style["user-top-profile-image-box"]}
               onClick={onProfileImageClickHandler}
             >
-              <ProfileImage size="lg" writerProfileImage={user.profileImage} />
+              <ProfileImage size="lg" writerProfileImage={profileImage} />
             </div>
           ) : (
             <div className={style["user-top-profile-image-box"]}>
-              <ProfileImage size="lg" writerProfileImage={user.profileImage} />
+              <ProfileImage size="lg" writerProfileImage={profileImage} />
             </div>
           )}
           <input

@@ -6,18 +6,19 @@
     FROM board
   </select>
   
-  <select id="getTop3BoardList" resultType="com.backproject.springback.entity.BoardListViewEntity">
+  <select id="getTop3BoardList" resultType="hashmap">
     SELECT 
-      board_number,
+      board_number as boardNumber,
       title,
       content,
-      title_image,
-      view_count,
-      favorite_count,
-      write_datetime,
-      writer_email,
-      writer_nickname,
-      writer_profile_image
+      title_image as titleImage,
+      view_count as viewCount,
+      comment_count as commentCount,
+      favorite_count as favoriteCount,
+      write_datetime as writeDatetime,
+      writer_email as writerEmail,
+      writer_nickname as writerNickname,
+      writer_profile_image as writerProfileImage
     FROM board_list_view 
     WHERE write_datetime > #{writeDatetime} 
     ORDER BY favorite_count
@@ -67,14 +68,14 @@
       B.board_number,
       B.title, 
       B.content, 
-      I.image, 
+      I.image as titleImage, 
       B.view_count, 
       B.favorite_count, 
       B.comment_count,
       B.write_datetime, 
       B.writer_email, 
-      U.nickname, 
-      U.profile_image 
+      U.nickname as writerNickname, 
+      U.profile_image as writerProfileImage 
     FROM board AS B 
     INNER JOIN user AS U ON B.writer_email = U.email 
     LEFT JOIN ( SELECT board_number, MAX(sequence) AS max_sequence FROM image GROUP BY board_number ) AS MaxSeq 

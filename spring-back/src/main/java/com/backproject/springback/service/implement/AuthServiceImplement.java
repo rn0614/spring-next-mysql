@@ -60,7 +60,6 @@ public class AuthServiceImplement implements AuthService {
   @Override
   public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
     String token = null;
-
     try{
       String email = dto.getEmail();
       UserEntity userEntity = userMapper.findByEmail(email);

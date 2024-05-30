@@ -26,6 +26,7 @@ export default function Top3Item({ top3ListItem }: Props) {
   const router = useRouter();
 
   const onClickHandler = () => {
+    console.log('boardNumber',boardNumber);
     router.push(BOARD_DETAIL_PATH(boardNumber));
   };
 

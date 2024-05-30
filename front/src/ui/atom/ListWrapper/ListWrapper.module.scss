@@ -1,11 +1,24 @@
-.top3-contents {
+.list-wrapper {
   display: flex;
-  justify-content: space-between;
-  gap: 24px;
-
   width: 100%;
-  padding: 1rem;
-  @media screen and (max-width: 900px) {
+
+  &.reactive-list{
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1.5rem;
+  
+    @media screen and (max-width: 600px) {
+      flex-direction: column;
+    }
+  }
+  
+  &.column-list{
     flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &.row-list{
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }
