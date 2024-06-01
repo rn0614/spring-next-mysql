@@ -1,5 +1,5 @@
 import React, { ComponentPropsWithoutRef, ReactNode } from "react";
-import styles from "./section.module.scss";
+import styles from "./Section.module.scss";
 import Text from "@/ui/atom/Text/Text";
 
 type SectionProps = {
