@@ -28,8 +28,6 @@ export default function BoardListItem({ boardListItem }: Props) {
   const onClickHandler = () => {
     router.push(BOARD_DETAIL_PATH(boardNumber));
   };
-
-  console.log("boardListItem", boardListItem);
   return (
     <div className={styles["board-list-item"]} onClick={onClickHandler}>
       <div className={styles["board-list-item-main-box"]}>

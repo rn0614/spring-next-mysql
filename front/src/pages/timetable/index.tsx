@@ -1,17 +1,16 @@
-import React, { useState, useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { DropTargetMonitor } from "react-dnd";
 // for mobile
-import { DndProvider } from 'react-dnd-multi-backend'
-import { HTML5toTouch } from 'rdndmb-html5-to-touch' // or any other pipeline
-import styles from "./styles.module.scss";
-import { cloneDeep } from "lodash";
-import DropWrapper from "@/ui/atom/DropWrapper/DropWrapper";
-import MainLayout from "@/layouts/Layout/MainLayout/MainLayout";
-import TimeSchedule from "@/types/timeSchedule";
-import { timeScheduleMock } from "@/mocks/time-schedule-list.mock";
-import Button from "@/ui/atom/Button/Button";
 import { useScheduler } from "@/hooks/useSchedule";
-import InputBox from "@/components/InputBox";
+import MainLayout from "@/layouts/Layout/MainLayout/MainLayout";
+import { timeScheduleMock } from "@/mocks/time-schedule-list.mock";
+import TimeSchedule from "@/types/timeSchedule";
+import Button from "@/ui/atom/Button/Button";
+import DropWrapper from "@/ui/atom/DropWrapper/DropWrapper";
+import { cloneDeep } from "lodash";
+import { HTML5toTouch } from 'rdndmb-html5-to-touch'; // or any other pipeline
+import { DndProvider } from 'react-dnd-multi-backend';
+import styles from "./styles.module.scss";
 
 const changeData = (inputData:any) => {
   // Creating a Map to group data by type
