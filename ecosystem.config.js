@@ -1,22 +1,21 @@
 module.exports = {
   apps : [
     {
-      name: 'FrontEnd',
-      script: 'npm',
-      args: 'start',
-      cwd: './front',
+      name: "NextApp",
+      script: "npm",
+      args: "start",
+      cwd: "./front",
       env: {
-        NODE_ENV: 'production'
+        NODE_ENV: "production"
+      },
+      env_development: {
+        NODE_ENV: "development"
       }
     },
     {
-      name: 'BackEnd',
-      script: 'java',
-      args: '-jar spring-back/target/spring-back-0.0.1-SNAPSHOT.jar',
-      cwd: './spring-back',
-      env: {
-        NODE_ENV: 'production'
-      }
+      name: "SpringBootApp",
+      script: "./spring-back/run-app.sh",
+      exec_mode: "fork"
     }
   ]
 };
