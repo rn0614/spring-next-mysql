@@ -1,70 +1,64 @@
 import React, {
   ChangeEvent,
+  ComponentPropsWithoutRef,
   KeyboardEvent,
   forwardRef,
 } from "react";
 import styles from "./style.module.scss";
 import { IconButton } from "@/ui/atom/Icon/Icon";
+import { FieldError, UseFormRegister } from "react-hook-form";
 
-interface Props {
-  name:string;
+type Props ={
+  id:string;
   label: string;
-  type: "text" | "password";
   placeholder: string;
-  error: boolean;
-  value: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-
+  error: FieldError|undefined;
+  register:UseFormRegister<any>;
   icon?: string;
   onButtonClick?: () => void;
-
   message?: string;
-
   onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
-}
+}&ComponentPropsWithoutRef<"input">;
 
 const InputBox = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
   const {
-    name,
+    id,
     label,
     type,
     error,
     placeholder,
-    value,
-    onChange,
+    register,
     onButtonClick,
     icon,
-    message,
-    onKeyDown,
+    message
   } = props;
 
-  //  event handler: Key down 이벤트러치 함수  //
-  const onKeyDownHandler =(e:KeyboardEvent<HTMLInputElement>)=>{
-    if(!onKeyDown) return;
-    onKeyDown(e);
-  }
 
   return (
     <div className={styles["inputbox"]}>
-      <div className={styles["inputbox-label"]}>{label}</div>
+      <label htmlFor={id} className={styles["inputbox-label"]}>{label}</label>
       <div
         className={`${styles["inputbox-container"]} ${error ? error : null}`}
       >
         <input
-          name={name}
+          id={id}
           className={styles["input"]}
-          ref={ref}
           type={type}
           placeholder={placeholder}
-          value={value}
-          onChange={(e)=>onChange(e)}
-          onKeyDown={onKeyDownHandler}
+          {...register(id, {
+            required: id+" 입력은 필수입니다",
+            // pattern: {
+            //   value: /\S+@\S+\.\S+/,
+            //   message: "이메일 형식에 맞지 않습니다",
+            // },
+            // maxLength: 80,
+          })}
         />
         {onButtonClick !== undefined && (
           <IconButton onButtonClick={onButtonClick} icon={icon}/>
         )}
       </div>
-      <div className={styles["inputbox-message"]}>{message}</div>
+      <div className={styles["inputbox-message"]}>{error?.message}</div>
     </div>
   );
 });

@@ -7,6 +7,7 @@ import { BOARD_DETAIL_PATH } from "@/constants";
 import GetBoardResponseDto from "@/stores/get-board.store";
 import { ResponseDto } from "@/pages/api/response/index";
 import { useEffect, useState } from "react";
+import { queryClient } from "@/utils/react-query/queryClient";
 
 const GET_BOARD_URL = (boardNumber: number | string) =>
   `${process.env.NEXT_PUBLIC_API_BACK}/board/${boardNumber}`;
@@ -110,6 +111,7 @@ export const increaseViewCountRequest = async (
 const postBoardRequest = async (requestBody: PostBoardRequestDto) => {
   try {
     const response = await authFetch().post(POST_BOARD_URL(), requestBody);
+    
     return response.data;
   } catch (error) {
     throw error;
@@ -170,6 +172,7 @@ export function usePostBoard() {
   const router = useRouter();
   const { mutate } = useMutation(postBoardRequest, {
     onSuccess: async (response) => {
+      await queryClient.invalidateQueries(["board"]);
       router.push(BOARD_DETAIL_PATH(response.boardNumber));
     },
   });
@@ -187,7 +190,7 @@ export function useUpdateBoard() {
 }
 
 export function useGetUserBoardList(email: string) {
-  const { data } = useQuery(["user-board-list"], () =>
+  const { data } = useQuery(["board"], () =>
     getUserBoardListRequest(email)
   );
   return data?.latestList ? data.latestList : [];
