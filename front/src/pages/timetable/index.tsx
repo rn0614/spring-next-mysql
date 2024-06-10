@@ -3,7 +3,7 @@ import { DropTargetMonitor } from "react-dnd";
 // for mobile
 import { useScheduler } from "@/hooks/useSchedule";
 import MainLayout from "@/layouts/Layout/MainLayout/MainLayout";
-import { timeScheduleMock } from "@/mocks/time-schedule-list.mock";
+import { timeScheduleMock } from "@/mocks/data/time-schedule-list.mock";
 import TimeSchedule from "@/types/timeSchedule";
 import Button from "@/ui/atom/Button/Button";
 import DropWrapper from "@/ui/atom/DropWrapper/DropWrapper";

@@ -8,6 +8,11 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import Loading from "@/ui/atom/Loading/Loading";
 import ToastProvider from "@/components/ToastProvider/ToastProvider";
 import LoginProvider from "@/components/LoginProvider/LoginProvider";
+import { initMsw } from "@/mock";
+
+//mocking 적용
+
+initMsw()
 
 const queryClient = QueryClient;
 export default function App({ Component, pageProps }: AppProps) {

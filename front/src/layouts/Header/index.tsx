@@ -102,7 +102,7 @@ export default function Header({ path }: Props) {
   };
 
   return (
-    <header id={styles["header"]} className="header">
+    <div id={styles["header"]} className="header">
       <div className={styles["header-container"]}>
         <Logo icon="logo-dark-icon" size="lg" onClick={onLogoClickHander}>
           Koo
@@ -128,6 +128,6 @@ export default function Header({ path }: Props) {
           )}
         </div>
       </div>
-    </header>
+    </div>
   );
 }
