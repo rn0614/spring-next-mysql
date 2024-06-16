@@ -10,15 +10,17 @@ import com.backproject.springback.dto.response.user.PatchProfileImageResponseDto
 import com.backproject.springback.entity.UserEntity;
 import com.backproject.springback.mapper.UserMapper;
 import com.backproject.springback.service.UserService;
-import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
-public class UserServiceImplement implements UserService {
+public class UserServiceImplement implements UserService{
 
-  private final UserMapper userMapper;
+  @Autowired
+  private UserMapper userMapper;
+
 
   @Override
   public ResponseEntity<? super GetSignInUserResponseDto> getSignInUser(
@@ -94,3 +96,4 @@ public class UserServiceImplement implements UserService {
     }
   }
 }
+

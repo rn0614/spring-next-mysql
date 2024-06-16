@@ -3,13 +3,13 @@
 <mapper namespace="com.backproject.springback.mapper.UserMapper">
   <select id="existsByEmail"
     resultType="boolean"
-  > SELECT EXISTS (SELECT 1 FROM user WHERE email = #{email}) </select>
+  > SELECT EXISTS (SELECT 1 FROM `user` WHERE email = #{email}) </select>
   <select id="existsByNickname"
     resultType="boolean"
-  > SELECT EXISTS (SELECT 1 FROM user WHERE nickname = #{nickname}) </select>
+  > SELECT EXISTS (SELECT 1 FROM `user` WHERE nickname = #{nickname}) </select>
   <select id="existsByTelNumber"
     resultType="boolean"
-  > SELECT EXISTS (SELECT 1 FROM user WHERE tel_number = #{telNumber}) </select>
+  > SELECT EXISTS (SELECT 1 FROM `user` WHERE tel_number = #{telNumber}) </select>
   <select id="findByEmail"
     resultType="com.backproject.springback.entity.UserEntity"
   > SELECT
@@ -21,14 +21,14 @@
       address_detail,
       profile_image,
       agreed_personal
-    FROM user 
+    FROM `user` 
     WHERE email = #{email} </select>
   <insert id="insert" parameterType="com.backproject.springback.entity.UserEntity">
     INSERT INTO user ( email, password, nickname, tel_number, address, address_detail, profile_image, agreed_personal)
     VALUES ( #{email}, #{password}, #{nickname}, #{telNumber}, #{address}, #{addressDetail}, #{profileImage}, #{agreedPersonal})
   </insert>
   <update id="update" parameterType="com.backproject.springback.entity.UserEntity">
-    UPDATE user
+    UPDATE `user`
     SET password = #{password}, 
         nickname = #{nickname}, 
         tel_number = #{telNumber}, 

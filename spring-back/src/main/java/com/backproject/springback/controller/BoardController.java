@@ -17,7 +17,7 @@ import com.backproject.springback.dto.response.board.PostBoardResponseDto;
 import com.backproject.springback.dto.response.board.PostCommentResponseDto;
 import com.backproject.springback.dto.response.board.PutFavoriteResponseDto;
 import com.backproject.springback.service.BoardService;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

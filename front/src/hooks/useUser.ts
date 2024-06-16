@@ -24,7 +24,7 @@ export const signUpRequest = async (RequestBody: SignUpRequestDto) => {
       return responseBody;
     })
     .catch((error) => {
-      if (!error.response.data) return null;
+      if (!error.response?.data) return null;
       const responseBody: ResponseDto = error.response.data;
       return responseBody;
     });

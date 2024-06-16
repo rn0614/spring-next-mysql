@@ -1,9 +1,9 @@
 package com.backproject.springback.entity;
 
 import com.backproject.springback.dto.request.auth.SignUpRequestDto;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +25,7 @@ public class UserEntity {
   private String addressDetail;
   private String profileImage;
   private boolean agreedPersonal;
+  private String role;
 
   public UserEntity(SignUpRequestDto dto) {
     this.email = dto.getEmail();
@@ -34,6 +35,7 @@ public class UserEntity {
     this.address = dto.getAddress();
     this.addressDetail = dto.getAddressDetail();
     this.agreedPersonal = dto.getAgreedPersonal();
+    this.role = dto.getRole();
   }
 
 

@@ -9,7 +9,7 @@
       C.content AS content,
       COUNT(*) OVER() AS totalCount
     FROM comment AS C
-    INNER JOIN user AS U
+    INNER JOIN `user` AS U
     ON C.user_email = U.email
     WHERE C.board_number = #{boardNumber}
     ORDER BY write_datetime DESC

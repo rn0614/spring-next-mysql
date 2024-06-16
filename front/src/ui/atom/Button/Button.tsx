@@ -20,11 +20,6 @@ export default function Button({
     styles.button,
     secondary ? styles.secondary : styles.primary
   );
-  const style = {
-    backgroundColor: bgColor || "",
-    color: ftColor || "",
-    width: width || "",
-  };
 
-  return <button className={composeClassess} style={style} {...restProps} />;
+  return <button className={composeClassess}  {...restProps} />;
 }

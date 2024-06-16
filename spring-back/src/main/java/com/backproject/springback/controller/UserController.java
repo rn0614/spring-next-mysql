@@ -9,7 +9,7 @@ import com.backproject.springback.dto.response.user.PatchProfileImageResponseDto
 import com.backproject.springback.service.UserService;
 import lombok.RequiredArgsConstructor;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

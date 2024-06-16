@@ -5,7 +5,7 @@ import com.backproject.springback.entity.primaryKey.FavoritePk;
 import com.backproject.springback.repository.resultSet.GetFavoriteListResultSet;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

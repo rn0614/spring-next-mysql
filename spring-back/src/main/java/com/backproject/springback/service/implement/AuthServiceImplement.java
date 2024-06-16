@@ -11,9 +11,10 @@ import com.backproject.springback.service.AuthService;
 import com.backproject.springback.provider.JwtProvider;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +23,9 @@ public class AuthServiceImplement implements AuthService {
 
   private final UserMapper userMapper;
   private final JwtProvider jwtProvider;
-  private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+  @Autowired
+  private BCryptPasswordEncoder bCryptPasswordEncoder;
 
   @Override
   public ResponseEntity<? super SignUpResponseDto> signUp(
@@ -44,7 +47,7 @@ public class AuthServiceImplement implements AuthService {
 
       // 암호화
       String password = dto.getPassword();
-      String encodedPassword = passwordEncoder.encode(password);
+      String encodedPassword = bCryptPasswordEncoder.encode(password);
       dto.setPassword(encodedPassword);
 
       UserEntity userEntity = new UserEntity(dto);
@@ -67,7 +70,7 @@ public class AuthServiceImplement implements AuthService {
 
       String password = dto.getPassword();
       String encodedPassword = userEntity.getPassword();
-      boolean isMatched = passwordEncoder.matches(password, encodedPassword); // 받은 패스워드와 인코딩된 패스워드 검증
+      boolean isMatched = bCryptPasswordEncoder.matches(password, encodedPassword); // 받은 패스워드와 인코딩된 패스워드 검증
       if(!isMatched) return SignInResponseDto.signInFailed();
 
       token = jwtProvider.create(email);

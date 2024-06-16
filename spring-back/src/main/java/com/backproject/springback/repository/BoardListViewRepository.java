@@ -43,7 +43,7 @@ public interface BoardListViewRepository
       LEFT JOIN (
           SELECT 
               board_number,
-              MAX(sequence) AS max_sequence
+              MAX(`sequence`) AS max_sequence
           FROM 
               image
           GROUP BY 

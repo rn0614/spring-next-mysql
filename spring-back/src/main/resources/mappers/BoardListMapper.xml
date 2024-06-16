@@ -20,7 +20,7 @@
       writer_nickname as writerNickname,
       writer_profile_image as writerProfileImage
     FROM board_list_view 
-    WHERE write_datetime > #{writeDatetime} 
+    WHERE 1=1 
     ORDER BY favorite_count
     DESC, comment_count DESC, view_count DESC, write_datetime DESC 
     LIMIT 3 
@@ -77,7 +77,7 @@
       U.nickname as writerNickname, 
       U.profile_image as writerProfileImage 
     FROM board AS B 
-    INNER JOIN user AS U ON B.writer_email = U.email 
+    INNER JOIN `user` AS U ON B.writer_email = U.email 
     LEFT JOIN ( SELECT board_number, MAX(sequence) AS max_sequence FROM image GROUP BY board_number ) AS MaxSeq 
       ON B.board_number = MaxSeq.board_number 
     LEFT JOIN image AS I 

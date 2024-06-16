@@ -7,7 +7,7 @@
       U.nickname AS nickname,
       U.profile_image AS profileImage
     FROM favorite AS F
-    INNER JOIN user AS U
+    INNER JOIN `user` AS U
     ON F.user_email = U.email
     WHERE F.board_number = #{boardNumber}
   </select>

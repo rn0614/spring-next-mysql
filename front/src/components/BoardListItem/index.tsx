@@ -48,7 +48,7 @@ export default function BoardListItem({ boardListItem }: Props) {
       </div>
       {boardTitleImage && (
         <div
-          className={styles["board-list-item-image-box"]}
+          className={styles["board-list-item__image-box"]}
           style={{ backgroundImage: `url(${boardTitleImage})`,backgroundSize: "cover" }}
         ></div>
       )}

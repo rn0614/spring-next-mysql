@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.backproject.springback.entity.UserEntity;
 
+
 @Mapper
 public interface UserMapper {
   boolean existsByEmail(String email);  // 쿼리에 존재하는지 확인

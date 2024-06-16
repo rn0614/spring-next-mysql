@@ -5,7 +5,7 @@ import com.backproject.springback.dto.request.auth.SignUpRequestDto;
 import com.backproject.springback.dto.response.auth.SignInResponseDto;
 import com.backproject.springback.dto.response.auth.SignUpResponseDto;
 import com.backproject.springback.service.AuthService;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
