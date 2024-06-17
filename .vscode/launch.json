@@ -13,6 +13,13 @@
       "cwd":"${workspaceFolder}/spring-back"
     },
     {
+      "name": "Next.js:Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/front"
+    },
+    {
       "name": "Next.js: debug full stack",
       "type": "node-terminal",
       "request": "launch",
@@ -21,7 +28,8 @@
       "serverReadyAction": {
         "pattern": "- Local:.+(https?://.+)",
         "uriFormat": "%s",
-        "action": "debugWithChrome"
+        "action": "debugWithChrome",
+        "webRoot": "${workspaceFolder}/front"
       }
     }
   ]

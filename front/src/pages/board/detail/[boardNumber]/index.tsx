@@ -28,6 +28,7 @@ import {
   increaseViewCountRequest,
 } from "@/hooks/useBoard";
 import { useGetFavoriteList, usePutFavorite } from "@/hooks/useFavorite";
+import { toast } from "react-toastify";
 
 type boardProps = {
   board: Board;
@@ -143,7 +144,7 @@ export default function DetailBoardPage({ board }: boardProps) {
 
     const onFavoriteClickHandler = () => {
       if (!loginUser || !cookies.accessToken) {
-        alert("로그인 후 좋아요가 가능합니다.");
+        toast.warn("로그인 후 좋아요가 가능합니다.");
         return;
       }
       putFavorite(board.boardNumber);

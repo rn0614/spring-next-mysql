@@ -4,5 +4,10 @@ import 'react-toastify/dist/ReactToastify.min.css';
 
 
 export default function ToastProvider() {
-  return <ToastContainer autoClose={2000} />;
+  return <ToastContainer 
+  position="top-center"
+  limit={2}
+  closeButton={true}
+  hideProgressBar
+  />;
 }

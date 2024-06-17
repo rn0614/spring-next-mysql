@@ -3,8 +3,6 @@ import Button from "@/ui/atom/Button/Button";
 import { useForm, SubmitHandler } from "react-hook-form";
 import style from "./style.module.scss";
 import InputBox from "../InputBox";
-import { useRouter } from "next/navigation";
-import { MAIN_PATH } from "@/constants";
 
 type inputDataType = {
   email: string;
@@ -12,7 +10,6 @@ type inputDataType = {
 };
 
 export default function SignInCard({ setIsSigned }: any) {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -22,7 +19,6 @@ export default function SignInCard({ setIsSigned }: any) {
 
   const submitHandler: SubmitHandler<inputDataType> = async (data) => {
     setUser(data);
-    router.push(MAIN_PATH());
   };
 
   const onSignUpLinkClickHandler = () => {

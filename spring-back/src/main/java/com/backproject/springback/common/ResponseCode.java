@@ -22,5 +22,4 @@ public interface ResponseCode {
 
   // HTTP STATUS 500
   String DATABASE_ERROR ="DBE";
-
 }

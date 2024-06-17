@@ -4,6 +4,7 @@ import { queryClient } from "@/utils/react-query/queryClient";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
+import { toast } from "react-toastify";
 
 const GET_COMMENT_LIST_URL = ({ boardNumber, limit, page }: getCommentType) =>
   `${process.env.NEXT_PUBLIC_API_BACK}/board/${boardNumber}/comment-list?limit=${limit}&startNumber=${(page-1)*limit}`;
@@ -61,7 +62,7 @@ export function usePostComment() {
   const { mutate } = useMutation(postCommentRequest, {
     onSuccess: async (response) => {
       await queryClient.invalidateQueries(["comment-list"]); // invaludateQueries 가 비동기되면 fetching 계속 돔
-      alert("댓글이 등록됐습니다.");
+      toast.info("댓글이 등록됐습니다.");
     },
   });
   return mutate;

@@ -16,6 +16,7 @@ import {
 import { fileUploadRequest } from "@/hooks/useBoard";
 import { useRecoilValue } from "recoil";
 import { CurrUserAtom } from "@/stores/login-user.store";
+import { toast } from "react-toastify";
 
 type boardProps = {
   user: any;
@@ -49,7 +50,7 @@ export default function User({ user, boardList }: boardProps) {
 
       patchProfileImageRequest({ profileImage: url })
         .then((response) => {
-          alert("프로필 사진이 업데이트 됐습니다")
+          toast.info("프로필 사진이 업데이트 됐습니다")
           return response;
         })
         .catch((error) => {
