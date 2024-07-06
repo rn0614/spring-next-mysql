@@ -1,3 +1,12 @@
+import React from 'react'
+
+export default function IndexPage() {
+  return (
+    <div>IndexPage</div>
+  )
+}
+
+
 // import { Canvas } from "@react-three/fiber";
 // import { useControls } from "leva";
 // import CameraThreeElement from "../../components/three/CameraThreeElement";
