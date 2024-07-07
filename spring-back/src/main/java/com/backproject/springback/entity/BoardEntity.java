@@ -1,10 +1,13 @@
 package com.backproject.springback.entity;
 
-import com.backproject.springback.dto.request.board.PostBoardRequestDto;
-import com.backproject.springback.dto.request.board.UpdateBoardRequestDto;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
+
+import com.backproject.springback.dto.request.board.PostBoardRequestDto;
+import com.backproject.springback.dto.request.board.UpdateBoardRequestDto;
+import com.backproject.springback.common.TimeUtil;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,11 +39,7 @@ public class BoardEntity {
   private String writerEmail;
 
   public BoardEntity(PostBoardRequestDto dto, String email) {
-    Date now = Date.from(Instant.now());
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-      "yyyy-MM-dd HH:mm:ss"
-    );
-    String writeDatetime = simpleDateFormat.format(now);
+    String writeDatetime = TimeUtil.getCurrentKSTTimeString();
 
     this.title = dto.getTitle();
     this.content = dto.getContent();

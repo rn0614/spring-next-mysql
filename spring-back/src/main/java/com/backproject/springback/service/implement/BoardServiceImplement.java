@@ -1,5 +1,6 @@
 package com.backproject.springback.service.implement;
 
+import com.backproject.springback.common.TimeUtil;
 import com.backproject.springback.dto.request.board.PostBoardRequestDto;
 import com.backproject.springback.dto.request.board.PostCommentRequestDto;
 import com.backproject.springback.dto.request.board.UpdateBoardRequestDto;
@@ -34,6 +35,7 @@ import com.backproject.springback.repository.resultSet.GetBoardResultSet;
 import com.backproject.springback.repository.resultSet.GetCommentListResultSet;
 import com.backproject.springback.repository.resultSet.GetFavoriteListResultSet;
 import com.backproject.springback.service.BoardService;
+import jakarta.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -41,7 +43,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -330,7 +331,9 @@ public class BoardServiceImplement implements BoardService {
   @Override
   public ResponseEntity<? super GetTop3BoardListResponseDto> getTop3BoardList() {
     try {
-      Date beforeWeek = Date.from(Instant.now().minus(7, ChronoUnit.DAYS));
+      Date beforeWeek = Date.from(
+        TimeUtil.getCurrentKSTTime().toInstant().minus(7, ChronoUnit.DAYS)
+      );
       SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
         "yyyy-MM-dd HH:mm:ss"
       );

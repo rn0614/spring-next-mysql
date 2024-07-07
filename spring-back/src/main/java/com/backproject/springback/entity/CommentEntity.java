@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import com.backproject.springback.common.TimeUtil;
 import com.backproject.springback.dto.request.board.PostCommentRequestDto;
 
 import lombok.AllArgsConstructor;
@@ -30,9 +31,7 @@ public class CommentEntity {
   private int boardNumber;
 
   public CommentEntity(PostCommentRequestDto dto,Integer boardnumber, String email){
-    Date now = Date.from(Instant.now());
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    String writeDatetime = simpleDateFormat.format(now);
+    String writeDatetime = TimeUtil.getCurrentKSTTimeString();
 
     this.content= dto.getContent();
     this.writeDatetime = writeDatetime;
