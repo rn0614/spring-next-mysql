@@ -2,8 +2,8 @@ import { useCookies } from "react-cookie";
 
 export const useLoginCookies = () => {
   const [cookies, setCookies] = useCookies();
-  const now = new Date().getTime();
-  const expires = new Date(now + 9 * 36000 + 60 * 300000);
+  const now = new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' });
+  const expires = new Date(now + 60 * 60 * 1000);
   const setLoginCookie = (response: any) => {
     if (
       (response?.token !== null &&
