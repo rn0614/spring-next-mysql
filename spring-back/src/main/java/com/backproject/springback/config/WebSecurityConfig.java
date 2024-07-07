@@ -50,7 +50,7 @@ public class WebSecurityConfig {
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
-    config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://spring.koosang-project.com"));
+    config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://spring.koosang-project.com","https://spring.koosang-project.com"));
     config.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","PATCH"));
     config.setAllowCredentials(true);
     config.setExposedHeaders(Arrays.asList("Authorization", "Authorization-refresh"));
