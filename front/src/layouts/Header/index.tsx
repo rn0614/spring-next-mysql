@@ -50,7 +50,7 @@ export default function Header({ path }: Props) {
       content: board.content,
       boardImageList,
     };
-    postBoard(requestBody);
+    await postBoard(requestBody);
     setBorad(null);
     
   };
@@ -61,13 +61,15 @@ export default function Header({ path }: Props) {
 
     const boardImageList: string[] = [...board.boardImageList!];
     if (board?.boardImageFileList) {
-      for (const file of board?.boardImageFileList) {
+      const uploadPromises = board.boardImageFileList.map(async (file) => {
         const data = new FormData();
         data.append("file", file);
 
         const url = (await fileUploadRequest(data)) as string;
         if (url) boardImageList.push(url);
-      }
+      });
+
+      await Promise.all(uploadPromises);
     }
 
     const requestBody = {
@@ -75,7 +77,7 @@ export default function Header({ path }: Props) {
       content: board.content,
       boardImageList,
     };
-    updateBoard({ boardNumber, requestBody });
+    await updateBoard({ boardNumber, requestBody });
     setBorad(null);
     router.push(BOARD_DETAIL_PATH(boardNumber!));
   };

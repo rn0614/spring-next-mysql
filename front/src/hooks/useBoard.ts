@@ -183,7 +183,8 @@ export function useUpdateBoard() {
   const router = useRouter();
   const { mutate } = useMutation(updateBoardRequest, {
     onSuccess: async (response) => {
-      await router.push(BOARD_DETAIL_PATH(response.boardNumber));
+      await queryClient.invalidateQueries(["board"]);
+      router.push(BOARD_DETAIL_PATH(response.boardNumber));
     },
   });
   return mutate;
