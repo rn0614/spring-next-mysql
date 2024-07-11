@@ -7,7 +7,7 @@ import { BoardListItemType } from "@/types/interface";
 import BoardListItem from "@/components/BoardListItem";
 import { useRouter } from "next/navigation";
 import { BOARD_WRITE_PATH } from "@/constants";
-import ProfileImage from "@/ui/atom/ProfileImage/ProfileImage";
+import { Profile } from "@/ui/atom/ProfileImage/ProfileImage";
 import {
   getUserInfo,
   patchNicknameRequest,
@@ -50,7 +50,7 @@ export default function User({ user, boardList }: boardProps) {
 
       patchProfileImageRequest({ profileImage: url })
         .then((response) => {
-          toast.info("프로필 사진이 업데이트 됐습니다")
+          toast.info("프로필 사진이 업데이트 됐습니다");
           return response;
         })
         .catch((error) => {
@@ -80,11 +80,15 @@ export default function User({ user, boardList }: boardProps) {
               className={style["user-top-profile-image-box"]}
               onClick={onProfileImageClickHandler}
             >
-              <ProfileImage size="lg" writerProfileImage={profileImage} />
+              <Profile size="lg" writerProfileImage={profileImage}>
+                <Profile.Image />
+              </Profile>
             </div>
           ) : (
             <div className={style["user-top-profile-image-box"]}>
-              <ProfileImage size="lg" writerProfileImage={profileImage} />
+              <Profile size="lg" writerProfileImage={profileImage}>
+                <Profile.Image />
+              </Profile>
             </div>
           )}
           <input

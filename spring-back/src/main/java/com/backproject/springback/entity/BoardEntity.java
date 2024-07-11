@@ -1,12 +1,8 @@
 package com.backproject.springback.entity;
 
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Date;
-
+import com.backproject.springback.common.TimeUtil;
 import com.backproject.springback.dto.request.board.PostBoardRequestDto;
 import com.backproject.springback.dto.request.board.UpdateBoardRequestDto;
-import com.backproject.springback.common.TimeUtil;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

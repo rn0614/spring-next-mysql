@@ -13,7 +13,7 @@ import CommentItem from "@/components/CommentItem";
 import Button from "@/ui/atom/Button/Button";
 import Pagination from "@/components/Pagination";
 import MainLayout from "@/layouts/Layout/MainLayout/MainLayout";
-import { ProfileImageWithNickName } from "@/ui/atom/ProfileImage/ProfileImage";
+import { Profile } from "@/ui/atom/ProfileImage/ProfileImage";
 import { useRecoilValue } from "recoil";
 import { CurrUserAtom } from "@/stores/login-user.store";
 import { useRouter } from "next/router";
@@ -77,11 +77,17 @@ export default function DetailBoardPage({ board }: boardProps) {
               className={style["board-detail-write-info-box"]}
               onClick={onNicknameClickHander}
             >
-              <ProfileImageWithNickName
+              <Profile
                 writerDatetime={getElapsedTime(board.writeDatetime)}
                 writerNickname={board.writerNickname}
                 writerProfileImage={board ? board.writerProfileImage : null}
-              />
+              >
+              <Profile.Image />
+              <Profile.WriteBox>
+                <Profile.NickName />
+                <Profile.WriteDate />
+              </Profile.WriteBox>
+              </Profile>
             </div>
             {isWriter && (
               <IconButton
@@ -346,7 +352,7 @@ export default function DetailBoardPage({ board }: boardProps) {
 export async function getServerSideProps(context: any) {
   try {
     const boardNumber = context.query.boardNumber as string;
-    
+
     const board = await getBoardRequest(boardNumber);
 
     await increaseViewCountRequest(boardNumber);

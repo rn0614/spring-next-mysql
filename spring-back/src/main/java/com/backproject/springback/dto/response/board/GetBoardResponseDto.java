@@ -1,22 +1,18 @@
 package com.backproject.springback.dto.response.board;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import com.backproject.springback.common.ResponseCode;
 import com.backproject.springback.common.ResponseMessage;
 import com.backproject.springback.dto.response.ResponseDto;
 import com.backproject.springback.entity.ImageEntity;
-import com.backproject.springback.repository.resultSet.GetBoardResultSet;
-
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 @Getter
 public class GetBoardResponseDto extends ResponseDto {

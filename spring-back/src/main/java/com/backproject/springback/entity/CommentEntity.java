@@ -1,18 +1,13 @@
 package com.backproject.springback.entity;
 
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Date;
+import com.backproject.springback.common.TimeUtil;
+import com.backproject.springback.dto.request.board.PostCommentRequestDto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
-import com.backproject.springback.common.TimeUtil;
-import com.backproject.springback.dto.request.board.PostCommentRequestDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

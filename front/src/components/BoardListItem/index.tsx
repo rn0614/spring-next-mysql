@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./style.module.scss";
 import { BoardListItemType } from "@/types/interface";
 import { useRouter } from "next/navigation";
-import { ProfileImageWithNickName } from "@/ui/atom/ProfileImage/ProfileImage";
+import { Profile } from "@/ui/atom/ProfileImage/ProfileImage";
 import { BOARD_DETAIL_PATH } from "@/constants";
 import Text from "@/ui/atom/Text/Text";
 
@@ -32,11 +32,15 @@ export default function BoardListItem({ boardListItem }: Props) {
     <div className={styles["board-list-item"]} onClick={onClickHandler}>
       <div className={styles["board-list-item-main-box"]}>
         <div className={styles["board-list-item-top"]}>
-          <ProfileImageWithNickName
+          <Profile
             writerProfileImage={writerProfileImage}
             writerNickname={writerNickname}
             writerDatetime={writerDatetime}
-          />
+          >
+            <Profile.Image />
+            <Profile.WriteDate />
+            <Profile.NickName />
+          </Profile>
         </div>
         <div className={styles["board-list-item-middle"]}>
           <Text size="md">{title}</Text>
@@ -49,7 +53,10 @@ export default function BoardListItem({ boardListItem }: Props) {
       {boardTitleImage && (
         <div
           className={styles["board-list-item__image-box"]}
-          style={{ backgroundImage: `url(${boardTitleImage})`,backgroundSize: "cover" }}
+          style={{
+            backgroundImage: `url(${boardTitleImage})`,
+            backgroundSize: "cover",
+          }}
         ></div>
       )}
     </div>

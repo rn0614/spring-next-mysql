@@ -1,18 +1,17 @@
-import Head from "next/head";
 import BoardListItem from "@/components/BoardListItem";
+import Pagination from "@/components/Pagination";
 import Top3Item from "@/components/Top3Item";
-import MainLayout from "@/layouts/Layout/MainLayout/MainLayout";
-import style from "./style.module.scss";
-import { useEffect, useState } from "react";
-import { BoardListItemType } from "@/types/interface";
-import { useRouter } from "next/navigation";
 import { SEARCH_PATH } from "@/constants";
 import { getTop3BoardListRequest, useGetLatestBoard } from "@/hooks/useBoard";
 import { useGetPopularList } from "@/hooks/useSearch";
-import Pagination from "@/components/Pagination";
-import Text from "@/ui/atom/Text/Text";
+import MainLayout from "@/layouts/Layout/MainLayout/MainLayout";
+import { BoardListItemType } from "@/types/interface";
 import ListWrapper from "@/ui/atom/ListWrapper/ListWrapper";
 import Section from "@/ui/morecular/Section/Section";
+import Head from "next/head";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import style from "./style.module.scss";
 
 export default function Home() {
   const MainTop = () => {
