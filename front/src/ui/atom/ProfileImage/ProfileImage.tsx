@@ -91,4 +91,4 @@ const ProfileWriteDate: React.FC = () => {
 };
 Profile.WriteDate = ProfileWriteDate;
 
-export { Profile };
+export { Profile, ProfileImage };

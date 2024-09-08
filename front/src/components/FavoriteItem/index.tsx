@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./style.module.scss";
-import ProfileImage from "@/ui/atom/ProfileImage/ProfileImage";
+import {ProfileImage} from "@/ui/atom/ProfileImage/ProfileImage";
 import { FavoriteListItem } from "@/types/interface";
 
 type FavoriteItemProps = {
