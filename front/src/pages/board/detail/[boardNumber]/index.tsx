@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import style from "./style.module.scss";
-import Icon, { IconButton } from "@/ui/atom/Icon/Icon";
+import Icon from "@/ui/atom/Icon/Icon";
 import FavoriteItem from "@/components/FavoriteItem";
 import { Board } from "@/types/interface";
 import CommentItem from "@/components/CommentItem";
@@ -22,6 +22,9 @@ import { useGetCommentList, usePostComment } from "@/hooks/useComment";
 import { getElapsedTime } from "@/utils/day";
 import { useCookies } from "react-cookie";
 import { PostCommentRequestDto } from "@/pages/api/request/board";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   useDeleteBoard,
   getBoardRequest,
@@ -29,6 +32,7 @@ import {
 } from "@/hooks/useBoard";
 import { useGetFavoriteList, usePutFavorite } from "@/hooks/useFavorite";
 import { toast } from "react-toastify";
+import { Box, Divider, Menu, MenuItem, Typography } from "@mui/material";
 
 type boardProps = {
   board: Board;
@@ -42,15 +46,17 @@ export default function DetailBoardPage({ board }: boardProps) {
 
   const BoardDetailTop = () => {
     const deleteBoard = useDeleteBoard();
-    const [showMore, setShowMore] = useState<boolean>(false);
-
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
     const onNicknameClickHander = () => {
       if (!board) return;
       router.push(USER_PATH(board.writerEmail));
-    };
-
-    const onMoreButtonClickHandler = () => {
-      setShowMore((pre) => !pre);
     };
 
     const onUpdateButtonClickHandler = () => {
@@ -69,12 +75,15 @@ export default function DetailBoardPage({ board }: boardProps) {
     if (!board) return <div>게시물이 존재하지 않습니다.</div>;
 
     return (
-      <div id={style["board-detail-top"]}>
-        <div className={style["board-detail-top-header"]}>
-          <div className={style["board-detail-title"]}>{board.title}</div>
-          <div className={style["board-detail-top-sub-box"]}>
-            <div
-              className={style["board-detail-write-info-box"]}
+      <Box id={style["board-detail-top"]}>
+        <Box className={style["board-detail-top-header"]}>
+          <Box className={style["board-detail-title"]}>{board.title}</Box>
+          <Box className={style["board-detail-top-sub-box"]}>
+            <Box
+              display={"flex"}
+              alignItems={"center"}
+              gap={1}
+              sx={{ cursor: "pointer" }}
               onClick={onNicknameClickHander}
             >
               <Profile
@@ -82,50 +91,40 @@ export default function DetailBoardPage({ board }: boardProps) {
                 writerNickname={board.writerNickname}
                 writerProfileImage={board ? board.writerProfileImage : null}
               >
-              <Profile.Image />
-              <Profile.WriteBox>
-                <Profile.NickName />
-                <Profile.WriteDate />
-              </Profile.WriteBox>
+                <Profile.Image />
+                <Box display={"flex"} flexDirection={"column"}>
+                  <Profile.NickName />
+                  <Profile.WriteDate />
+                </Box>
               </Profile>
-            </div>
+            </Box>
             {isWriter && (
-              <IconButton
-                icon="more-icon"
-                onButtonClick={onMoreButtonClickHandler}
-              />
+              <IconButton aria-label="Example" onClick={handleClick}>
+                <EditIcon />
+              </IconButton>
             )}
-            {showMore && (
-              <div className={style["board-detail-more-box"]}>
-                <div
-                  className={style["board-detail-update-button"]}
-                  onClick={onUpdateButtonClickHandler}
-                >
-                  수정
-                </div>
-                <hr />
-                <div
-                  className={style["board-detail-delete-button"]}
-                  onClick={onDelteButtonClickHandler}
-                >
-                  삭제
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-        <hr />
-        <div className={style["board-detail-top-main"]}>
-          <div className={style["board-detail-main-text"]}>{board.content}</div>
+            <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+              <MenuItem onClick={onUpdateButtonClickHandler}>
+                <Typography>수정</Typography>
+              </MenuItem>
+              <MenuItem onClick={onDelteButtonClickHandler}>
+                <Typography>삭제</Typography>
+              </MenuItem>
+            </Menu>
+          </Box>
+        </Box>
+        <Divider />
+        <Box className={style["board-detail-top-main"]}>
+          <Typography className={style["board-detail-main-text"]}>{board.content}</Typography>
           {board.boardImageList.map((imageSrc, idx) => (
             <img
-              key={idx}
+              key={imageSrc}
               className={style["board-detail-main-image"]}
               src={imageSrc}
             ></img>
           ))}
-        </div>
-      </div>
+        </Box>
+      </Box>
     );
   };
 
@@ -341,6 +340,7 @@ export default function DetailBoardPage({ board }: boardProps) {
       <div id={style["board-detail-wrapper"]}>
         <div className={style["board-detail-container"]}>
           <BoardDetailTop />
+          <Divider />
           <BoardDetailBottom />
         </div>
       </div>

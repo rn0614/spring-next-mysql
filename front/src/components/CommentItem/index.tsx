@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./style.module.scss";
-import ProfileImage from "@/ui/atom/ProfileImage/ProfileImage";
+import {Profile} from "@/ui/atom/ProfileImage/ProfileImage";
 import { CommentListItem } from "@/types/interface";
 import { getElapsedTime } from "@/utils/day";
 
@@ -13,7 +13,9 @@ export default function CommentItem({ commentItem }: CommentItemProsp) {
   return (
     <div className={styles["comment-list-item"]}>
       <div className={styles["comment-list-item-top"]}>
-        <ProfileImage writerProfileImage={profileImage} />
+        <Profile writerProfileImage={profileImage} >
+          <Profile.Image/>
+        </Profile>
         <div className={styles["comment-list-item-nickname"]}>{nickname}</div>
         <div className={styles["comment-list-item-divider"]}>{`\|`}</div>
         <div className={styles["comment-list-item-time"]}>{getElapsedTime(writeDatetime)}</div>

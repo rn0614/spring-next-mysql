@@ -1,5 +1,22 @@
 import React, { ReactNode, useContext } from "react";
 import style from "./ProfileIamge.module.scss";
+import { Box } from "@mui/material";
+import Image from "next/image";
+
+const profileStyles = {
+  sm: {
+    width: 16,
+    height: 16,
+  },
+  md: {
+    width: 32,
+    height: 32,
+  },
+  lg: {
+    width: 48,
+    height: 48,
+  },
+};
 
 type ProfileType = {
   writerProfileImage: string | null;
@@ -29,39 +46,34 @@ function Profile(props: ProfileType) {
 }
 
 const ProfileImage: React.FC<any> = () => {
-  const { writerProfileImage, size = "sm" } = useProfileContext();
+  const { writerProfileImage, size = "md" } = useProfileContext();
   return (
-    writerProfileImage ?? (
-      <div
-        className={`style["profile-image"] ${style["size-" + size]}`}
-        style={{
-          backgroundImage: `url(${
-            writerProfileImage
-              ? writerProfileImage
-              : "/image/default-profile-image.png"
-          })`,
-          backgroundSize: "cover",
-        }}
-      ></div>
-    )
+    <Box
+      height={profileStyles[size].height}
+      width={profileStyles[size].width}
+      borderRadius={"100%"}
+      overflow={"hidden"}
+    >
+      <Image
+        height={profileStyles[size].height}
+        width={profileStyles[size].width}
+        src={
+          writerProfileImage
+            ? writerProfileImage
+            : "/image/default-profile-image.png"
+        }
+        alt="프로필 이미지"
+      />
+    </Box>
   );
 };
 Profile.Image = ProfileImage;
-
-const ProfileWriteBox: React.FC<any> = ({ children }) => {
-  return (
-    <div style={{ display: "flex", flexDirection: "column" }}>{children}</div>
-  );
-};
-Profile.WriteBox = ProfileWriteBox;
 
 const ProfileNickName: React.FC = () => {
   const { writerNickname } = useProfileContext();
   return (
     writerNickname && (
-      <div className={style["board-list-item-nickname"]}>
-        {writerNickname}
-      </div>
+      <Box className={style["board-list-item-nickname"]}>{writerNickname}</Box>
     )
   );
 };
@@ -71,12 +83,9 @@ const ProfileWriteDate: React.FC = () => {
   const { writerDatetime } = useProfileContext();
   return (
     writerDatetime && (
-      <div
-        className={style["board-list-item-write-datetime"]}
-        suppressHydrationWarning
-      >
+      <Box className={style["board-list-item-write-datetime"]}>
         {writerDatetime}
-      </div>
+      </Box>
     )
   );
 };

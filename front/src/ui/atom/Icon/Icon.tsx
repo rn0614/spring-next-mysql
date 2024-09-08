@@ -24,7 +24,7 @@ export default function Icon({
 }
 
 type IconButtonProps = {
-  onButtonClick: () => void;
+  onButtonClick: any;
   icon: string | undefined;
   position?:string;
 };
