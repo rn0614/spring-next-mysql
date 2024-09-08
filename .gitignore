@@ -1,3 +1,8 @@
 spring-back/src/main/resources/application.properties
 spring-back/src/main/resources/application-prod.properties
 spring-back/src/main/resources/application-local.properties
+
+
+
+/spring-back/src/main/resources/application-prod.properties
+/spring-back/src/main/resources/application-dev.properties
