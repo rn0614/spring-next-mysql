@@ -40,10 +40,6 @@ const InputBox = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
     pattern: pattern ? pattern : undefined,
     minLength: minLength ? minLength : undefined,
   };
-  const testHandler =()=>{
-    console.log(validationRules)
-
-  }
   return (
     <div className={styles["inputbox"]}>
       <label htmlFor={id} className={styles["inputbox-label"]}>
@@ -65,7 +61,6 @@ const InputBox = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
       {error && (
         <div className={styles["inputbox-message"]}>{error.message}</div>
       )}
-      <button onClick={testHandler}>click</button>
     </div>
   );
 });
