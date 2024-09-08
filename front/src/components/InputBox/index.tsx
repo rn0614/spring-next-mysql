@@ -1,24 +1,23 @@
-import React, {
-  ChangeEvent,
-  ComponentPropsWithoutRef,
-  KeyboardEvent,
-  forwardRef,
-} from "react";
+import React, { forwardRef } from "react";
 import styles from "./style.module.scss";
-import { IconButton } from "@/ui/atom/Icon/Icon";
 import { FieldError, UseFormRegister } from "react-hook-form";
+import { IconButton } from "@/ui/atom/Icon/Icon";
 
-type Props ={
-  id:string;
+type Props = {
+  id: string;
   label: string;
   placeholder: string;
-  error: FieldError|undefined;
-  register:UseFormRegister<any>;
+  error: FieldError | undefined;
+  register: UseFormRegister<any>; // register 함수 타입
+  required?: boolean | string;
+  pattern?: { value: RegExp; message: string };
+  minLength?: { value: number; message: string }; // react-hook-form에서만 처리
   icon?: string;
   onButtonClick?: () => void;
-  message?: string;
-  onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
-}&ComponentPropsWithoutRef<"input">;
+} & Omit<
+  React.ComponentPropsWithoutRef<"input">,
+  "minLength" | "pattern" | "required"
+>; // minLength 속성 제외
 
 const InputBox = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
   const {
@@ -28,37 +27,45 @@ const InputBox = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
     error,
     placeholder,
     register,
-    onButtonClick,
+    required,
+    pattern,
+    minLength,
     icon,
-    message
+    onButtonClick,
+    ...rest
   } = props;
 
+  const validationRules = {
+    required: required ? `${id} 입력은 필수입니다` : undefined,
+    pattern: pattern ? pattern : undefined,
+    minLength: minLength ? minLength : undefined,
+  };
+  const testHandler =()=>{
+    console.log(validationRules)
 
+  }
   return (
     <div className={styles["inputbox"]}>
-      <label htmlFor={id} className={styles["inputbox-label"]}>{label}</label>
+      <label htmlFor={id} className={styles["inputbox-label"]}>
+        {label}
+      </label>
       <div
-        className={`${styles["inputbox-container"]} ${error ? error : null}`}
+        className={`${styles["inputbox-container"]} ${
+          error ? styles["inputbox-error"] : ""
+        }`}
       >
         <input
-          id={id}
           className={styles["input"]}
           type={type}
           placeholder={placeholder}
-          {...register(id, {
-            required: id+" 입력은 필수입니다",
-            // pattern: {
-            //   value: /\S+@\S+\.\S+/,
-            //   message: "이메일 형식에 맞지 않습니다",
-            // },
-            // maxLength: 80,
-          })}
+          {...register(id, validationRules)} // react-hook-form 유효성 검사 처리
         />
-        {onButtonClick !== undefined && (
-          <IconButton onButtonClick={onButtonClick} icon={icon}/>
-        )}
+        {icon && <IconButton onButtonClick={onButtonClick} icon={icon} />}
       </div>
-      <div className={styles["inputbox-message"]}>{error?.message}</div>
+      {error && (
+        <div className={styles["inputbox-message"]}>{error.message}</div>
+      )}
+      <button onClick={testHandler}>click</button>
     </div>
   );
 });

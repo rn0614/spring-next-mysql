@@ -20,7 +20,6 @@ public class SignUpRequestDto {
   private String email;
 
   @NotBlank
-  @Size(min = 8, max = 20)
   private String password;
 
   private String passwordCheck;
@@ -29,10 +28,8 @@ public class SignUpRequestDto {
   private String nickname;
 
   @NotBlank
-  @Pattern(regexp = "^[0-9]{11,13}$")
   private String telNumber;
 
-  @NotBlank
   private String address;
 
   private String addressDetail;
