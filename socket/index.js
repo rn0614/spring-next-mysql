@@ -11,7 +11,7 @@ const rooms = {};
 
 // Socket.IO 초기화
 io = new SocketIOServer(server, {
-  path: "/api/socket", // 소켓 경로 설정
+  path: "/socket", // 소켓 경로 설정
   cors: {
     origin: "*", // CORS 허용 (필요에 따라 설정)
     methods: ["GET", "POST"],
@@ -22,14 +22,18 @@ io = new SocketIOServer(server, {
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
 
+  // 방 목록 요청 처리
+  socket.on("getRoomList", () => {
+    const roomList = Object.keys(rooms);
+    socket.emit("roomList", roomList);
+  });
+
   // 방에 참가
   socket.on("joinRoom", ({ chatId }) => {
     socket.join(chatId);
 
-    console.log('1')
     // 해당 방에 아무도 없으면 방장으로 설정
     if (!rooms[chatId]) {
-      console.log('2')
       rooms[chatId] = {
         owner: socket.id,
         users: new Set([socket.id]),
@@ -37,7 +41,6 @@ io.on("connection", (socket) => {
       };
       socket.emit("setOwner", true); // 클라이언트에 방장임을 알림
     } else {
-      console.log('3')
       rooms[chatId].users.add(socket.id);
       socket.emit("setOwner", false); // 클라이언트에 방장이 아님을 알림
       socket.emit("initializeDrawing", rooms[chatId].elements);
@@ -45,12 +48,12 @@ io.on("connection", (socket) => {
     console.log(`User ${socket.id} joined room ${chatId}`);
   });
 
-  socket.emit("initializeDrawing", ()=>{
-    console.log("initializeDrawing emit")
+  socket.emit("initializeDrawing", () => {
+    console.log("initializeDrawing emit");
   });
   // 드로잉 초기화
   socket.on("initializeDrawing", () => {
-    console.log('initializeDrawing on')
+    console.log("initializeDrawing on");
     socket.emit("initializeDrawing", rooms[chatId].elements);
   });
 
