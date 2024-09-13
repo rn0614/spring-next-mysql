@@ -18,6 +18,7 @@ io = new SocketIOServer(server, {
   },
 });
 
+
 // 소켓 연결 처리
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
